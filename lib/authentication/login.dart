@@ -3,19 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/firebase/firebase.dart';
 import 'package:incube/route.dart';
-import './userImage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +127,7 @@ class _Signup_FrameState extends State<Signup_Frame> {
             child: GestureDetector(
               onTap: () {
                 // Handle the click event, e.g., navigate to the login screen
-                Navigator.popAndPushNamed(context, AppRoutes.login);
+                Navigator.popAndPushNamed(context, AppRoutes.auth);
               },
               child: RichText(
                 text: TextSpan(
@@ -138,10 +136,10 @@ class _Signup_FrameState extends State<Signup_Frame> {
                           const Color.fromRGBO(30, 30, 30, 0.800000011920929)),
                   children: [
                     TextSpan(
-                      text: 'Already have an account? ',
+                      text: 'Dont have an account ',
                     ),
                     TextSpan(
-                      text: 'Sign in',
+                      text: 'Sign up',
                       style: LabelMedium().copyWith(
                           color: Colors.black, fontWeight: FontWeight.w600),
                     ),
@@ -226,29 +224,13 @@ class _SignUpFormState extends State<SignUpForm> {
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
   final firebase = FirebaseClass();
-  String accelerator_Name = '';
-  String user_Name = '';
   String email = '';
-  String website_Link = '';
   String password = '';
   bool isLoading = false;
-  Uint8List? selectedImage;
-  void onImagePicked(Uint8List? image) {
-    setState(() {
-      selectedImage = image;
-    });
-  }
 
   void submitForm() {
     if (checkBoxValue) {
-      final cred = firebase.signup(
-        accelerator_Name,
-        user_Name,
-        email,
-        website_Link,
-        password,
-        selectedImage!,
-      );
+      final cred = firebase.signin(email, password);
       if (cred != null) {
         Navigator.popAndPushNamed(context, AppRoutes.home);
       }
@@ -269,94 +251,6 @@ class _SignUpFormState extends State<SignUpForm> {
       key: authFormKey,
       child: Column(
         children: [
-          Container(
-            height: screenHeight * 0.06,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.name,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return "Enter accelerator name";
-                    //   }
-                    //   return null;
-                    // },
-                    onChanged: (value) {
-                      setState(() {
-                        accelerator_Name = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Accelerator name',
-                      labelStyle: GoogleFonts.roboto(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4285714286,
-                        color: Color(0x7c1e1e1e),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight * 0.06,
-                    margin: EdgeInsets.only(left: screenWidth * 0.007),
-                    child: TextFormField(
-                      keyboardType: TextInputType.name,
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return "Enter user name";
-                      //   }
-                      //   return null;
-                      // },
-                      onChanged: (value) {
-                        setState(() {
-                          user_Name = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'User name',
-                        labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: Color(0x7c1e1e1e),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.02),
           // Row 2
           Container(
             height: screenHeight * 0.06,
@@ -401,128 +295,11 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight * 0.06,
-                    margin: EdgeInsets.only(left: screenWidth * 0.007),
-                    child: TextFormField(
-                      keyboardType: TextInputType.url,
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return "Enter website link";
-                      //   } else if (!value.contains('http')) {
-                      //     return "Enter valid website link";
-                      //   }
-                      //   return null;
-                      // },
-                      onChanged: (value) {
-                        setState(() {
-                          website_Link = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Website link',
-                        labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: Color(0x7c1e1e1e),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
           SizedBox(height: screenHeight * 0.02),
-          // Row 3
-          Container(
-            height: screenHeight * 0.06,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return "Enter Location";
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: InputDecoration(
-                      labelText: 'Location',
-                      labelStyle: GoogleFonts.roboto(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4285714286,
-                        color: Color(0x7c1e1e1e),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight * 0.06,
-                    margin: EdgeInsets.only(left: screenWidth * 0.007),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Admin id',
-                        labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: Color(0x7c1e1e1e),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.02),
-          // Row 4
+          //Row 4
           Container(
             width: screenWidth * 0.31,
             height: screenHeight * 0.06,
@@ -613,11 +390,8 @@ class _SignUpFormState extends State<SignUpForm> {
               ],
             ),
           ),
-          //Row 6
           SizedBox(height: screenHeight * 0.02),
-          UserImage(onPickedImage: onImagePicked),
-          SizedBox(height: screenHeight * 0.02),
-          // Row 7 - Elevated Button
+          // Row 5 - Elevated Button
           Container(
             width: screenWidth * 0.31,
             height: screenHeight * 0.06,

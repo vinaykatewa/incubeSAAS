@@ -21,7 +21,7 @@ Color primaryColor2() {
 }
 
 Color secondaryColor() {
-  return const Color(0xFF25164F);
+  return const Color.fromRGBO(54, 36, 101, 1);
 }
 
 Color tertiaryColor1() {
@@ -138,7 +138,7 @@ TextStyle BodyMedium() {
 TextStyle BodySmall() {
   return GoogleFonts.roboto(
     fontWeight: FontWeight.w400,
-    fontSize: 16,
+    fontSize: 14,
     letterSpacing: 0.53,
     // height: 21.328,
   );

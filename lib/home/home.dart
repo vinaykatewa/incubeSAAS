@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:incube/firebase/firebase.dart';
-// import 'package:incube/route.dart';
+import 'package:incube/firebase/firebase.dart';
+import 'package:incube/route.dart';
 import './dashboard/dashboard.dart';
 import '../uiThemes.dart';
 import './communications/communications.dart';
@@ -74,6 +75,12 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
+  final FirebaseClass _firebaseClass = FirebaseClass();
+  void _signOut() async {
+    await _firebaseClass.signOut();
+    Navigator.popAndPushNamed(context, AppRoutes.auth);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -86,7 +93,7 @@ class _NavigationBarState extends State<NavigationBar> {
             left: screenWidth * 0.01, right: screenWidth * 0.01),
         width: double.infinity,
         height: screenHeight * 0.05,
-        color: textColor(),
+        color: secondaryColor(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +101,7 @@ class _NavigationBarState extends State<NavigationBar> {
             Text(
               'Incube',
               style: GoogleFonts.bodoniModa(
-                color: const Color.fromRGBO(202, 131, 70, 1),
+                color: Colors.transparent,
                 fontSize: 24,
                 fontWeight: FontWeight.normal,
               ),
@@ -103,41 +110,55 @@ class _NavigationBarState extends State<NavigationBar> {
               child: Row(
                 children: List.generate(
                   5,
-                  (index) => TextButton(
-                    onPressed: () {
-                      widget.onButtonTapped(index);
-                    },
-                    child: Text(
-                      _getButtonText(index),
-                      style: LabelMedium().copyWith(
+                  (index) => Container(
+                    margin: EdgeInsets.only(left: screenWidth * 0.02),
+                    decoration: BoxDecoration(
                         color: widget.selectedButtonIndex == index
-                            ? primaryColor2()
-                            : const Color.fromRGBO(245, 247, 244, 1),
+                            ? tertiaryColor1()
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(MainBorderRadius()),
+                        )),
+                    child: TextButton(
+                      onPressed: () {
+                        widget.onButtonTapped(index);
+                      },
+                      child: Text(
+                        _getButtonText(index),
+                        style: LabelMedium().copyWith(
+                          color: widget.selectedButtonIndex == index
+                              ? Colors.black
+                              : Colors.white.withOpacity(0.9),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Container(
-              //perform click function here
-              child: Row(
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.user,
-                    color: const Color.fromRGBO(245, 247, 244, 1),
-                    size: screenWidth * 0.01,
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.007,
-                  ),
-                  Text(
-                    'Log out',
-                    style: LabelSmall().copyWith(
-                      color: const Color.fromRGBO(245, 247, 244, 1),
+            GestureDetector(
+              onTap: () {
+                Navigator.popAndPushNamed(context, AppRoutes.auth);
+              },
+              child: Container(
+                child: Row(
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.user,
+                      color: Colors.white.withOpacity(0.9),
+                      size: screenWidth * 0.01,
                     ),
-                  )
-                ],
+                    SizedBox(
+                      width: screenWidth * 0.007,
+                    ),
+                    Text(
+                      'Log out',
+                      style: LabelSmall().copyWith(
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],

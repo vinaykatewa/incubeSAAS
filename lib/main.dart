@@ -3,15 +3,18 @@ import 'package:incube/home/home.dart';
 import 'route.dart';
 import 'package:incube/authentication/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:incube/authentication/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: 'AIzaSyAwXPyqjhn-KU0gG43X5FRhRCp6TJINMlA',
-          appId: "1:53573072205:web:cde06ae4eedd7b30963304",
-          messagingSenderId: "53573072205",
-          projectId: "incube-2948b"));
+    apiKey: "AIzaSyBcb-5I5nzJ8CO_gtYuyl1y7HF-ODPzAAI",
+    appId: "1:931432761517:web:a4352e9cf4a0a9bc611e24",
+    messagingSenderId: "931432761517",
+    projectId: "incubeweb-ed03b",
+    storageBucket: "incubeweb-ed03b.appspot.com",
+  ));
   runApp(const MyApp());
 }
 
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.auth,
       routes: {
         AppRoutes.auth: (context) => const AuthScreen(),
+        AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
       },
     );
