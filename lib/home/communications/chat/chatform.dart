@@ -4,6 +4,7 @@ import 'package:incube/uiThemes.dart';
 import 'chatDisplay.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
+import 'messageModel.dart';
 
 class ChatForm extends StatefulWidget {
   ChatForm({Key? key});
@@ -33,7 +34,7 @@ class _ChatFormState extends State<ChatForm> {
     _currentUser = FirebaseAuth.instance.currentUser;
 
     _fetchUserName();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
@@ -67,18 +68,15 @@ class _ChatFormState extends State<ChatForm> {
                         shrinkWrap: true,
                         reverse: true,
                         children: messages.map((DocumentSnapshot document) {
-                          Map<String, dynamic> data =
-                              document.data() as Map<String, dynamic>;
-
-                          DateTime dateTime =
-                              (data['dateTime'] as Timestamp).toDate();
+                          MessageModel messageModel =
+                              MessageModel.fromDocument(document);
 
                           return ChatDisplay(
-                            message: data['message'],
-                            time: dateTime,
-                            senderUid: data['senderUid'],
-                            userName: data['userName'],
-                            userImage: data['userImage'],
+                            message: messageModel.message,
+                            time: messageModel.time,
+                            senderUid: messageModel.senderUid,
+                            userName: messageModel.userName,
+                            userImage: messageModel.userImage,
                             currentUserUid: _currentUser?.uid ?? '',
                           );
                         }).toList(),
@@ -178,14 +176,15 @@ class _ChatFormState extends State<ChatForm> {
   }
 
   void _sendMessage(String message) {
-    _messagesForChannel(_currentChannel).add({
-      'message': message,
-      'dateTime': DateTime.now(),
-      'senderUid': _currentUser?.uid,
-      'userName': _userName,
-      'userImage': _userImage,
-    });
-
+    _messagesForChannel(_currentChannel).add(
+      MessageModel(
+        message: message,
+        time: DateTime.now(),
+        senderUid: _currentUser!.uid,
+        userName: _userName,
+        userImage: _userImage,
+      ).toMap(),
+    );
     _textController.clear();
   }
 

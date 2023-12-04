@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+import 'eventModel.dart';
 
 class Events extends StatefulWidget {
   const Events({Key? key}) : super(key: key);
@@ -78,7 +79,7 @@ class _EventsState extends State<Events> {
                 child: ListView.builder(
                   itemCount: events.length,
                   itemBuilder: (context, index) {
-                    final event = events[index];
+                    final event = EventModel.fromFirestore(events[index]);
                     //outer container
                     return Container(
                       margin: EdgeInsets.only(
@@ -118,8 +119,7 @@ class _EventsState extends State<Events> {
                                         borderRadius:
                                             BorderRadius.circular(6.0),
                                         image: DecorationImage(
-                                          image: NetworkImage(
-                                              event['Event_image']),
+                                          image: NetworkImage(event.eventImage),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -134,7 +134,7 @@ class _EventsState extends State<Events> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          event['Event_Name'],
+                                          event.eventName,
                                           style: TitleMedium().copyWith(
                                             color: textColor(),
                                             fontSize: 20,
@@ -161,8 +161,7 @@ class _EventsState extends State<Events> {
                                                           MainBorderRadius()))),
                                               child: Text(
                                                 _formatDaysRemaining(
-                                                    event['Event_Timing']
-                                                        .toDate()),
+                                                    event.eventTiming),
                                                 style: BodySmall().copyWith(
                                                   color: Colors.white,
                                                 ),
@@ -171,7 +170,7 @@ class _EventsState extends State<Events> {
                                             SizedBox(
                                               width: screenWidth * 0.1,
                                             ),
-                                            event['is_Event_Online']
+                                            event.isEventOnline
                                                 ? Container(
                                                     child: Row(
                                                       children: [
@@ -241,7 +240,7 @@ class _EventsState extends State<Events> {
                                                   width: screenWidth * 0.002,
                                                 ),
                                                 Text(
-                                                  event['Event_Fee'],
+                                                  event.eventFee,
                                                   style: BodySmall().copyWith(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w600,
@@ -260,8 +259,7 @@ class _EventsState extends State<Events> {
                                                   child: Row(
                                                     children: [
                                                       Text(
-                                                        event[
-                                                            'Event_Participants'],
+                                                        event.eventParticipants,
                                                         style: BodySmall()
                                                             .copyWith(
                                                                 fontWeight:
@@ -493,14 +491,12 @@ class _EventsState extends State<Events> {
                                                 Radius.circular(
                                                     MainBorderRadius())),
                                             border: Border.all(
-                                              color:
-                                                  secondaryColor(), // Use a light color for the border
-                                              width:
-                                                  1.0, // Adjust the width of the border
+                                              color: secondaryColor(),
+                                              width: 1.0,
                                             ),
                                           ),
                                           child: Text(
-                                            event['Event_Provider'],
+                                            event.eventProvider,
                                             style: TextStyle(
                                                 color: secondaryColor()),
                                           )),
@@ -520,7 +516,7 @@ class _EventsState extends State<Events> {
                                         width: screenWidth * 0.005,
                                       ),
                                       Text(
-                                        '${_formatDateTime(event['Event_Timing'].toDate())}',
+                                        '${_formatDateTime(event.eventTiming)}',
                                       ),
                                     ],
                                   ),
@@ -538,7 +534,7 @@ class _EventsState extends State<Events> {
                                         width: screenWidth * 0.005,
                                       ),
                                       Text(
-                                        event['Event_Tag'],
+                                        event.eventTag,
                                         style: TextStyle(
                                           color: secondaryColor(),
                                         ),
@@ -858,17 +854,17 @@ class _EventsState extends State<Events> {
       await ref.putData(image);
       final imageUrl = await ref.getDownloadURL();
       print('Image uploaded successfully');
-      await _eventsCollection.add({
-        'Event_Name': title,
-        'Event_Provider': eventProvider,
-        'Event_Tag': eventTag,
-        'Event_Participants': eventParticipants,
-        'Event_Fee': eventFee,
-        'Event_Timing': eventDate,
-        'Event_image': imageUrl,
-        'Event_Location': location,
-        'is_Event_Online': isOnline
-      });
+      await _eventsCollection.add(EventModel(
+        eventName: title,
+        eventProvider: eventProvider,
+        eventTag: eventTag,
+        eventParticipants: eventParticipants,
+        eventFee: eventFee,
+        eventTiming: eventDate,
+        eventImage: imageUrl,
+        eventLocation: location,
+        isEventOnline: isOnline,
+      ).toMap());
     } catch (e) {
       print('Error adding event to Firestore: $e');
     }

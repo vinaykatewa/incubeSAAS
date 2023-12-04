@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:incube/home/home.dart';
 import 'package:incube/uiThemes.dart';
 import 'chat/chatform.dart';
-import 'events.dart';
+import 'events/events.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Communications extends StatefulWidget {
