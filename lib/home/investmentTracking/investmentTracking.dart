@@ -76,14 +76,6 @@ class _SideNavigationState extends State<SideNavigation> {
       margin: EdgeInsets.only(top: screenHeight * 0.002),
       decoration: BoxDecoration(
         color: Color.fromRGBO(54, 36, 101, 1),
-        // gradient: LinearGradient(
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     colors: [
-        //       Color.fromRGBO(22, 43, 89, 1),
-        //       Color.fromRGBO(66, 50, 121, 0.8),
-        //       Color.fromRGBO(14, 58, 105, 1),
-        //     ]),
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(MainBorderRadius()),
           topRight: Radius.circular(MainBorderRadius()),

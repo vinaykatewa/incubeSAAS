@@ -210,11 +210,6 @@ class _EventsState extends State<Events> {
                                                           width: screenWidth *
                                                               0.002,
                                                         ),
-                                                        // Text(
-                                                        //   'Online',
-                                                        //   style: BodySmall().copyWith(
-                                                        //       color: Colors.black),
-                                                        // ),
                                                       ],
                                                     ),
                                                   )
