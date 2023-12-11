@@ -1,0 +1,29 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-incubeweb-staging-142718-authRole",
+      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-staging-142718-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-staging-142718-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-incubeweb-staging-142718-deployment",
+      "UnauthRoleName": "amplify-incubeweb-staging-142718-unauthRole",
+      "StackName": "amplify-incubeweb-staging-142718",
+      "StackId": "arn:aws:cloudformation:ap-south-1:381322991813:stack/amplify-incubeweb-staging-142718/39713ee0-9768-11ee-89e3-0ad566f5b3c4",
+      "AmplifyAppId": "d31m46r0nuphp2"
+    },
+    "categories": {
+      "auth": {
+        "incubeweb1a713ce2": {}
+      },
+      "function": {
+        "S3Trigger09d1cdbc": {
+          "deploymentBucketName": "amplify-incubeweb-staging-142718-deployment",
+          "s3Key": "amplify-builds/S3Trigger09d1cdbc-39734c63757771457234-build.zip"
+        }
+      },
+      "storage": {
+        "UsersImage": {}
+      }
+    }
+  }
+}

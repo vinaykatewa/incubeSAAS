@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,11 +75,7 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
-  final FirebaseClass _firebaseClass = FirebaseClass();
-  void _signOut() async {
-    await _firebaseClass.signOut();
-    Navigator.popAndPushNamed(context, AppRoutes.auth);
-  }
+  // fis
 
   @override
   Widget build(BuildContext context) {

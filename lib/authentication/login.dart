@@ -223,20 +223,14 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
-  final firebase = FirebaseClass();
+  // final firebase = FirebaseClass();
   String email = '';
   String password = '';
   bool isLoading = false;
 
   void submitForm() {
-    if (checkBoxValue) {
-      final cred = firebase.signin(email, password);
-      if (cred != null) {
-        Navigator.popAndPushNamed(context, AppRoutes.home);
-      }
-    }
-    // if (authFormKey.currentState!.validate() && checkBoxValue) {
-    //   final cred = firebase.signup(email, password);
+    // if (checkBoxValue) {
+    //   final cred = firebase.signin(email, password);
     //   if (cred != null) {
     //     Navigator.popAndPushNamed(context, AppRoutes.home);
     //   }

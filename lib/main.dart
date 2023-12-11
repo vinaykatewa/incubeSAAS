@@ -1,21 +1,33 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:incube/amplifyconfiguration.dart';
 import 'package:incube/home/home.dart';
 import 'route.dart';
 import 'package:incube/authentication/auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:incube/authentication/login.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'amplifyconfiguration.dart';
+import 'models/ModelProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      options: const FirebaseOptions(
-    apiKey: "AIzaSyBcb-5I5nzJ8CO_gtYuyl1y7HF-ODPzAAI",
-    appId: "1:931432761517:web:a4352e9cf4a0a9bc611e24",
-    messagingSenderId: "931432761517",
-    projectId: "incubeweb-ed03b",
-    storageBucket: "incubeweb-ed03b.appspot.com",
-  ));
+  await _configureAmplify();
   runApp(const MyApp());
+}
+
+Future<void> _configureAmplify() async {
+  final datastorePlugin =
+      AmplifyDataStore(modelProvider: ModelProvider.instance);
+
+  await Amplify.addPlugin(datastorePlugin);
+  try {
+    final authPlugin = AmplifyAuthCognito();
+    await Amplify.addPlugin(authPlugin);
+    await Amplify.configure(amplifyconfig);
+  } on Exception catch (e) {
+    safePrint('An error occurred while configuring Amplify: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {

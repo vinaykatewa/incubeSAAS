@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/uiThemes.dart';
-import 'package:incube/firebase/firebase.dart';
 import 'package:incube/route.dart';
 import './userImage.dart';
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
+import '../firebase/AwsAmplify.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -225,40 +223,41 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
-  final firebase = FirebaseClass();
+  // final firebase = FirebaseClass();
   String accelerator_Name = '';
   String user_Name = '';
   String email = '';
   String website_Link = '';
   String password = '';
   bool isLoading = false;
-  Uint8List? selectedImage;
-  void onImagePicked(Uint8List? image) {
+  String? selectedImage;
+  void onImagePicked(String? image) {
     setState(() {
       selectedImage = image;
     });
   }
 
   void submitForm() {
-    if (checkBoxValue) {
-      final cred = firebase.signup(
-        accelerator_Name,
-        user_Name,
-        email,
-        website_Link,
-        password,
-        selectedImage!,
-      );
-      if (cred != null) {
-        Navigator.popAndPushNamed(context, AppRoutes.home);
-      }
-    }
-    // if (authFormKey.currentState!.validate() && checkBoxValue) {
-    //   final cred = firebase.signup(email, password);
+    // if (checkBoxValue) {
+    //   final cred = firebase.signup(
+    //     accelerator_Name,
+    //     user_Name,
+    //     email,
+    //     website_Link,
+    //     password,
+    //     selectedImage!,
+    //   );
     //   if (cred != null) {
     //     Navigator.popAndPushNamed(context, AppRoutes.home);
     //   }
     // }
+    if (checkBoxValue) {
+      final cred = AwsIncube().signUp(accelerator_Name, user_Name, email,
+          website_Link, password, selectedImage!);
+      if (cred != null) {
+        Navigator.popAndPushNamed(context, AppRoutes.home);
+      }
+    }
   }
 
   @override

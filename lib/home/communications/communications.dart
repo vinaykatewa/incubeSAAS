@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:incube/home/home.dart';
 import 'package:incube/uiThemes.dart';
-import 'chat/chatform.dart';
-import 'events/events.dart';
+// import 'chat/chatform.dart';
+// import 'events/events.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Communications extends StatefulWidget {
@@ -37,9 +37,9 @@ class _CommunicationsState extends State<Communications> {
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return const Events();
+      // return const Events();
       case 1:
-        return ChatForm();
+      // return ChatForm();
       case 2:
         return InvestmentTrackingScreen();
       case 3:

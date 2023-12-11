@@ -7,7 +7,7 @@ import 'package:incube/uiThemes.dart';
 
 class UserImage extends StatefulWidget {
   const UserImage({super.key, required this.onPickedImage});
-  final void Function(Uint8List? pickImage) onPickedImage;
+  final void Function(String? pickImage) onPickedImage;
 
   @override
   State<UserImage> createState() => _UserImageState();
@@ -37,7 +37,7 @@ class _UserImageState extends State<UserImage> {
     }
   }
 
-  void submitImage(Uint8List uintImg) {
+  void submitImage(String uintImg) {
     widget.onPickedImage(uintImg);
   }
 
@@ -79,7 +79,7 @@ class _UserImageState extends State<UserImage> {
             ),
             onPressed: () async {
               // Calling uploadImage Method
-              submitImage(selectedImageInBytes!);
+              submitImage(_imageFile);
             },
             child: Text('Upload Image To Firebase Storage',
                 style: BodySmall().copyWith(color: Colors.black)),
