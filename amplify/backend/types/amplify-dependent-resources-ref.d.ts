@@ -1,13 +1,13 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
-    "Incubeweb": {
+    "incube": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
       "GraphQLAPIKeyOutput": "string"
     }
   },
   "auth": {
-    "incubeweb1a713ce2": {
+    "incube": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -17,17 +17,8 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     }
   },
-  "function": {
-    "S3Trigger09d1cdbc": {
-      "Arn": "string",
-      "LambdaExecutionRole": "string",
-      "LambdaExecutionRoleArn": "string",
-      "Name": "string",
-      "Region": "string"
-    }
-  },
   "storage": {
-    "UsersImage": {
+    "s3incubestorage11996cc9": {
       "BucketName": "string",
       "Region": "string"
     }

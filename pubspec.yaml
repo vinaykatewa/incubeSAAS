@@ -53,6 +53,8 @@ dependencies:
   amplify_auth_cognito: ^1.6.1
   amplify_flutter: ^1.6.1
   amplify_datastore: ^1.6.0
+  amplify_api: ^1.6.2
+  amplify_storage_s3: ^1.6.1
 
 dev_dependencies:
   flutter_test:

@@ -1,18 +1,13 @@
 {
   "api": {
-    "Incubeweb": {
+    "incube": {
       "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
+              "apiKeyExpirationDays": 7
             },
             "authenticationType": "API_KEY"
           }
@@ -23,7 +18,7 @@
     }
   },
   "auth": {
-    "incubeweb1a713ce2": {
+    "incube": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -33,11 +28,9 @@
         ],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
+          "passwordPolicyMinLength": 6
         },
-        "signupAttributes": [
-          "EMAIL"
-        ],
+        "signupAttributes": [],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"
@@ -50,44 +43,9 @@
       "service": "Cognito"
     }
   },
-  "function": {
-    "S3Trigger09d1cdbc": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_S3Trigger09d1cdbc_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Trigger09d1cdbc"
-        }
-      ]
-    },
-    "AMPLIFY_function_S3Trigger09d1cdbc_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Trigger09d1cdbc"
-        }
-      ]
-    }
-  },
   "storage": {
-    "UsersImage": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn",
-            "LambdaExecutionRole"
-          ],
-          "category": "function",
-          "resourceName": "S3Trigger09d1cdbc"
-        }
-      ],
+    "s3incubestorage11996cc9": {
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }
