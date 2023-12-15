@@ -1,5 +1,8 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:incube/authentication/emailConfermationScreen.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
 import './userImage.dart';
@@ -237,25 +240,36 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  void submitForm() {
-    // if (checkBoxValue) {
-    //   final cred = firebase.signup(
-    //     accelerator_Name,
-    //     user_Name,
-    //     email,
-    //     website_Link,
-    //     password,
-    //     selectedImage!,
-    //   );
-    //   if (cred != null) {
-    //     Navigator.popAndPushNamed(context, AppRoutes.home);
-    //   }
-    // }
+  void submitForm() async {
     if (checkBoxValue) {
-      final cred = AwsIncube().signUp(accelerator_Name, user_Name, email,
-          website_Link, password, selectedImage!);
-      if (cred != null) {
-        Navigator.popAndPushNamed(context, AppRoutes.home);
+      try {
+        final result = await Amplify.Auth.signUp(
+            username: email,
+            password: password,
+            options: SignUpOptions(userAttributes: {
+              AuthUserAttributeKey.email: email,
+            }));
+        safePrint('Signup is started');
+        // if (result.isSignUpComplete) {
+        //   safePrint('Signup is completed moving to conferm screen');
+        //   Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (_) => EmailConfirmationScreen(email: email)));
+        // }
+        safePrint('Signup is completed moving to conferm screen');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => EmailConfirmationScreen(
+                      email: email,
+                      acceleratorName: accelerator_Name,
+                      userName: user_Name,
+                      imageFile: selectedImage!,
+                    )));
+      } on AuthException catch (e) {
+        safePrint('Signup is failing');
+        safePrint(e.toString());
       }
     }
   }

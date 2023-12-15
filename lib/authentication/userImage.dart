@@ -47,11 +47,11 @@ class _UserImageState extends State<UserImage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (_imageFile.isNotEmpty || _imageFile != '')
-            Container(
-              height: 10,
-              child: Image.memory(selectedImageInBytes!),
-            ),
+          // if (_imageFile.isNotEmpty || _imageFile != '')
+          //   Container(
+          //     height: 10,
+          //     child: Image.memory(selectedImageInBytes!),
+          //   ),
           const SizedBox(height: 5),
           ElevatedButton(
             style: ElevatedButton.styleFrom(

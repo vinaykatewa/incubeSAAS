@@ -8,6 +8,7 @@ import 'package:incube/authentication/auth.dart';
 import 'package:incube/authentication/login.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,12 +17,12 @@ void main() async {
 }
 
 Future<void> _configureAmplify() async {
-  await Amplify.addPlugins([
-    AmplifyAPI(modelProvider: ModelProvider.instance),
-  ]);
   try {
-    final authPlugin = AmplifyAuthCognito();
-    await Amplify.addPlugin(authPlugin);
+    await Amplify.addPlugins([
+      AmplifyAPI(modelProvider: ModelProvider.instance),
+      AmplifyAuthCognito(),
+      AmplifyStorageS3(),
+    ]);
     await Amplify.configure(amplifyconfig);
   } on Exception catch (e) {
     safePrint('An error occurred while configuring Amplify: $e');
