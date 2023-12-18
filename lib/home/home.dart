@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,8 +77,6 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
-  // fis
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -134,7 +134,7 @@ class _NavigationBarState extends State<NavigationBar> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.popAndPushNamed(context, AppRoutes.auth);
+                signOutCurrentUser();
               },
               child: Container(
                 child: Row(
@@ -161,6 +161,16 @@ class _NavigationBarState extends State<NavigationBar> {
         ),
       ),
     );
+  }
+
+  Future<void> signOutCurrentUser() async {
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      Navigator.popAndPushNamed(context, AppRoutes.auth);
+      safePrint('Sign out completed successfully');
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
+    }
   }
 
   String _getButtonText(int index) {

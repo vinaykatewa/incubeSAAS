@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/uiThemes.dart';
@@ -91,7 +93,7 @@ class _Signup_FrameState extends State<Signup_Frame> {
           )),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             child: Column(
@@ -221,20 +223,33 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
-  // final firebase = FirebaseClass();
   String email = '';
   String password = '';
   bool isLoading = false;
 
-  void submitForm() {
-    // if (checkBoxValue) {
-    //   final cred = firebase.signin(email, password);
-    //   if (cred != null) {
-    //     Navigator.popAndPushNamed(context, AppRoutes.home);
-    //   }
-    // }
+  void submitForm() async {
+    if (authFormKey.currentState!.validate()) {
+      await _onLogin();
+      Navigator.popAndPushNamed(context, AppRoutes.home);
+    }
+  }
+
+  Future<String> _onLogin() async {
+    try {
+      final res = await Amplify.Auth.signIn(
+        username: email,
+        password: password,
+      );
+      return res.toString();
+    } on AuthException catch (e) {
+      if (e.message.contains('already a user which is signed in')) {
+        await Amplify.Auth.signOut();
+        return 'Problem logging in. Please try again.';
+      }
+
+      return '${e.message} - ${e.recoverySuggestion}';
+    }
   }
 
   @override
@@ -248,48 +263,43 @@ class _SignUpFormState extends State<SignUpForm> {
           // Row 2
           Container(
             height: screenHeight * 0.06,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return "Enter email";
-                    //   } else if (!value.contains('@gmail.com')) {
-                    //     return "Enter valid email";
-                    //   }
-                    //   return null;
-                    // },
-                    onChanged: (value) {
-                      setState(() {
-                        email = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email id',
-                      labelStyle: GoogleFonts.roboto(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4285714286,
-                        color: Color(0x7c1e1e1e),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
-                  ),
+            width: screenWidth * 0.31,
+            child: TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Enter email";
+                } else if (!value.contains('@gmail.com')) {
+                  return "Enter valid email";
+                }
+                return null;
+              },
+              onChanged: (value) {
+                setState(() {
+                  email = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Email id',
+                labelStyle: GoogleFonts.roboto(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 1.4285714286,
+                  color: Color(0x7c1e1e1e),
                 ),
-              ],
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: const Color.fromRGBO(0, 0, 0, 1),
+                  ),
+                  borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: const Color.fromRGBO(0, 0, 0, 1),
+                  ),
+                  borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                ),
+              ),
             ),
           ),
           SizedBox(height: screenHeight * 0.02),
@@ -329,61 +339,6 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SizedBox(height: screenHeight * 0.02),
           //Row 5
-          Container(
-            child: Row(
-              children: [
-                Checkbox(
-                  checkColor: tertiaryColor1(),
-                  activeColor: primaryColor1(),
-                  side: MaterialStateBorderSide.resolveWith(
-                      (Set<MaterialState> states) {
-                    return const BorderSide(
-                        color: Color.fromRGBO(30, 30, 30, 0.800000011920929));
-                  }),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  value: checkBoxValue,
-                  onChanged: (bool? value) {
-                    // Handle the checkbox state change
-                    setState(() {
-                      checkBoxValue = !checkBoxValue;
-                    });
-                  },
-                ),
-                RichText(
-                  text: TextSpan(
-                    style: LabelSmall().copyWith(
-                        color: Color.fromRGBO(30, 30, 30, 0.800000011920929)),
-                    children: [
-                      TextSpan(
-                        text: 'I’ve read and agree with ',
-                      ),
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: LabelSmall().copyWith(
-                            color: Colors.black,
-                            // color: Color(0xb2000000),
-                            fontWeight: FontWeight.w600),
-                      ),
-                      TextSpan(
-                        text: ' and our ',
-                      ),
-                      TextSpan(
-                          text: 'Privacy Policy',
-                          style: LabelSmall().copyWith(
-                              color: Colors.black,
-                              // color: Color(0xb2000000),
-                              fontWeight: FontWeight.w600)),
-                      TextSpan(
-                        text: ' ',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
           SizedBox(height: screenHeight * 0.02),
           // Row 5 - Elevated Button
           Container(
@@ -412,7 +367,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 padding: EdgeInsets.only(
                     top: screenWidth * 0.006, bottom: screenWidth * 0.006),
                 child: Text(
-                  'SIGN UP',
+                  'LOGIN',
                   style: LabelMedium().copyWith(
                     color: Colors.white,
                   ),

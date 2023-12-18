@@ -47,11 +47,11 @@ class _UserImageState extends State<UserImage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // if (_imageFile.isNotEmpty || _imageFile != '')
-          //   Container(
-          //     height: 10,
-          //     child: Image.memory(selectedImageInBytes!),
-          //   ),
+          if (_imageFile.isNotEmpty || _imageFile != '')
+            Container(
+              height: 30,
+              child: Image.memory(selectedImageInBytes!),
+            ),
           const SizedBox(height: 5),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -61,28 +61,13 @@ class _UserImageState extends State<UserImage> {
               ),
             ),
             onPressed: () {
-              // Calling pickImage Method
               pickImage();
+              submitImage(_imageFile);
             },
             child: Text(
               'Pick Image',
               style: BodySmall().copyWith(color: Colors.black),
             ),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(MainBorderRadius()),
-              ),
-            ),
-            onPressed: () async {
-              // Calling uploadImage Method
-              submitImage(_imageFile);
-            },
-            child: Text('Upload Image To Firebase Storage',
-                style: BodySmall().copyWith(color: Colors.black)),
           ),
         ],
       ),

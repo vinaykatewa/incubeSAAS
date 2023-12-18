@@ -44,7 +44,7 @@
     }
   },
   "storage": {
-    "s3incubestorage11996cc9": {
+    "s3incubestorage": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

@@ -129,7 +129,6 @@ class _Signup_FrameState extends State<Signup_Frame> {
           Center(
             child: GestureDetector(
               onTap: () {
-                // Handle the click event, e.g., navigate to the login screen
                 Navigator.popAndPushNamed(context, AppRoutes.login);
               },
               child: RichText(
@@ -250,13 +249,6 @@ class _SignUpFormState extends State<SignUpForm> {
               AuthUserAttributeKey.email: email,
             }));
         safePrint('Signup is started');
-        // if (result.isSignUpComplete) {
-        //   safePrint('Signup is completed moving to conferm screen');
-        //   Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //           builder: (_) => EmailConfirmationScreen(email: email)));
-        // }
         safePrint('Signup is completed moving to conferm screen');
         Navigator.push(
             context,

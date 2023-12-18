@@ -7,5 +7,5 @@ type Todo @model {
   acceleratorName: String!
   userName: String
   email: String
-  imageUrl: String
+  imageUrl: Stringamplify
 }
