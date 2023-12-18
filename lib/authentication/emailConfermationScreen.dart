@@ -30,7 +30,8 @@ class EmailConfirmationScreen extends StatefulWidget {
 }
 
 class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
-  var uid = 'initial uid1';
+  var uid = 'initial uid2';
+  late final result;
 
   var imageUrl = '';
 
@@ -95,7 +96,6 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           username: widget.email,
           confirmationCode: confirmationCode,
         );
-
         safePrint('success in conferming user');
       } on AuthException catch (e) {
         safePrint('code submission error');

@@ -26,7 +26,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    fetchCognitoAuthSession();
+    // fetchCognitoAuthSession();
+    fetchUserIdFromAttributes();
   }
 
   Future<void> fetchCognitoAuthSession() async {
@@ -46,6 +47,23 @@ class _HomeState extends State<Home> {
       });
     } on AuthException catch (e) {
       safePrint('Error retrieving auth session: ${e.message}');
+    }
+  }
+
+  Future<String> fetchUserIdFromAttributes() async {
+    safePrint("will try to run the uid function");
+    try {
+      safePrint("running the uid function");
+      final attributes = await Amplify.Auth.fetchUserAttributes();
+      final subAttribute =
+          attributes.firstWhere((element) => element.userAttributeKey == 'sub');
+      final userId = subAttribute.value;
+      safePrint("uid retrival is successful, its done");
+      safePrint("this is the uid");
+      safePrint("Current user's identity ID: $userId");
+      return userId;
+    } catch (e) {
+      throw e;
     }
   }
 
