@@ -30,7 +30,7 @@ class EmailConfirmationScreen extends StatefulWidget {
 }
 
 class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
-  var uid = '';
+  var uid = 'initial uid1';
 
   var imageUrl = '';
 
@@ -95,6 +95,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           username: widget.email,
           confirmationCode: confirmationCode,
         );
+
         safePrint('success in conferming user');
       } on AuthException catch (e) {
         safePrint('code submission error');
@@ -106,8 +107,10 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
     try {
       final cognitoPlugin =
           Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
-      final result = await cognitoPlugin.fetchAuthSession();
-      final identityId = result.identityIdResult.value;
+      // final result = await cognitoPlugin.fetchAuthSession();
+      final result = await Amplify.Auth.getCurrentUser();
+      // final identityId = result.identityIdResult.value;
+      final identityId = result.userId;
       safePrint("Current user's identity ID: $identityId");
       setState(() {
         uid = identityId;

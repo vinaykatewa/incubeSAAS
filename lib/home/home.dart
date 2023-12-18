@@ -22,6 +22,32 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedButtonIndex = 0;
+  late String uid;
+  @override
+  void initState() {
+    super.initState();
+    fetchCognitoAuthSession();
+  }
+
+  Future<void> fetchCognitoAuthSession() async {
+    safePrint("will try to run the uid function");
+    try {
+      // final cognitoPlugin =
+      //     Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
+      // final result = await cognitoPlugin.fetchAuthSession();
+      safePrint("running the uid function");
+      final result = await Amplify.Auth.getCurrentUser();
+      // final identityId = result.identityIdResult.value;
+      final identityId = result.userId;
+      safePrint("this is the uid");
+      safePrint("Current user's identity ID: $identityId");
+      setState(() {
+        uid = identityId;
+      });
+    } on AuthException catch (e) {
+      safePrint('Error retrieving auth session: ${e.message}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

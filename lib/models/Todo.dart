@@ -26,7 +26,6 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 /** This is an auto generated class representing the Todo type in your schema. */
 class Todo extends amplify_core.Model {
   static const classType = const _TodoModelType();
-  final String id;
   final String? _uid;
   final String? _acceleratorName;
   final String? _userName;
@@ -40,12 +39,21 @@ class Todo extends amplify_core.Model {
   
   @Deprecated('[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
   @override
-  String getId() => id;
+  String getId() => modelIdentifier.serializeAsString();
   
   TodoModelIdentifier get modelIdentifier {
+    try {
       return TodoModelIdentifier(
-        id: id
+        uid: _uid!
       );
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   String get uid {
@@ -94,11 +102,10 @@ class Todo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Todo._internal({required this.id, required uid, required acceleratorName, userName, email, imageUrl, createdAt, updatedAt}): _uid = uid, _acceleratorName = acceleratorName, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Todo._internal({required uid, required acceleratorName, userName, email, imageUrl, createdAt, updatedAt}): _uid = uid, _acceleratorName = acceleratorName, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Todo({String? id, required String uid, required String acceleratorName, String? userName, String? email, String? imageUrl}) {
+  factory Todo({required String uid, required String acceleratorName, String? userName, String? email, String? imageUrl}) {
     return Todo._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
       uid: uid,
       acceleratorName: acceleratorName,
       userName: userName,
@@ -114,7 +121,6 @@ class Todo extends amplify_core.Model {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Todo &&
-      id == other.id &&
       _uid == other._uid &&
       _acceleratorName == other._acceleratorName &&
       _userName == other._userName &&
@@ -130,7 +136,6 @@ class Todo extends amplify_core.Model {
     var buffer = new StringBuffer();
     
     buffer.write("Todo {");
-    buffer.write("id=" + "$id" + ", ");
     buffer.write("uid=" + "$_uid" + ", ");
     buffer.write("acceleratorName=" + "$_acceleratorName" + ", ");
     buffer.write("userName=" + "$_userName" + ", ");
@@ -143,10 +148,9 @@ class Todo extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Todo copyWith({String? uid, String? acceleratorName, String? userName, String? email, String? imageUrl}) {
+  Todo copyWith({String? acceleratorName, String? userName, String? email, String? imageUrl}) {
     return Todo._internal(
-      id: id,
-      uid: uid ?? this.uid,
+      uid: uid,
       acceleratorName: acceleratorName ?? this.acceleratorName,
       userName: userName ?? this.userName,
       email: email ?? this.email,
@@ -154,15 +158,13 @@ class Todo extends amplify_core.Model {
   }
   
   Todo copyWithModelFieldValues({
-    ModelFieldValue<String>? uid,
     ModelFieldValue<String>? acceleratorName,
     ModelFieldValue<String?>? userName,
     ModelFieldValue<String?>? email,
     ModelFieldValue<String?>? imageUrl
   }) {
     return Todo._internal(
-      id: id,
-      uid: uid == null ? this.uid : uid.value,
+      uid: uid,
       acceleratorName: acceleratorName == null ? this.acceleratorName : acceleratorName.value,
       userName: userName == null ? this.userName : userName.value,
       email: email == null ? this.email : email.value,
@@ -171,8 +173,7 @@ class Todo extends amplify_core.Model {
   }
   
   Todo.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
-      _uid = json['uid'],
+    : _uid = json['uid'],
       _acceleratorName = json['acceleratorName'],
       _userName = json['userName'],
       _email = json['email'],
@@ -181,11 +182,10 @@ class Todo extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'uid': _uid, 'acceleratorName': _acceleratorName, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'uid': _uid, 'acceleratorName': _acceleratorName, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id,
     'uid': _uid,
     'acceleratorName': _acceleratorName,
     'userName': _userName,
@@ -196,7 +196,6 @@ class Todo extends amplify_core.Model {
   };
 
   static final amplify_core.QueryModelIdentifier<TodoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TodoModelIdentifier>();
-  static final ID = amplify_core.QueryField(fieldName: "id");
   static final UID = amplify_core.QueryField(fieldName: "uid");
   static final ACCELERATORNAME = amplify_core.QueryField(fieldName: "acceleratorName");
   static final USERNAME = amplify_core.QueryField(fieldName: "userName");
@@ -206,7 +205,9 @@ class Todo extends amplify_core.Model {
     modelSchemaDefinition.name = "Todo";
     modelSchemaDefinition.pluralName = "Todos";
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+    modelSchemaDefinition.indexes = [
+      amplify_core.ModelIndex(fields: const ["uid"], name: null)
+    ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Todo.UID,
@@ -273,15 +274,15 @@ class _TodoModelType extends amplify_core.ModelType<Todo> {
  * of [Todo] in your schema.
  */
 class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
-  final String id;
+  final String uid;
 
-  /** Create an instance of TodoModelIdentifier using [id] the primary key. */
+  /** Create an instance of TodoModelIdentifier using [uid] the primary key. */
   const TodoModelIdentifier({
-    required this.id});
+    required this.uid});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'id': id
+    'uid': uid
   });
   
   @override
@@ -294,7 +295,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TodoModelIdentifier(id: $id)';
+  String toString() => 'TodoModelIdentifier(uid: $uid)';
   
   @override
   bool operator ==(Object other) {
@@ -303,10 +304,10 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
     }
     
     return other is TodoModelIdentifier &&
-      id == other.id;
+      uid == other.uid;
   }
   
   @override
   int get hashCode =>
-    id.hashCode;
+    uid.hashCode;
 }

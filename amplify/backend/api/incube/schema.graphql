@@ -3,9 +3,9 @@
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
 type Todo @model {
-  uid: ID!
+  uid: ID! @primaryKey
   acceleratorName: String!
   userName: String
   email: String
-  imageUrl: Stringamplify
+  imageUrl: String
 }
