@@ -87,18 +87,6 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                     },
                     child: Text("CONFIRM"),
                   ),
-                  ElevatedButton(
-                    onPressed: () => amplifyFunction.isUserSignedIn(),
-                    child: Text("conferm signin"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => amplifyFunction.getCurrentUser(),
-                    child: Text("get user creds"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => amplifyFunction.fetchAuthSession(),
-                    child: Text("get user creds"),
-                  ),
                 ],
               ),
               if (_isExecuting)
