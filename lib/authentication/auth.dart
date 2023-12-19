@@ -225,7 +225,6 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
-  // final firebase = FirebaseClass();
   String accelerator_Name = '';
   String user_Name = '';
   String email = '';
@@ -233,6 +232,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String password = '';
   bool isLoading = false;
   String? selectedImage;
+  final amplifyFunction = AwsIncube();
   void onImagePicked(String? image) {
     setState(() {
       selectedImage = image;
@@ -242,25 +242,22 @@ class _SignUpFormState extends State<SignUpForm> {
   void submitForm() async {
     if (checkBoxValue) {
       try {
-        final result = await Amplify.Auth.signUp(
-            username: email,
-            password: password,
-            options: SignUpOptions(userAttributes: {
-              AuthUserAttributeKey.email: email,
-            }));
-        safePrint('Signup is started');
-        safePrint('Signup is completed moving to conferm screen');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => EmailConfirmationScreen(
-                      email: email,
-                      acceleratorName: accelerator_Name,
-                      userName: user_Name,
-                      imageFile: selectedImage!,
-                    )));
+        await amplifyFunction
+            .signUpUser(password: password, email: email)
+            .whenComplete(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => EmailConfirmationScreen(
+                        email: email,
+                        acceleratorName: accelerator_Name,
+                        userName: user_Name,
+                        password: password,
+                        imageFile: selectedImage!,
+                      )));
+        });
       } on AuthException catch (e) {
-        safePrint('Signup is failing');
+        safePrint('pushing to email confermation');
         safePrint(e.toString());
       }
     }

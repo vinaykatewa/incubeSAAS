@@ -4,7 +4,6 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:incube/firebase/firebase.dart';
 import 'package:incube/route.dart';
 import './dashboard/dashboard.dart';
 import '../uiThemes.dart';
@@ -12,6 +11,7 @@ import './communications/communications.dart';
 import './dealManagement/dealManagement.dart';
 import './investmentTracking/investmentTracking.dart';
 import './portfolioAnalytics/portfolioAnalytics.dart';
+import '../firebase/AwsAmplify.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -23,48 +23,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedButtonIndex = 0;
   late String uid;
+  final awsFunction = AwsIncube();
   @override
   void initState() {
     super.initState();
-    // fetchCognitoAuthSession();
-    fetchUserIdFromAttributes();
-  }
-
-  Future<void> fetchCognitoAuthSession() async {
-    safePrint("will try to run the uid function");
-    try {
-      // final cognitoPlugin =
-      //     Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
-      // final result = await cognitoPlugin.fetchAuthSession();
-      safePrint("running the uid function");
-      final result = await Amplify.Auth.getCurrentUser();
-      // final identityId = result.identityIdResult.value;
-      final identityId = result.userId;
-      safePrint("this is the uid");
-      safePrint("Current user's identity ID: $identityId");
-      setState(() {
-        uid = identityId;
-      });
-    } on AuthException catch (e) {
-      safePrint('Error retrieving auth session: ${e.message}');
-    }
-  }
-
-  Future<String> fetchUserIdFromAttributes() async {
-    safePrint("will try to run the uid function");
-    try {
-      safePrint("running the uid function");
-      final attributes = await Amplify.Auth.fetchUserAttributes();
-      final subAttribute =
-          attributes.firstWhere((element) => element.userAttributeKey == 'sub');
-      final userId = subAttribute.value;
-      safePrint("uid retrival is successful, its done");
-      safePrint("this is the uid");
-      safePrint("Current user's identity ID: $userId");
-      return userId;
-    } catch (e) {
-      throw e;
-    }
+    awsFunction.getCurrentUser();
   }
 
   @override

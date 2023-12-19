@@ -14,6 +14,7 @@ class EmailConfirmationScreen extends StatefulWidget {
   final String email;
   final String acceleratorName;
   final String userName;
+  final String password;
   final String imageFile;
 
   EmailConfirmationScreen({
@@ -21,6 +22,7 @@ class EmailConfirmationScreen extends StatefulWidget {
     required this.email,
     required this.acceleratorName,
     required this.userName,
+    required this.password,
     required this.imageFile,
   }) : super(key: key);
 
@@ -30,7 +32,8 @@ class EmailConfirmationScreen extends StatefulWidget {
 }
 
 class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
-  var uid = 'initial uid2';
+  final amplifyFunction = AwsIncube();
+  var uid = 'initial uid13';
   late final result;
 
   var imageUrl = '';
@@ -41,7 +44,6 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +73,18 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                 onPressed: () => _executeMethods(),
                 child: Text("CONFIRM"),
               ),
+              ElevatedButton(
+                onPressed: () => amplifyFunction.isUserSignedIn(),
+                child: Text("conferm signin"),
+              ),
+              ElevatedButton(
+                onPressed: () => amplifyFunction.getCurrentUser(),
+                child: Text("get user creds"),
+              ),
+              ElevatedButton(
+                onPressed: () => amplifyFunction.fetchAuthSession(),
+                child: Text("get user creds"),
+              ),
             ],
           ),
         ),
@@ -79,44 +93,31 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   }
 
   void _executeMethods() async {
-    await _submitCode();
-    await fetchCognitoAuthSession();
-    await storingImage();
-    await graphQLData();
-    safePrint('home to home');
-    _gotoMainScreen();
+    await _submitCode().whenComplete(() async {
+      await amplifyFunction
+          .login(widget.email, widget.password)
+          .whenComplete(() {
+        _gotoMainScreen();
+      });
+    });
+    // await Futurfe.delayed(Duration(seconds: 2));
+    // await amplifyFunction.isUserSignedIn();
+    // await amplifyFunction.getCurrentUser();
+    // await fetchCognitoAuthSession();
+    // await storingImage();
+    // await graphQLData();
+    // safePrint('home to home');
   }
 
   Future<void> _submitCode() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      final confirmationCode = _confirmationCodeController.text;
-      safePrint('submit code button is started');
-      try {
-        await Amplify.Auth.confirmSignUp(
-          username: widget.email,
-          confirmationCode: confirmationCode,
-        );
-        safePrint('success in conferming user');
-      } on AuthException catch (e) {
-        safePrint('code submission error');
-      }
-    }
-  }
-
-  Future<void> fetchCognitoAuthSession() async {
+    final confirmationCode = _confirmationCodeController.text;
+    safePrint('submit code button is started');
     try {
-      final cognitoPlugin =
-          Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
-      // final result = await cognitoPlugin.fetchAuthSession();
-      final result = await Amplify.Auth.getCurrentUser();
-      // final identityId = result.identityIdResult.value;
-      final identityId = result.userId;
-      safePrint("Current user's identity ID: $identityId");
-      setState(() {
-        uid = identityId;
-      });
+      await amplifyFunction.confirmUser(
+          username: widget.email, confirmationCode: confirmationCode);
     } on AuthException catch (e) {
-      safePrint('Error retrieving auth session: ${e.message}');
+      safePrint('error in confirmation of code');
+      safePrint(e.toString());
     }
   }
 
