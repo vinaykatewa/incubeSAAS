@@ -3,7 +3,6 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/uiThemes.dart';
-import 'package:incube/firebase/firebase.dart';
 import 'package:incube/route.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';

@@ -1,9 +1,5 @@
-import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:amazon_cognito_identity_dart_2/cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 class AwsIncube {
   Future<bool> isUserSignedIn() async {

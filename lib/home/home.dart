@@ -1,4 +1,3 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import './communications/communications.dart';
 import './dealManagement/dealManagement.dart';
 import './investmentTracking/investmentTracking.dart';
 import './portfolioAnalytics/portfolioAnalytics.dart';
-import '../firebase/AwsAmplify.dart';
+import '../AmplifyFuntions/AwsAmplify.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

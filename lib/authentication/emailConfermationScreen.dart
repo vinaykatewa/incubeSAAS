@@ -4,7 +4,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/models/Todo.dart';
 import 'package:incube/route.dart';
-import '../firebase/AwsAmplify.dart';
+import '../AmplifyFuntions/AwsAmplify.dart';
 import 'dart:html' as html;
 
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';

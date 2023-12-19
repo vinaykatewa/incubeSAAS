@@ -7,7 +7,7 @@ import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
 import './userImage.dart';
 import 'dart:typed_data';
-import '../firebase/AwsAmplify.dart';
+import '../AmplifyFuntions/AwsAmplify.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
