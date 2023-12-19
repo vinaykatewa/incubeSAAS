@@ -44,6 +44,8 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  bool _isExecuting = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,36 +57,57 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: Stack(
             children: [
-              Text(
-                "An email confirmation code is sent to ${widget.email}. Please type the code to confirm your email.",
-                style: Theme.of(context).textTheme.headline6,
+              Column(
+                children: [
+                  Text(
+                    "An email confirmation code is sent to ${widget.email}. Please type the code to confirm your email.",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _confirmationCodeController,
+                    decoration: InputDecoration(labelText: "Confirmation Code"),
+                    validator: (value) => value?.length != 6
+                        ? "The confirmation code is invalid"
+                        : null,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        _isExecuting = true;
+                      });
+
+                      await _executeMethods();
+
+                      setState(() {
+                        _isExecuting = false;
+                      });
+                    },
+                    child: Text("CONFIRM"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => amplifyFunction.isUserSignedIn(),
+                    child: Text("conferm signin"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => amplifyFunction.getCurrentUser(),
+                    child: Text("get user creds"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => amplifyFunction.fetchAuthSession(),
+                    child: Text("get user creds"),
+                  ),
+                ],
               ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                controller: _confirmationCodeController,
-                decoration: InputDecoration(labelText: "Confirmation Code"),
-                validator: (value) => value?.length != 6
-                    ? "The confirmation code is invalid"
-                    : null,
-              ),
-              ElevatedButton(
-                onPressed: () => _executeMethods(),
-                child: Text("CONFIRM"),
-              ),
-              ElevatedButton(
-                onPressed: () => amplifyFunction.isUserSignedIn(),
-                child: Text("conferm signin"),
-              ),
-              ElevatedButton(
-                onPressed: () => amplifyFunction.getCurrentUser(),
-                child: Text("get user creds"),
-              ),
-              ElevatedButton(
-                onPressed: () => amplifyFunction.fetchAuthSession(),
-                child: Text("get user creds"),
-              ),
+              if (_isExecuting)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
             ],
           ),
         ),
@@ -92,21 +115,20 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
     );
   }
 
-  void _executeMethods() async {
+  Future<void> _executeMethods() async {
     await _submitCode().whenComplete(() async {
       await amplifyFunction
           .login(widget.email, widget.password)
-          .whenComplete(() {
-        _gotoMainScreen();
+          .whenComplete(() async {
+        await storingImage().whenComplete(() async {
+          await _getUserId().whenComplete(() async {
+            await graphQLData().whenComplete(() {
+              _gotoMainScreen();
+            });
+          });
+        });
       });
     });
-    // await Futurfe.delayed(Duration(seconds: 2));
-    // await amplifyFunction.isUserSignedIn();
-    // await amplifyFunction.getCurrentUser();
-    // await fetchCognitoAuthSession();
-    // await storingImage();
-    // await graphQLData();
-    // safePrint('home to home');
   }
 
   Future<void> _submitCode() async {
@@ -119,6 +141,15 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
       safePrint('error in confirmation of code');
       safePrint(e.toString());
     }
+  }
+
+  Future<void> _getUserId() async {
+    final result = await amplifyFunction.getCurrentUser();
+    safePrint('we are retriving users uid');
+    setState(() {
+      uid = result.userId.toString();
+    });
+    safePrint('this is the user uid' + uid);
   }
 
   Future<void> graphQLData() async {
