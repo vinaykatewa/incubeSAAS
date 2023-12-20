@@ -162,11 +162,53 @@ class _NavigationBarState extends State<NavigationBar> {
                   ],
                 ),
               ),
-            )
+            ),
+            ElevatedButton(onPressed: () {}, child: Text('Teams')),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> teams(BuildContext context) {
+    String teamUser;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              content: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Give user name of member',
+                      labelStyle: BodySmall()
+                          .copyWith(color: Colors.white.withOpacity(0.8)),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    style: BodySmall().copyWith(color: Colors.white),
+                    onChanged: (value) {
+                      teamUser = value;
+                    },
+                  )
+                ],
+              ),
+              actions: [
+                TextButton(onPressed: () {}, child: Text('submit user'))
+              ],
+            );
+          });
+        });
+  }
+
+  Future<void> addUserToGroup(String userName) async {
+    // final result = await Amplify.Auth;
   }
 
   Future<void> signOutCurrentUser() async {

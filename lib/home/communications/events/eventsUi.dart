@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:incube/models/Events.dart';
 import 'package:incube/uiThemes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EventsUi extends StatefulWidget {
   final Events event;
@@ -19,7 +20,7 @@ class _EventsUiState extends State<EventsUi> {
   @override
   void initState() {
     super.initState();
-    List<int> list = utf8.encode(widget.event.eventImage);
+    List<int> list = widget.event.eventImage.codeUnits;
     webImage = Uint8List.fromList(list);
   }
 
@@ -68,11 +69,20 @@ class _EventsUiState extends State<EventsUi> {
                         //   fit: BoxFit.cover,
                         // ),
                       ),
-                      child: Image.memory(
-                        webImage,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Text('Error loading image' + error.toString());
-                        },
+                      // child: Image.memory(
+                      //   webImage,
+                      //   // widget.event.eventImage,
+                      //   // errorBuilder: (context, error, stackTrace) {
+                      //   //   return Text('Error loading image' + error.toString());
+                      //   // },
+                      // ),
+                      child: CachedNetworkImage(
+                        // cacheKey: trip.tripImageKey,
+                        imageUrl: widget.event.eventImage,
+                        width: double.maxFinite,
+                        height: 500,
+                        alignment: Alignment.topCenter,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     SizedBox(
