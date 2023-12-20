@@ -23,9 +23,9 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the Todo type in your schema. */
-class Todo extends amplify_core.Model {
-  static const classType = const _TodoModelType();
+/** This is an auto generated class representing the userInfo type in your schema. */
+class userInfo extends amplify_core.Model {
+  static const classType = const _userInfoModelType();
   final String? _uid;
   final String? _acceleratorName;
   final String? _userName;
@@ -41,9 +41,9 @@ class Todo extends amplify_core.Model {
   @override
   String getId() => modelIdentifier.serializeAsString();
   
-  TodoModelIdentifier get modelIdentifier {
+  userInfoModelIdentifier get modelIdentifier {
     try {
-      return TodoModelIdentifier(
+      return userInfoModelIdentifier(
         uid: _uid!
       );
     } catch(e) {
@@ -102,10 +102,10 @@ class Todo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Todo._internal({required uid, required acceleratorName, userName, email, imageUrl, createdAt, updatedAt}): _uid = uid, _acceleratorName = acceleratorName, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const userInfo._internal({required uid, required acceleratorName, userName, email, imageUrl, createdAt, updatedAt}): _uid = uid, _acceleratorName = acceleratorName, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Todo({required String uid, required String acceleratorName, String? userName, String? email, String? imageUrl}) {
-    return Todo._internal(
+  factory userInfo({required String uid, required String acceleratorName, String? userName, String? email, String? imageUrl}) {
+    return userInfo._internal(
       uid: uid,
       acceleratorName: acceleratorName,
       userName: userName,
@@ -120,7 +120,7 @@ class Todo extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Todo &&
+    return other is userInfo &&
       _uid == other._uid &&
       _acceleratorName == other._acceleratorName &&
       _userName == other._userName &&
@@ -135,7 +135,7 @@ class Todo extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Todo {");
+    buffer.write("userInfo {");
     buffer.write("uid=" + "$_uid" + ", ");
     buffer.write("acceleratorName=" + "$_acceleratorName" + ", ");
     buffer.write("userName=" + "$_userName" + ", ");
@@ -148,8 +148,8 @@ class Todo extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Todo copyWith({String? acceleratorName, String? userName, String? email, String? imageUrl}) {
-    return Todo._internal(
+  userInfo copyWith({String? acceleratorName, String? userName, String? email, String? imageUrl}) {
+    return userInfo._internal(
       uid: uid,
       acceleratorName: acceleratorName ?? this.acceleratorName,
       userName: userName ?? this.userName,
@@ -157,13 +157,13 @@ class Todo extends amplify_core.Model {
       imageUrl: imageUrl ?? this.imageUrl);
   }
   
-  Todo copyWithModelFieldValues({
+  userInfo copyWithModelFieldValues({
     ModelFieldValue<String>? acceleratorName,
     ModelFieldValue<String?>? userName,
     ModelFieldValue<String?>? email,
     ModelFieldValue<String?>? imageUrl
   }) {
-    return Todo._internal(
+    return userInfo._internal(
       uid: uid,
       acceleratorName: acceleratorName == null ? this.acceleratorName : acceleratorName.value,
       userName: userName == null ? this.userName : userName.value,
@@ -172,7 +172,7 @@ class Todo extends amplify_core.Model {
     );
   }
   
-  Todo.fromJson(Map<String, dynamic> json)  
+  userInfo.fromJson(Map<String, dynamic> json)  
     : _uid = json['uid'],
       _acceleratorName = json['acceleratorName'],
       _userName = json['userName'],
@@ -195,46 +195,46 @@ class Todo extends amplify_core.Model {
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<TodoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TodoModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<userInfoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<userInfoModelIdentifier>();
   static final UID = amplify_core.QueryField(fieldName: "uid");
   static final ACCELERATORNAME = amplify_core.QueryField(fieldName: "acceleratorName");
   static final USERNAME = amplify_core.QueryField(fieldName: "userName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static final IMAGEURL = amplify_core.QueryField(fieldName: "imageUrl");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Todo";
-    modelSchemaDefinition.pluralName = "Todos";
+    modelSchemaDefinition.name = "userInfo";
+    modelSchemaDefinition.pluralName = "userInfos";
     
     modelSchemaDefinition.indexes = [
       amplify_core.ModelIndex(fields: const ["uid"], name: null)
     ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.UID,
+      key: userInfo.UID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.ACCELERATORNAME,
+      key: userInfo.ACCELERATORNAME,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.USERNAME,
+      key: userInfo.USERNAME,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.EMAIL,
+      key: userInfo.EMAIL,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.IMAGEURL,
+      key: userInfo.IMAGEURL,
       isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
@@ -255,29 +255,29 @@ class Todo extends amplify_core.Model {
   });
 }
 
-class _TodoModelType extends amplify_core.ModelType<Todo> {
-  const _TodoModelType();
+class _userInfoModelType extends amplify_core.ModelType<userInfo> {
+  const _userInfoModelType();
   
   @override
-  Todo fromJson(Map<String, dynamic> jsonData) {
-    return Todo.fromJson(jsonData);
+  userInfo fromJson(Map<String, dynamic> jsonData) {
+    return userInfo.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Todo';
+    return 'userInfo';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Todo] in your schema.
+ * of [userInfo] in your schema.
  */
-class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
+class userInfoModelIdentifier implements amplify_core.ModelIdentifier<userInfo> {
   final String uid;
 
-  /** Create an instance of TodoModelIdentifier using [uid] the primary key. */
-  const TodoModelIdentifier({
+  /** Create an instance of userInfoModelIdentifier using [uid] the primary key. */
+  const userInfoModelIdentifier({
     required this.uid});
   
   @override
@@ -295,7 +295,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TodoModelIdentifier(uid: $uid)';
+  String toString() => 'userInfoModelIdentifier(uid: $uid)';
   
   @override
   bool operator ==(Object other) {
@@ -303,7 +303,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
       return true;
     }
     
-    return other is TodoModelIdentifier &&
+    return other is userInfoModelIdentifier &&
       uid == other.uid;
   }
   

@@ -2,7 +2,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/models/Todo.dart';
+import 'package:incube/models/userInfo.dart';
 import 'package:incube/route.dart';
 import '../AmplifyFuntions/AwsAmplify.dart';
 import 'dart:html' as html;
@@ -142,7 +142,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
   Future<void> graphQLData() async {
     try {
-      final userDataModel = Todo(
+      final userDataModel = userInfo(
         uid: uid,
         acceleratorName: widget.acceleratorName,
         userName: widget.userName,

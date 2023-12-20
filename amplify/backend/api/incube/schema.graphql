@@ -2,10 +2,22 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Todo @model {
+type userInfo @model {
   uid: ID! @primaryKey
   acceleratorName: String!
   userName: String
   email: String
   imageUrl: String
+}
+
+type Events @model {
+  eventName: String!
+  eventProvider: String!
+  eventTag: String!
+  eventParticipants: String!
+  eventFee: String!
+  eventTiming: String!
+  eventImage: String!
+  eventLocation: String
+  isEventOnline: Boolean!
 }

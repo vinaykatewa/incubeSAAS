@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import '../AmplifyFuntions/AwsAmplify.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -226,28 +225,13 @@ class _SignUpFormState extends State<SignUpForm> {
   String email = '';
   String password = '';
   bool isLoading = false;
+  final awsFunction = AwsIncube();
 
   void submitForm() async {
     if (authFormKey.currentState!.validate()) {
-      await _onLogin();
-      Navigator.popAndPushNamed(context, AppRoutes.home);
-    }
-  }
-
-  Future<String> _onLogin() async {
-    try {
-      final res = await Amplify.Auth.signIn(
-        username: email,
-        password: password,
-      );
-      return res.toString();
-    } on AuthException catch (e) {
-      if (e.message.contains('already a user which is signed in')) {
-        await Amplify.Auth.signOut();
-        return 'Problem logging in. Please try again.';
-      }
-
-      return '${e.message} - ${e.recoverySuggestion}';
+      await awsFunction.login(email, password).whenComplete(() {
+        Navigator.popAndPushNamed(context, AppRoutes.home);
+      });
     }
   }
 

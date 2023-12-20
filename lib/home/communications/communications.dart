@@ -37,7 +37,7 @@ class _CommunicationsState extends State<Communications> {
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return const Events();
+        return const EventsWidget();
       case 1:
       // return ChatForm();
       case 2:
