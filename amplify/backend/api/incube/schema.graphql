@@ -21,3 +21,8 @@ type Events @model {
   eventLocation: String
   isEventOnline: Boolean!
 }
+type Organization @model {
+org_name: String!
+org_admin: String!
+org_team: [String]
+}

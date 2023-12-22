@@ -55,6 +55,7 @@
     "breakCircularDependency": true,
     "dependsOn": [],
     "hostedUI": false,
-    "authProviders": []
+    "authProviders": [],
+    "adminQueryGroup": "incubeUsersGroup"
   }
 }

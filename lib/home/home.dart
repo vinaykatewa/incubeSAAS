@@ -1,16 +1,23 @@
+import 'dart:convert';
+import 'dart:js_interop';
+
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'package:incube/authentication/addUsertoPool.dart';
 import 'package:incube/route.dart';
-import './dashboard/dashboard.dart';
+
+import '../AmplifyFuntions/AwsAmplify.dart';
 import '../uiThemes.dart';
 import './communications/communications.dart';
+import './dashboard/dashboard.dart';
 import './dealManagement/dealManagement.dart';
 import './investmentTracking/investmentTracking.dart';
 import './portfolioAnalytics/portfolioAnalytics.dart';
-import '../AmplifyFuntions/AwsAmplify.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -83,6 +90,7 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
+  final userPool = AdminQueriesAPI();
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -163,52 +171,10 @@ class _NavigationBarState extends State<NavigationBar> {
                 ),
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text('Teams')),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> teams(BuildContext context) {
-    String teamUser;
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              content: Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Give user name of member',
-                      labelStyle: BodySmall()
-                          .copyWith(color: Colors.white.withOpacity(0.8)),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                    ),
-                    style: BodySmall().copyWith(color: Colors.white),
-                    onChanged: (value) {
-                      teamUser = value;
-                    },
-                  )
-                ],
-              ),
-              actions: [
-                TextButton(onPressed: () {}, child: Text('submit user'))
-              ],
-            );
-          });
-        });
-  }
-
-  Future<void> addUserToGroup(String userName) async {
-    // final result = await Amplify.Auth;
   }
 
   Future<void> signOutCurrentUser() async {

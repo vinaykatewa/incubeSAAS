@@ -19,7 +19,14 @@
         "s3incubestorage": {}
       },
       "api": {
-        "incube": {}
+        "incube": {},
+        "AdminQueries": {}
+      },
+      "function": {
+        "AdminQueries96385d41": {
+          "deploymentBucketName": "amplify-incube-staging-54412-deployment",
+          "s3Key": "amplify-builds/AdminQueries96385d41-6a6a3448506a76725339-build.zip"
+        }
       }
     }
   }
