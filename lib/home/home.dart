@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:incube/authentication/addUsertoPool.dart';
 import 'package:incube/route.dart';
 
 import '../AmplifyFuntions/AwsAmplify.dart';
@@ -90,7 +89,6 @@ class NavigationBar extends StatefulWidget {
 }
 
 class _NavigationBarState extends State<NavigationBar> {
-  final userPool = AdminQueriesAPI();
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
