@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:incube/amplifyconfiguration.dart';
 import 'package:incube/home/home.dart';
+import 'package:incube/organizations/organization.dart';
 import 'route.dart';
 import 'package:incube/authentication/auth.dart';
 import 'package:incube/authentication/login.dart';
@@ -14,7 +15,11 @@ import './models/ModelProvider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _configureAmplify();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      child: const MyApp(),
+    ),
+  );
 }
 
 Future<void> _configureAmplify() async {
@@ -43,6 +48,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.auth: (context) => const AuthScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
+        AppRoutes.OrganizationPage: (context) => const OrganizationPage(),
       },
     );
   }

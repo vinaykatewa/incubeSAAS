@@ -27,10 +27,10 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 class userInfo extends amplify_core.Model {
   static const classType = const _userInfoModelType();
   final String? _uid;
-  final String? _acceleratorName;
   final String? _userName;
   final String? _email;
   final String? _imageUrl;
+  final String? _Organization;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -69,19 +69,6 @@ class userInfo extends amplify_core.Model {
     }
   }
   
-  String get acceleratorName {
-    try {
-      return _acceleratorName!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
-  
   String? get userName {
     return _userName;
   }
@@ -94,6 +81,19 @@ class userInfo extends amplify_core.Model {
     return _imageUrl;
   }
   
+  String get Organization {
+    try {
+      return _Organization!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -102,15 +102,15 @@ class userInfo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const userInfo._internal({required uid, required acceleratorName, userName, email, imageUrl, createdAt, updatedAt}): _uid = uid, _acceleratorName = acceleratorName, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
+  const userInfo._internal({required uid, userName, email, imageUrl, required Organization, createdAt, updatedAt}): _uid = uid, _userName = userName, _email = email, _imageUrl = imageUrl, _Organization = Organization, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory userInfo({required String uid, required String acceleratorName, String? userName, String? email, String? imageUrl}) {
+  factory userInfo({required String uid, String? userName, String? email, String? imageUrl, required String Organization}) {
     return userInfo._internal(
       uid: uid,
-      acceleratorName: acceleratorName,
       userName: userName,
       email: email,
-      imageUrl: imageUrl);
+      imageUrl: imageUrl,
+      Organization: Organization);
   }
   
   bool equals(Object other) {
@@ -122,10 +122,10 @@ class userInfo extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is userInfo &&
       _uid == other._uid &&
-      _acceleratorName == other._acceleratorName &&
       _userName == other._userName &&
       _email == other._email &&
-      _imageUrl == other._imageUrl;
+      _imageUrl == other._imageUrl &&
+      _Organization == other._Organization;
   }
   
   @override
@@ -137,10 +137,10 @@ class userInfo extends amplify_core.Model {
     
     buffer.write("userInfo {");
     buffer.write("uid=" + "$_uid" + ", ");
-    buffer.write("acceleratorName=" + "$_acceleratorName" + ", ");
     buffer.write("userName=" + "$_userName" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("imageUrl=" + "$_imageUrl" + ", ");
+    buffer.write("Organization=" + "$_Organization" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -148,59 +148,59 @@ class userInfo extends amplify_core.Model {
     return buffer.toString();
   }
   
-  userInfo copyWith({String? acceleratorName, String? userName, String? email, String? imageUrl}) {
+  userInfo copyWith({String? userName, String? email, String? imageUrl, String? Organization}) {
     return userInfo._internal(
       uid: uid,
-      acceleratorName: acceleratorName ?? this.acceleratorName,
       userName: userName ?? this.userName,
       email: email ?? this.email,
-      imageUrl: imageUrl ?? this.imageUrl);
+      imageUrl: imageUrl ?? this.imageUrl,
+      Organization: Organization ?? this.Organization);
   }
   
   userInfo copyWithModelFieldValues({
-    ModelFieldValue<String>? acceleratorName,
     ModelFieldValue<String?>? userName,
     ModelFieldValue<String?>? email,
-    ModelFieldValue<String?>? imageUrl
+    ModelFieldValue<String?>? imageUrl,
+    ModelFieldValue<String>? Organization
   }) {
     return userInfo._internal(
       uid: uid,
-      acceleratorName: acceleratorName == null ? this.acceleratorName : acceleratorName.value,
       userName: userName == null ? this.userName : userName.value,
       email: email == null ? this.email : email.value,
-      imageUrl: imageUrl == null ? this.imageUrl : imageUrl.value
+      imageUrl: imageUrl == null ? this.imageUrl : imageUrl.value,
+      Organization: Organization == null ? this.Organization : Organization.value
     );
   }
   
   userInfo.fromJson(Map<String, dynamic> json)  
     : _uid = json['uid'],
-      _acceleratorName = json['acceleratorName'],
       _userName = json['userName'],
       _email = json['email'],
       _imageUrl = json['imageUrl'],
+      _Organization = json['Organization'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'uid': _uid, 'acceleratorName': _acceleratorName, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'uid': _uid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'Organization': _Organization, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'uid': _uid,
-    'acceleratorName': _acceleratorName,
     'userName': _userName,
     'email': _email,
     'imageUrl': _imageUrl,
+    'Organization': _Organization,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
   static final amplify_core.QueryModelIdentifier<userInfoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<userInfoModelIdentifier>();
   static final UID = amplify_core.QueryField(fieldName: "uid");
-  static final ACCELERATORNAME = amplify_core.QueryField(fieldName: "acceleratorName");
   static final USERNAME = amplify_core.QueryField(fieldName: "userName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static final IMAGEURL = amplify_core.QueryField(fieldName: "imageUrl");
+  static final ORGANIZATION = amplify_core.QueryField(fieldName: "Organization");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "userInfo";
     modelSchemaDefinition.pluralName = "userInfos";
@@ -211,12 +211,6 @@ class userInfo extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.UID,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: userInfo.ACCELERATORNAME,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
@@ -236,6 +230,12 @@ class userInfo extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.IMAGEURL,
       isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.ORGANIZATION,
+      isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     

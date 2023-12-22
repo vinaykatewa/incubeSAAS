@@ -1,7 +1,11 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:incube/models/Organization.dart';
+import 'package:incube/provider.dart';
 
 class AwsIncube {
+  final IncubeProvider _incubeProvider = IncubeProvider();
   Future<bool> isUserSignedIn() async {
     final result = await Amplify.Auth.fetchAuthSession();
     safePrint(result.isSignedIn.toString());
@@ -93,6 +97,53 @@ class AwsIncube {
     } catch (e) {
       safePrint('there is a error in login button method');
       safePrint(e.toString());
+    }
+  }
+
+  Future<void> fetchOrganizations() async {
+    safePrint('fetchOrganizations method is running');
+    try {
+      safePrint('fetchOrganizations is trying to get the data');
+      safePrint('fetchOrganizations is trying to get the data');
+      final request = ModelQueries.list(Organization.classType);
+      final response =
+          await Amplify.API.query(request: request).response.whenComplete(() {
+        safePrint('Amplify api call is completed');
+      });
+      _incubeProvider.addAllOrganization(response.data!.items);
+      safePrint(
+          'length of the organization list: ${_incubeProvider.org_list.length}');
+      safePrint(
+          'length of the organization : ${_incubeProvider.org_list[0]!.org_name}');
+      safePrint(
+          'length of the organization list: ${_incubeProvider.org_list.length}');
+    } on ApiException catch (e) {
+      safePrint('Query failed: $e');
+      safePrint('queryListItems method is failed');
+    }
+  }
+
+  Future<void> addOrganization(String org_name, String org_admin) async {
+    safePrint('_addEvent is running');
+    try {
+      safePrint('we are adding the organization');
+      final organizationModel =
+          Organization(org_name: org_name, org_admin: org_admin);
+      final request = ModelMutations.create(organizationModel);
+      final response =
+          await Amplify.API.mutate(request: request).response.whenComplete(() {
+        fetchOrganizations();
+      });
+
+      final createdTodo = response.data;
+      if (createdTodo == null) {
+        safePrint('errors: ${response.errors}');
+        return;
+      }
+      safePrint('Mutation result org_name: ${createdTodo.org_name}');
+      safePrint('Mutation result org_admin: ${createdTodo.org_admin}');
+    } on ApiException catch (e) {
+      safePrint('Mutation failed: $e');
     }
   }
 }

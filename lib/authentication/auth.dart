@@ -3,6 +3,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/authentication/emailConfermationScreen.dart';
+import 'package:incube/models/ModelProvider.dart';
+import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
 import './userImage.dart';
@@ -223,13 +225,13 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final IncubeProvider _incubeProvider = IncubeProvider();
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
-  String accelerator_Name = '';
   String user_Name = '';
   String email = '';
-  String website_Link = '';
   String password = '';
+  String organization_name = '';
   bool isLoading = false;
   String? selectedImage;
   final amplifyFunction = AwsIncube();
@@ -245,13 +247,13 @@ class _SignUpFormState extends State<SignUpForm> {
         await amplifyFunction
             .signUpUser(password: password, email: email)
             .whenComplete(() {
+          _incubeProvider.email = email;
+          _incubeProvider.userName = user_Name;
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (_) => EmailConfirmationScreen(
                         email: email,
-                        acceleratorName: accelerator_Name,
-                        userName: user_Name,
                         password: password,
                         imageFile: selectedImage!,
                       )));
@@ -280,17 +282,17 @@ class _SignUpFormState extends State<SignUpForm> {
                     keyboardType: TextInputType.name,
                     // validator: (value) {
                     //   if (value == null || value.isEmpty) {
-                    //     return "Enter accelerator name";
+                    //     return "Enter user name";
                     //   }
                     //   return null;
                     // },
                     onChanged: (value) {
                       setState(() {
-                        accelerator_Name = value;
+                        user_Name = value;
                       });
                     },
                     decoration: InputDecoration(
-                      labelText: 'Accelerator name',
+                      labelText: 'User name',
                       labelStyle: GoogleFonts.roboto(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -317,20 +319,22 @@ class _SignUpFormState extends State<SignUpForm> {
                     height: screenHeight * 0.06,
                     margin: EdgeInsets.only(left: screenWidth * 0.007),
                     child: TextFormField(
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.emailAddress,
                       // validator: (value) {
                       //   if (value == null || value.isEmpty) {
-                      //     return "Enter user name";
+                      //     return "Enter email";
+                      //   } else if (!value.contains('@gmail.com')) {
+                      //     return "Enter valid email";
                       //   }
                       //   return null;
                       // },
                       onChanged: (value) {
                         setState(() {
-                          user_Name = value;
+                          email = value;
                         });
                       },
                       decoration: InputDecoration(
-                        labelText: 'User name',
+                        labelText: 'Email id',
                         labelStyle: GoogleFonts.roboto(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -360,98 +364,6 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SizedBox(height: screenHeight * 0.02),
           // Row 2
-          Container(
-            height: screenHeight * 0.06,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return "Enter email";
-                    //   } else if (!value.contains('@gmail.com')) {
-                    //     return "Enter valid email";
-                    //   }
-                    //   return null;
-                    // },
-                    onChanged: (value) {
-                      setState(() {
-                        email = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email id',
-                      labelStyle: GoogleFonts.roboto(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4285714286,
-                        color: Color(0x7c1e1e1e),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight * 0.06,
-                    margin: EdgeInsets.only(left: screenWidth * 0.007),
-                    child: TextFormField(
-                      keyboardType: TextInputType.url,
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return "Enter website link";
-                      //   } else if (!value.contains('http')) {
-                      //     return "Enter valid website link";
-                      //   }
-                      //   return null;
-                      // },
-                      onChanged: (value) {
-                        setState(() {
-                          website_Link = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Website link',
-                        labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: Color(0x7c1e1e1e),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.02),
           // Row 3
           Container(
             height: screenHeight * 0.06,
@@ -459,15 +371,14 @@ class _SignUpFormState extends State<SignUpForm> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return "Enter Location";
-                    //   }
-                    //   return null;
-                    // },
+                    obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
                     decoration: InputDecoration(
-                      labelText: 'Location',
+                      labelText: 'Password',
                       labelStyle: GoogleFonts.roboto(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -485,37 +396,6 @@ class _SignUpFormState extends State<SignUpForm> {
                           color: const Color.fromRGBO(0, 0, 0, 1),
                         ),
                         borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight * 0.06,
-                    margin: EdgeInsets.only(left: screenWidth * 0.007),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Admin id',
-                        labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: Color(0x7c1e1e1e),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: const Color.fromRGBO(0, 0, 0, 1),
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(borderRadiusAuth()),
-                        ),
                       ),
                     ),
                   ),
@@ -525,39 +405,6 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SizedBox(height: screenHeight * 0.02),
           // Row 4
-          Container(
-            width: screenWidth * 0.31,
-            height: screenHeight * 0.06,
-            child: TextFormField(
-              obscureText: true,
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Password',
-                labelStyle: GoogleFonts.roboto(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  height: 1.4285714286,
-                  color: Color(0x7c1e1e1e),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: const Color.fromRGBO(0, 0, 0, 1),
-                  ),
-                  borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: const Color.fromRGBO(0, 0, 0, 1),
-                  ),
-                  borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                ),
-              ),
-            ),
-          ),
           SizedBox(height: screenHeight * 0.02),
           //Row 5
           Container(

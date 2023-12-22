@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:incube/models/Organization.dart';
 
 class IncubeProvider extends ChangeNotifier {
-  bool isUserAuthenticated = false;
-  String userUid = "";
-  String acceleratorName = "";
-  String userName = "";
-  String email = "";
-  String userImageUrl = "";
-  void setUserUid(String uid) {
-    userUid = uid;
-    notifyListeners();
-  }
+  late final String email;
+  late final String userName;
+  late final String imageFile;
 
-  void changeUserAuthState() {
-    isUserAuthenticated = isUserAuthenticated;
+  late final String userId;
+  late final String organization_name;
+  late final String organizationId;
+
+  List<Organization?> org_list = [];
+
+  // addOrganization(Organization org) {
+  //   org_list.toList(org.);
+  //   notifyListeners();
+  // }
+
+  addAllOrganization(List<Organization?> org) {
+    org_list = org;
     notifyListeners();
   }
 }
