@@ -7,6 +7,7 @@ import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
+import 'package:provider/provider.dart';
 import './userImage.dart';
 import 'dart:typed_data';
 import '../AmplifyFuntions/AwsAmplify.dart';
@@ -225,7 +226,6 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final IncubeProvider _incubeProvider = IncubeProvider();
   var checkBoxValue = false;
   final authFormKey = GlobalKey<FormState>();
   String user_Name = '';
@@ -241,34 +241,38 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  void submitForm() async {
-    if (checkBoxValue) {
-      try {
-        await amplifyFunction
-            .signUpUser(password: password, email: email)
-            .whenComplete(() {
-          _incubeProvider.email = email;
-          _incubeProvider.userName = user_Name;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => EmailConfirmationScreen(
-                        email: email,
-                        password: password,
-                        imageFile: selectedImage!,
-                      )));
-        });
-      } on AuthException catch (e) {
-        safePrint('pushing to email confermation');
-        safePrint(e.toString());
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    void submitForm() async {
+      if (checkBoxValue) {
+        try {
+          await amplifyFunction
+              .signUpUser(password: password, email: email)
+              .whenComplete(() {
+            _incubeProvider.email = email;
+            safePrint('this is the userName: ' + user_Name);
+            _incubeProvider.userName = user_Name;
+            safePrint('this is provider userName: ' + _incubeProvider.userName);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => EmailConfirmationScreen(
+                          email: email,
+                          password: password,
+                          imageFile: selectedImage!,
+                        )));
+          });
+        } on AuthException catch (e) {
+          safePrint('pushing to email confermation');
+          safePrint(e.toString());
+        }
+      }
+    }
+
     return Form(
       key: authFormKey,
       child: Column(

@@ -30,7 +30,12 @@ class Organization extends amplify_core.Model {
   final String id;
   final String? _org_name;
   final String? _org_admin;
-  final List<String>? _org_team;
+  final List<Deals>? _org_deals;
+  final List<Team>? _org_team;
+  final String? _uid;
+  final String? _userName;
+  final String? _email;
+  final String? _imageUrl;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -73,8 +78,64 @@ class Organization extends amplify_core.Model {
     }
   }
   
-  List<String>? get org_team {
+  List<Deals>? get org_deals {
+    return _org_deals;
+  }
+  
+  List<Team>? get org_team {
     return _org_team;
+  }
+  
+  String get uid {
+    try {
+      return _uid!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get userName {
+    try {
+      return _userName!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get email {
+    try {
+      return _email!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get imageUrl {
+    try {
+      return _imageUrl!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -85,14 +146,19 @@ class Organization extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Organization._internal({required this.id, required org_name, required org_admin, org_team, createdAt, updatedAt}): _org_name = org_name, _org_admin = org_admin, _org_team = org_team, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Organization._internal({required this.id, required org_name, required org_admin, org_deals, org_team, required uid, required userName, required email, required imageUrl, createdAt, updatedAt}): _org_name = org_name, _org_admin = org_admin, _org_deals = org_deals, _org_team = org_team, _uid = uid, _userName = userName, _email = email, _imageUrl = imageUrl, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Organization({String? id, required String org_name, required String org_admin, List<String>? org_team}) {
+  factory Organization({String? id, required String org_name, required String org_admin, List<Deals>? org_deals, List<Team>? org_team, required String uid, required String userName, required String email, required String imageUrl}) {
     return Organization._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       org_name: org_name,
       org_admin: org_admin,
-      org_team: org_team != null ? List<String>.unmodifiable(org_team) : org_team);
+      org_deals: org_deals != null ? List<Deals>.unmodifiable(org_deals) : org_deals,
+      org_team: org_team != null ? List<Team>.unmodifiable(org_team) : org_team,
+      uid: uid,
+      userName: userName,
+      email: email,
+      imageUrl: imageUrl);
   }
   
   bool equals(Object other) {
@@ -106,7 +172,12 @@ class Organization extends amplify_core.Model {
       id == other.id &&
       _org_name == other._org_name &&
       _org_admin == other._org_admin &&
-      DeepCollectionEquality().equals(_org_team, other._org_team);
+      DeepCollectionEquality().equals(_org_deals, other._org_deals) &&
+      DeepCollectionEquality().equals(_org_team, other._org_team) &&
+      _uid == other._uid &&
+      _userName == other._userName &&
+      _email == other._email &&
+      _imageUrl == other._imageUrl;
   }
   
   @override
@@ -120,7 +191,12 @@ class Organization extends amplify_core.Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("org_name=" + "$_org_name" + ", ");
     buffer.write("org_admin=" + "$_org_admin" + ", ");
+    buffer.write("org_deals=" + (_org_deals != null ? _org_deals!.toString() : "null") + ", ");
     buffer.write("org_team=" + (_org_team != null ? _org_team!.toString() : "null") + ", ");
+    buffer.write("uid=" + "$_uid" + ", ");
+    buffer.write("userName=" + "$_userName" + ", ");
+    buffer.write("email=" + "$_email" + ", ");
+    buffer.write("imageUrl=" + "$_imageUrl" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -128,24 +204,39 @@ class Organization extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Organization copyWith({String? org_name, String? org_admin, List<String>? org_team}) {
+  Organization copyWith({String? org_name, String? org_admin, List<Deals>? org_deals, List<Team>? org_team, String? uid, String? userName, String? email, String? imageUrl}) {
     return Organization._internal(
       id: id,
       org_name: org_name ?? this.org_name,
       org_admin: org_admin ?? this.org_admin,
-      org_team: org_team ?? this.org_team);
+      org_deals: org_deals ?? this.org_deals,
+      org_team: org_team ?? this.org_team,
+      uid: uid ?? this.uid,
+      userName: userName ?? this.userName,
+      email: email ?? this.email,
+      imageUrl: imageUrl ?? this.imageUrl);
   }
   
   Organization copyWithModelFieldValues({
     ModelFieldValue<String>? org_name,
     ModelFieldValue<String>? org_admin,
-    ModelFieldValue<List<String>?>? org_team
+    ModelFieldValue<List<Deals>?>? org_deals,
+    ModelFieldValue<List<Team>?>? org_team,
+    ModelFieldValue<String>? uid,
+    ModelFieldValue<String>? userName,
+    ModelFieldValue<String>? email,
+    ModelFieldValue<String>? imageUrl
   }) {
     return Organization._internal(
       id: id,
       org_name: org_name == null ? this.org_name : org_name.value,
       org_admin: org_admin == null ? this.org_admin : org_admin.value,
-      org_team: org_team == null ? this.org_team : org_team.value
+      org_deals: org_deals == null ? this.org_deals : org_deals.value,
+      org_team: org_team == null ? this.org_team : org_team.value,
+      uid: uid == null ? this.uid : uid.value,
+      userName: userName == null ? this.userName : userName.value,
+      email: email == null ? this.email : email.value,
+      imageUrl: imageUrl == null ? this.imageUrl : imageUrl.value
     );
   }
   
@@ -153,19 +244,39 @@ class Organization extends amplify_core.Model {
     : id = json['id'],
       _org_name = json['org_name'],
       _org_admin = json['org_admin'],
-      _org_team = json['org_team']?.cast<String>(),
+      _org_deals = json['org_deals'] is List
+        ? (json['org_deals'] as List)
+          .where((e) => e != null)
+          .map((e) => Deals.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
+      _org_team = json['org_team'] is List
+        ? (json['org_team'] as List)
+          .where((e) => e != null)
+          .map((e) => Team.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
+      _uid = json['uid'],
+      _userName = json['userName'],
+      _email = json['email'],
+      _imageUrl = json['imageUrl'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'org_name': _org_name, 'org_admin': _org_admin, 'org_team': _org_team, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'org_name': _org_name, 'org_admin': _org_admin, 'org_deals': _org_deals?.map((Deals? e) => e?.toJson()).toList(), 'org_team': _org_team?.map((Team? e) => e?.toJson()).toList(), 'uid': _uid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
     'org_name': _org_name,
     'org_admin': _org_admin,
+    'org_deals': _org_deals,
     'org_team': _org_team,
+    'uid': _uid,
+    'userName': _userName,
+    'email': _email,
+    'imageUrl': _imageUrl,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -174,7 +285,12 @@ class Organization extends amplify_core.Model {
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final ORG_NAME = amplify_core.QueryField(fieldName: "org_name");
   static final ORG_ADMIN = amplify_core.QueryField(fieldName: "org_admin");
+  static final ORG_DEALS = amplify_core.QueryField(fieldName: "org_deals");
   static final ORG_TEAM = amplify_core.QueryField(fieldName: "org_team");
+  static final UID = amplify_core.QueryField(fieldName: "uid");
+  static final USERNAME = amplify_core.QueryField(fieldName: "userName");
+  static final EMAIL = amplify_core.QueryField(fieldName: "email");
+  static final IMAGEURL = amplify_core.QueryField(fieldName: "imageUrl");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Organization";
     modelSchemaDefinition.pluralName = "Organizations";
@@ -193,11 +309,42 @@ class Organization extends amplify_core.Model {
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Organization.ORG_TEAM,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
+      fieldName: 'org_deals',
       isRequired: false,
       isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Deals')
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
+      fieldName: 'org_team',
+      isRequired: false,
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Team')
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Organization.UID,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Organization.USERNAME,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Organization.EMAIL,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Organization.IMAGEURL,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(

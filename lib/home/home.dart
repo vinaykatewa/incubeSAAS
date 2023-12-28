@@ -14,7 +14,7 @@ import '../AmplifyFuntions/AwsAmplify.dart';
 import '../uiThemes.dart';
 import './communications/communications.dart';
 import './dashboard/dashboard.dart';
-import './dealManagement/dealManagement.dart';
+import 'dealPipeline/dealPipeline.dart';
 import './investmentTracking/investmentTracking.dart';
 import './portfolioAnalytics/portfolioAnalytics.dart';
 
@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
       case 0:
         return const Dashboard();
       case 1:
-        return const DealManagement();
+        return const DealPipeline();
       case 2:
         return const InvestmentTracking();
       case 3:
@@ -190,7 +190,7 @@ class _NavigationBarState extends State<NavigationBar> {
       case 0:
         return 'DashBoard';
       case 1:
-        return 'Deal Management';
+        return 'Deal Pipeline';
       case 2:
         return 'Investment Tracking';
       case 3:

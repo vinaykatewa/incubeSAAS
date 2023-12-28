@@ -1,17 +1,29 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:incube/uiThemes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
+import 'package:incube/home/dealPipeline/openDeal.dart';
+import 'package:incube/models/Deals.dart';
+import 'package:incube/provider.dart';
 
-class DealManagement extends StatefulWidget {
-  const DealManagement({super.key});
+import 'package:incube/uiThemes.dart';
+import 'package:provider/provider.dart';
+
+import './addDeal.dart';
+import './reviewPending.dart';
+
+class DealPipeline extends StatefulWidget {
+  const DealPipeline({super.key});
 
   @override
-  State<DealManagement> createState() => _DealManagementState();
+  State<DealPipeline> createState() => _DealPipelineState();
 }
 
-class _DealManagementState extends State<DealManagement> {
-  int selctedIndex = 0;
+class _DealPipelineState extends State<DealPipeline> {
+  int selctedIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,15 +46,21 @@ class _DealManagementState extends State<DealManagement> {
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return PortfolioAnalyticsScreen();
+        return ReviewPandingDeals();
       case 1:
-        return DealManagementScreen();
+        return OpenDeals();
       case 2:
-        return InvestmentTrackingScreen();
+        return DealManagementScreen();
       case 3:
-        return PortfolioAnalyticsScreen();
+        return DealManagementScreen();
       case 4:
         return CommunicationsScreen();
+      case 5:
+        return CommunicationsScreen();
+      case 6:
+        return CommunicationsScreen();
+      case 7:
+        return AddDeal();
       default:
         return Container();
     }
@@ -76,14 +94,6 @@ class _SideNavigationState extends State<SideNavigation> {
       margin: EdgeInsets.only(top: screenHeight * 0.002),
       decoration: BoxDecoration(
         color: Color.fromRGBO(54, 36, 101, 1),
-        // gradient: LinearGradient(
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     colors: [
-        //       Color.fromRGBO(22, 43, 89, 1),
-        //       Color.fromRGBO(66, 50, 121, 0.8),
-        //       Color.fromRGBO(14, 58, 105, 1),
-        //     ]),
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(MainBorderRadius()),
           topRight: Radius.circular(MainBorderRadius()),
@@ -115,7 +125,7 @@ class _SideNavigationState extends State<SideNavigation> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              5,
+              7,
               (index) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,6 +173,53 @@ class _SideNavigationState extends State<SideNavigation> {
               ),
             ),
           ),
+          const Divider(
+            color: const Color.fromRGBO(245, 247, 244, 1),
+          ),
+          SizedBox(
+            height: screenHeight * 0.03,
+          ),
+          // add new deal button
+          ClipPath(
+            clipper: ReverseBorderRadiusClipper(radius: MainBorderRadius()),
+            child: Container(
+              margin: EdgeInsets.only(left: screenWidth * 0.01),
+              width: screenWidth * 0.15,
+              decoration: BoxDecoration(
+                  color: widget.selectedIndex == 7
+                      ? tertiaryColor1()
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(MainBorderRadius()),
+                    bottomLeft: Radius.circular(MainBorderRadius()),
+                  )),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      widget.onButtonTapped(7);
+                    });
+                  },
+                  icon: FaIcon(
+                    FontAwesomeIcons.plus,
+                    color: widget.selectedIndex == 7
+                        ? Colors.black
+                        : const Color.fromRGBO(245, 247, 244, 1),
+                    size: screenWidth * 0.01,
+                  ),
+                  label: Text(
+                    "Create a new deal",
+                    style: LabelMedium().copyWith(
+                      color: widget.selectedIndex == 7
+                          ? Colors.black
+                          : const Color.fromRGBO(245, 247, 244, 1),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -190,17 +247,19 @@ class _SideNavigationState extends State<SideNavigation> {
   String _getNavigationText(int index) {
     switch (index) {
       case 0:
-        return 'Profile';
+        return 'Review pending';
       case 1:
-        return 'Deal piepline';
+        return 'Open deals';
       case 2:
-        return 'Add investment';
+        return 'Presenting';
       case 3:
-        return 'Add funds';
+        return 'In due diligence';
       case 4:
-        return 'Initiate capital call';
+        return 'closing';
       case 5:
-        return 'Manage investor';
+        return 'Closed';
+      case 6:
+        return 'Rejected';
       default:
         return '';
     }
@@ -210,8 +269,33 @@ class _SideNavigationState extends State<SideNavigation> {
 class DealManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    final awsFunctions = AwsIncube();
     return Center(
-      child: Text('Deal Management Screen'),
+      child: Column(
+        children: [
+          Text('Deal Management Screen'),
+          ElevatedButton(
+              onPressed: () async {
+                safePrint('this is the users email :' + _incubeProvider.email);
+                safePrint('this is the organizationid userName :' +
+                    _incubeProvider.userName);
+                safePrint('this is the users uid:' + _incubeProvider.userId);
+                safePrint('this is the organization Name :' +
+                    _incubeProvider.organizationName);
+                safePrint('this is the organizationid :' +
+                    _incubeProvider.organizationId);
+                safePrint('this is the admin id :' + _incubeProvider.adminId);
+
+                // await awsFunctions.dealProcessing(
+                //     "cf34947c-32cd-4bec-8311-2391d2203b9a",
+                //     "open deals",
+                //     "460d2e9a-a972-46b5-ad80-f07fe9072918");
+              },
+              child: Text('give deal'))
+        ],
+      ),
     );
   }
 }

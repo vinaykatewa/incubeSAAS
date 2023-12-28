@@ -30,7 +30,9 @@ class userInfo extends amplify_core.Model {
   final String? _userName;
   final String? _email;
   final String? _imageUrl;
-  final String? _Organization;
+  final String? _organizationName;
+  final String? _organizationId;
+  final String? _adminId;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -69,21 +71,74 @@ class userInfo extends amplify_core.Model {
     }
   }
   
-  String? get userName {
-    return _userName;
-  }
-  
-  String? get email {
-    return _email;
-  }
-  
-  String? get imageUrl {
-    return _imageUrl;
-  }
-  
-  String get Organization {
+  String get userName {
     try {
-      return _Organization!;
+      return _userName!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get email {
+    try {
+      return _email!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get imageUrl {
+    try {
+      return _imageUrl!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get organizationName {
+    try {
+      return _organizationName!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get organizationId {
+    try {
+      return _organizationId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get adminId {
+    try {
+      return _adminId!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -102,15 +157,17 @@ class userInfo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const userInfo._internal({required uid, userName, email, imageUrl, required Organization, createdAt, updatedAt}): _uid = uid, _userName = userName, _email = email, _imageUrl = imageUrl, _Organization = Organization, _createdAt = createdAt, _updatedAt = updatedAt;
+  const userInfo._internal({required uid, required userName, required email, required imageUrl, required organizationName, required organizationId, required adminId, createdAt, updatedAt}): _uid = uid, _userName = userName, _email = email, _imageUrl = imageUrl, _organizationName = organizationName, _organizationId = organizationId, _adminId = adminId, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory userInfo({required String uid, String? userName, String? email, String? imageUrl, required String Organization}) {
+  factory userInfo({required String uid, required String userName, required String email, required String imageUrl, required String organizationName, required String organizationId, required String adminId}) {
     return userInfo._internal(
       uid: uid,
       userName: userName,
       email: email,
       imageUrl: imageUrl,
-      Organization: Organization);
+      organizationName: organizationName,
+      organizationId: organizationId,
+      adminId: adminId);
   }
   
   bool equals(Object other) {
@@ -125,7 +182,9 @@ class userInfo extends amplify_core.Model {
       _userName == other._userName &&
       _email == other._email &&
       _imageUrl == other._imageUrl &&
-      _Organization == other._Organization;
+      _organizationName == other._organizationName &&
+      _organizationId == other._organizationId &&
+      _adminId == other._adminId;
   }
   
   @override
@@ -140,7 +199,9 @@ class userInfo extends amplify_core.Model {
     buffer.write("userName=" + "$_userName" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("imageUrl=" + "$_imageUrl" + ", ");
-    buffer.write("Organization=" + "$_Organization" + ", ");
+    buffer.write("organizationName=" + "$_organizationName" + ", ");
+    buffer.write("organizationId=" + "$_organizationId" + ", ");
+    buffer.write("adminId=" + "$_adminId" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -148,27 +209,33 @@ class userInfo extends amplify_core.Model {
     return buffer.toString();
   }
   
-  userInfo copyWith({String? userName, String? email, String? imageUrl, String? Organization}) {
+  userInfo copyWith({String? userName, String? email, String? imageUrl, String? organizationName, String? organizationId, String? adminId}) {
     return userInfo._internal(
       uid: uid,
       userName: userName ?? this.userName,
       email: email ?? this.email,
       imageUrl: imageUrl ?? this.imageUrl,
-      Organization: Organization ?? this.Organization);
+      organizationName: organizationName ?? this.organizationName,
+      organizationId: organizationId ?? this.organizationId,
+      adminId: adminId ?? this.adminId);
   }
   
   userInfo copyWithModelFieldValues({
-    ModelFieldValue<String?>? userName,
-    ModelFieldValue<String?>? email,
-    ModelFieldValue<String?>? imageUrl,
-    ModelFieldValue<String>? Organization
+    ModelFieldValue<String>? userName,
+    ModelFieldValue<String>? email,
+    ModelFieldValue<String>? imageUrl,
+    ModelFieldValue<String>? organizationName,
+    ModelFieldValue<String>? organizationId,
+    ModelFieldValue<String>? adminId
   }) {
     return userInfo._internal(
       uid: uid,
       userName: userName == null ? this.userName : userName.value,
       email: email == null ? this.email : email.value,
       imageUrl: imageUrl == null ? this.imageUrl : imageUrl.value,
-      Organization: Organization == null ? this.Organization : Organization.value
+      organizationName: organizationName == null ? this.organizationName : organizationName.value,
+      organizationId: organizationId == null ? this.organizationId : organizationId.value,
+      adminId: adminId == null ? this.adminId : adminId.value
     );
   }
   
@@ -177,12 +244,14 @@ class userInfo extends amplify_core.Model {
       _userName = json['userName'],
       _email = json['email'],
       _imageUrl = json['imageUrl'],
-      _Organization = json['Organization'],
+      _organizationName = json['organizationName'],
+      _organizationId = json['organizationId'],
+      _adminId = json['adminId'],
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'uid': _uid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'Organization': _Organization, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'uid': _uid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'organizationName': _organizationName, 'organizationId': _organizationId, 'adminId': _adminId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -190,7 +259,9 @@ class userInfo extends amplify_core.Model {
     'userName': _userName,
     'email': _email,
     'imageUrl': _imageUrl,
-    'Organization': _Organization,
+    'organizationName': _organizationName,
+    'organizationId': _organizationId,
+    'adminId': _adminId,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -200,7 +271,9 @@ class userInfo extends amplify_core.Model {
   static final USERNAME = amplify_core.QueryField(fieldName: "userName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static final IMAGEURL = amplify_core.QueryField(fieldName: "imageUrl");
-  static final ORGANIZATION = amplify_core.QueryField(fieldName: "Organization");
+  static final ORGANIZATIONNAME = amplify_core.QueryField(fieldName: "organizationName");
+  static final ORGANIZATIONID = amplify_core.QueryField(fieldName: "organizationId");
+  static final ADMINID = amplify_core.QueryField(fieldName: "adminId");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "userInfo";
     modelSchemaDefinition.pluralName = "userInfos";
@@ -217,24 +290,36 @@ class userInfo extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.USERNAME,
-      isRequired: false,
+      isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.EMAIL,
-      isRequired: false,
+      isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.IMAGEURL,
-      isRequired: false,
+      isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: userInfo.ORGANIZATION,
+      key: userInfo.ORGANIZATIONNAME,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.ORGANIZATIONID,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.ADMINID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));

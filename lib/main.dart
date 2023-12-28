@@ -1,6 +1,7 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:incube/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:incube/amplifyconfiguration.dart';
 import 'package:incube/home/home.dart';
 import 'package:incube/organizations/organization.dart';
@@ -16,7 +17,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _configureAmplify();
   runApp(
-    ProviderScope(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => IncubeProvider()),
+      ],
       child: const MyApp(),
     ),
   );

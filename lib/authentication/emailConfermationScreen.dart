@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:incube/models/userInfo.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/route.dart';
+import 'package:provider/provider.dart';
 import '../AmplifyFuntions/AwsAmplify.dart';
 import 'dart:html' as html;
 
@@ -13,8 +14,6 @@ import 'package:aws_common/web.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   final String email;
-  // final String organization_name;
-  // final String userName;
   final String password;
   final String imageFile;
 
@@ -33,7 +32,6 @@ class EmailConfirmationScreen extends StatefulWidget {
 }
 
 class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
-  final IncubeProvider _incubeProvider = IncubeProvider();
   final amplifyFunction = AwsIncube();
   var uid = 'initial uid13';
   late final result;
@@ -50,6 +48,78 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+
+    Future<void> _submitCode() async {
+      final confirmationCode = _confirmationCodeController.text;
+      safePrint('submit code button is started');
+      try {
+        await amplifyFunction.confirmUser(
+            username: widget.email, confirmationCode: confirmationCode);
+      } on AuthException catch (e) {
+        safePrint('error in confirmation of code');
+        safePrint(e.toString());
+      }
+    }
+
+    Future<void> _getUserId() async {
+      final result = await amplifyFunction.getCurrentUser();
+      safePrint('we are retriving users uid');
+      setState(() {
+        uid = result.userId.toString();
+      });
+      safePrint('this is the user uid' + uid);
+    }
+
+    // Future<String> uploadHtmlFile(String imageData) async {
+    //   safePrint('file uploading is starting');
+    //   final bytes = imageData.codeUnits;
+    //   final awsFile = AWSFilePlatform.fromData(bytes);
+    //   final fileName = DateTime.now().toIso8601String();
+    //   try {
+    //     safePrint('trying to uoplaod file');
+    //     final uploadResult = await Amplify.Storage.uploadFile(
+    //       localFile: awsFile,
+    //       key: fileName,
+    //     ).result;
+    //     safePrint('file uplaoded successfully');
+    //     safePrint('Uploaded file: ${uploadResult.uploadedItem.key}');
+    //     return uploadResult.uploadedItem.key;
+    //   } on StorageException catch (e) {
+    //     safePrint('Error uploading file: ${e.message}');
+    //     rethrow;
+    //   }
+    // }
+
+    Future<void> storingImage() async {
+      // final imageKey = await uploadHtmlFile(widget.imageFile);
+      // final result = await Amplify.Storage.getUrl(key: imageKey).result;
+      // setState(() {
+      //   _incubeProvider.imageFile = result.url.toString();
+      // });
+      // safePrint('here is your download url');
+      // safePrint(_incubeProvider.imageFile);
+    }
+
+    void _gotoOrganizationScreen() {
+      safePrint('goingtoOrganizationScreen is running');
+      Navigator.popAndPushNamed(context, AppRoutes.OrganizationPage);
+      safePrint('goingtoOrganizationScreen is completed');
+    }
+
+    Future<void> _executeMethods() async {
+      await _submitCode().whenComplete(() async {
+        await amplifyFunction
+            .login(widget.email, widget.password)
+            .whenComplete(() async {
+          await storingImage().whenComplete(() async {
+            _gotoOrganizationScreen();
+          });
+        });
+      });
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -103,107 +173,5 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _executeMethods() async {
-    await _submitCode().whenComplete(() async {
-      await amplifyFunction
-          .login(widget.email, widget.password)
-          .whenComplete(() async {
-        await storingImage().whenComplete(() async {
-          //   await _getUserId().whenComplete(() async {
-          //     await graphQLData().whenComplete(() {
-          //       _gotoMainScreen();
-          //     });
-          //   });
-          // }
-          await amplifyFunction.fetchOrganizations().whenComplete(() {
-            _gotoOrganizationScreen();
-          });
-        });
-      });
-    });
-  }
-
-  Future<void> _submitCode() async {
-    final confirmationCode = _confirmationCodeController.text;
-    safePrint('submit code button is started');
-    try {
-      await amplifyFunction.confirmUser(
-          username: widget.email, confirmationCode: confirmationCode);
-    } on AuthException catch (e) {
-      safePrint('error in confirmation of code');
-      safePrint(e.toString());
-    }
-  }
-
-  Future<void> _getUserId() async {
-    final result = await amplifyFunction.getCurrentUser();
-    safePrint('we are retriving users uid');
-    setState(() {
-      uid = result.userId.toString();
-    });
-    safePrint('this is the user uid' + uid);
-  }
-
-  // Future<void> graphQLData() async {
-  //   try {
-  //     final userDataModel = userInfo(
-  //       uid: uid,
-  //       Organization: widget.organization_name,
-  //       userName: widget.userName,
-  //       email: widget.email,
-  //       imageUrl: imageUrl,
-  //     );
-  //     final request = ModelMutations.create(userDataModel);
-  //     final response = await Amplify.API.mutate(request: request).response;
-  //     final createdUserData = response.data;
-
-  //     if (createdUserData == null) {
-  //       safePrint('errors: ${response.errors}');
-  //     }
-  //     safePrint('Mutation result: ${createdUserData!.uid}');
-  //     safePrint('Mutation result: ${createdUserData.Organization}');
-  //     safePrint('Mutation result: ${createdUserData.userName}');
-  //     safePrint('Mutation result: ${createdUserData.email}');
-  //   } on ApiException catch (e) {
-  //     safePrint('Mutation failed: $e');
-  //   }
-  // }
-
-  Future<void> storingImage() async {
-    final imageKey = await uploadHtmlFile(widget.imageFile);
-    final result = await Amplify.Storage.getUrl(key: imageKey).result;
-    setState(() {
-      _incubeProvider.imageFile = result.url.toString();
-    });
-    safePrint('here is your download url');
-    safePrint(_incubeProvider.imageFile);
-  }
-
-  void _gotoOrganizationScreen() {
-    safePrint('goingtoOrganizationScreen is running');
-    Navigator.popAndPushNamed(context, AppRoutes.OrganizationPage);
-    safePrint('goingtoOrganizationScreen is completed');
-  }
-
-  Future<String> uploadHtmlFile(String imageData) async {
-    safePrint('file uploading is starting');
-    final bytes = imageData.codeUnits;
-    final awsFile = AWSFilePlatform.fromData(bytes);
-    final fileName = DateTime.now().toIso8601String();
-    try {
-      safePrint('trying to uoplaod file');
-      final uploadResult = await Amplify.Storage.uploadFile(
-        localFile: awsFile,
-        key: fileName,
-      ).result;
-      safePrint('file uplaoded successfully');
-      safePrint('Uploaded file: ${uploadResult.uploadedItem.key}');
-      return uploadResult.uploadedItem.key;
-    } on StorageException catch (e) {
-      safePrint('Error uploading file: ${e.message}');
-      rethrow;
-    }
   }
 }

@@ -2,12 +2,15 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+
 type userInfo @model {
   uid: ID! @primaryKey
-  userName: String
-  email: String
-  imageUrl: String
-  Organization: String!
+  userName: String!
+  email: String!
+  imageUrl: String!
+  organizationName: String!
+  organizationId: String!
+  adminId: String!
 }
 
 type Events @model {
@@ -21,8 +24,32 @@ type Events @model {
   eventLocation: String
   isEventOnline: Boolean!
 }
+
+type Team {
+id: ID!
+org_id: String!
+userUid: String!
+userName: String!
+userAdmin: String!
+teamName: String!
+}
 type Organization @model {
-org_name: String!
-org_admin: String!
-org_team: [String]
+  id: ID!
+  org_name: String!
+  org_admin: String!
+  org_deals: [Deals]
+  org_team: [Team]
+  uid: String!
+  userName: String!
+  email: String!
+  imageUrl: String!
+}
+
+type Deals{
+id: ID!
+company_logo: String!
+company_name: String!
+company_description: String!
+seeking: String!
+status: String!
 }
