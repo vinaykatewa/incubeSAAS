@@ -1,9 +1,16 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:incube/models/ModelProvider.dart';
+import 'package:incube/organizations/organization.dart';
+import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:incube/route.dart';
+import 'package:provider/provider.dart';
 import '../AmplifyFuntions/AwsAmplify.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            Expanded(flex: 7, child: Signup_Frame())
+            Expanded(flex: 7, child: Login_Frame())
           ],
         ),
       ),
@@ -68,14 +75,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class Signup_Frame extends StatefulWidget {
-  const Signup_Frame({super.key});
+class Login_Frame extends StatefulWidget {
+  const Login_Frame({super.key});
 
   @override
-  State<Signup_Frame> createState() => _Signup_FrameState();
+  State<Login_Frame> createState() => _Login_FrameState();
 }
 
-class _Signup_FrameState extends State<Signup_Frame> {
+class _Login_FrameState extends State<Login_Frame> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -121,7 +128,7 @@ class _Signup_FrameState extends State<Signup_Frame> {
           SizedBox(
             height: screenHeight * 0.04,
           ),
-          SignUpForm(),
+          LoginForm(),
           SizedBox(height: screenHeight * 0.02),
           Center(
             child: GestureDetector(
@@ -213,32 +220,92 @@ class _Signup_FrameState extends State<Signup_Frame> {
   }
 }
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _LoginFormState extends State<LoginForm> {
   final authFormKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
   bool isLoading = false;
   final awsFunction = AwsIncube();
 
-  void submitForm() async {
-    if (authFormKey.currentState!.validate()) {
-      await awsFunction.login(email, password).whenComplete(() {
-        Navigator.popAndPushNamed(context, AppRoutes.home);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+
+    Future<void> getUserData(String email) async {
+      safePrint('getUserData method is running in login class');
+      try {
+        final queryPredicate = userInfo.EMAIL.eq(email);
+
+        final request = ModelQueries.list<userInfo>(
+          userInfo.classType,
+          where: queryPredicate,
+        );
+        final response = await Amplify.API.query(request: request).response;
+        final _user = response.data?.items.first;
+        if (_user != null) {
+          _incubeProvider.userId = _user.userUid;
+          _incubeProvider.userName = _user.userName;
+          _incubeProvider.email = _user.email;
+          _incubeProvider.imageFile = _user.imageUrl;
+          _incubeProvider.isAdmin = _user.isadmin!;
+
+          _incubeProvider.organizationId = _user.organizationId!;
+          _incubeProvider.superAdmin = _user.superAdminId!;
+          _incubeProvider.requestStatus = _user.requestStatus!;
+
+          safePrint('we have set the provider details of the user');
+          safePrint('this is the userId:' + _incubeProvider.userId);
+          safePrint('this is the userName:' + _incubeProvider.userName);
+          safePrint('this is the email:' + _incubeProvider.email);
+          safePrint('this is the imageFile:' + _incubeProvider.imageFile);
+          safePrint(
+              'this is the isAdmin:' + _incubeProvider.isAdmin.toString());
+          safePrint(
+              'this is the organizationId:' + _incubeProvider.organizationId);
+          safePrint('this is the superAdmin:' + _incubeProvider.superAdmin);
+          safePrint(
+              'this is the requestStatus:' + _incubeProvider.requestStatus);
+          safePrint('this is the teamId:' + _incubeProvider.teamId);
+        } else {
+          safePrint(
+              'we got the null value from user while running getUserData in login class');
+        }
+      } catch (e) {
+        safePrint('getOrganizationsByAdminId is giving error' + e.toString());
+      }
+      return null;
+    }
+
+    void submitForm() async {
+      if (authFormKey.currentState!.validate()) {
+        await awsFunction.login(email, password).whenComplete(() async {
+          await getUserData(email).whenComplete(() {
+            if (_incubeProvider.isAdmin) {
+              Navigator.popAndPushNamed(context, AppRoutes.home);
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OrganizationPage(
+                          fromLogin: true,
+                        )),
+              );
+            }
+          });
+        });
+      }
+    }
+
     return Form(
       key: authFormKey,
       child: Column(

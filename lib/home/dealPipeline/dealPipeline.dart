@@ -278,15 +278,15 @@ class DealManagementScreen extends StatelessWidget {
           Text('Deal Management Screen'),
           ElevatedButton(
               onPressed: () async {
-                safePrint('this is the users email :' + _incubeProvider.email);
-                safePrint('this is the organizationid userName :' +
-                    _incubeProvider.userName);
-                safePrint('this is the users uid:' + _incubeProvider.userId);
-                safePrint('this is the organization Name :' +
-                    _incubeProvider.organizationName);
-                safePrint('this is the organizationid :' +
-                    _incubeProvider.organizationId);
-                safePrint('this is the admin id :' + _incubeProvider.adminId);
+                // safePrint('this is the users email :' + _incubeProvider.email);
+                // safePrint('this is the organizationid userName :' +
+                //     _incubeProvider.userName);
+                // safePrint('this is the users uid:' + _incubeProvider.userId);
+                // safePrint('this is the organization Name :' +
+                //     _incubeProvider.organizationName);
+                // safePrint('this is the organizationid :' +
+                //     _incubeProvider.organizationId);
+                // safePrint('this is the admin id :' + _incubeProvider.adminId);
 
                 // await awsFunctions.dealProcessing(
                 //     "cf34947c-32cd-4bec-8311-2391d2203b9a",

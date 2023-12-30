@@ -21,18 +21,23 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
+import 'package:collection/collection.dart';
 
 
 /** This is an auto generated class representing the userInfo type in your schema. */
 class userInfo extends amplify_core.Model {
   static const classType = const _userInfoModelType();
-  final String? _uid;
+  final String? _userUid;
   final String? _userName;
   final String? _email;
   final String? _imageUrl;
-  final String? _organizationName;
+  final bool? _isadmin;
   final String? _organizationId;
-  final String? _adminId;
+  final String? _superAdminId;
+  final String? _requestStatus;
+  final String? _teamId;
+  final bool? _isteamLeader;
+  final List<String>? _dealIds;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -46,7 +51,7 @@ class userInfo extends amplify_core.Model {
   userInfoModelIdentifier get modelIdentifier {
     try {
       return userInfoModelIdentifier(
-        uid: _uid!
+        userUid: _userUid!
       );
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
@@ -58,9 +63,9 @@ class userInfo extends amplify_core.Model {
     }
   }
   
-  String get uid {
+  String get userUid {
     try {
-      return _uid!;
+      return _userUid!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -110,43 +115,32 @@ class userInfo extends amplify_core.Model {
     }
   }
   
-  String get organizationName {
-    try {
-      return _organizationName!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
+  bool? get isadmin {
+    return _isadmin;
   }
   
-  String get organizationId {
-    try {
-      return _organizationId!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
+  String? get organizationId {
+    return _organizationId;
   }
   
-  String get adminId {
-    try {
-      return _adminId!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
+  String? get superAdminId {
+    return _superAdminId;
+  }
+  
+  String? get requestStatus {
+    return _requestStatus;
+  }
+  
+  String? get teamId {
+    return _teamId;
+  }
+  
+  bool? get isteamLeader {
+    return _isteamLeader;
+  }
+  
+  List<String>? get dealIds {
+    return _dealIds;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -157,17 +151,21 @@ class userInfo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const userInfo._internal({required uid, required userName, required email, required imageUrl, required organizationName, required organizationId, required adminId, createdAt, updatedAt}): _uid = uid, _userName = userName, _email = email, _imageUrl = imageUrl, _organizationName = organizationName, _organizationId = organizationId, _adminId = adminId, _createdAt = createdAt, _updatedAt = updatedAt;
+  const userInfo._internal({required userUid, required userName, required email, required imageUrl, isadmin, organizationId, superAdminId, requestStatus, teamId, isteamLeader, dealIds, createdAt, updatedAt}): _userUid = userUid, _userName = userName, _email = email, _imageUrl = imageUrl, _isadmin = isadmin, _organizationId = organizationId, _superAdminId = superAdminId, _requestStatus = requestStatus, _teamId = teamId, _isteamLeader = isteamLeader, _dealIds = dealIds, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory userInfo({required String uid, required String userName, required String email, required String imageUrl, required String organizationName, required String organizationId, required String adminId}) {
+  factory userInfo({required String userUid, required String userName, required String email, required String imageUrl, bool? isadmin, String? organizationId, String? superAdminId, String? requestStatus, String? teamId, bool? isteamLeader, List<String>? dealIds}) {
     return userInfo._internal(
-      uid: uid,
+      userUid: userUid,
       userName: userName,
       email: email,
       imageUrl: imageUrl,
-      organizationName: organizationName,
+      isadmin: isadmin,
       organizationId: organizationId,
-      adminId: adminId);
+      superAdminId: superAdminId,
+      requestStatus: requestStatus,
+      teamId: teamId,
+      isteamLeader: isteamLeader,
+      dealIds: dealIds != null ? List<String>.unmodifiable(dealIds) : dealIds);
   }
   
   bool equals(Object other) {
@@ -178,13 +176,17 @@ class userInfo extends amplify_core.Model {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is userInfo &&
-      _uid == other._uid &&
+      _userUid == other._userUid &&
       _userName == other._userName &&
       _email == other._email &&
       _imageUrl == other._imageUrl &&
-      _organizationName == other._organizationName &&
+      _isadmin == other._isadmin &&
       _organizationId == other._organizationId &&
-      _adminId == other._adminId;
+      _superAdminId == other._superAdminId &&
+      _requestStatus == other._requestStatus &&
+      _teamId == other._teamId &&
+      _isteamLeader == other._isteamLeader &&
+      DeepCollectionEquality().equals(_dealIds, other._dealIds);
   }
   
   @override
@@ -195,13 +197,17 @@ class userInfo extends amplify_core.Model {
     var buffer = new StringBuffer();
     
     buffer.write("userInfo {");
-    buffer.write("uid=" + "$_uid" + ", ");
+    buffer.write("userUid=" + "$_userUid" + ", ");
     buffer.write("userName=" + "$_userName" + ", ");
     buffer.write("email=" + "$_email" + ", ");
     buffer.write("imageUrl=" + "$_imageUrl" + ", ");
-    buffer.write("organizationName=" + "$_organizationName" + ", ");
+    buffer.write("isadmin=" + (_isadmin != null ? _isadmin!.toString() : "null") + ", ");
     buffer.write("organizationId=" + "$_organizationId" + ", ");
-    buffer.write("adminId=" + "$_adminId" + ", ");
+    buffer.write("superAdminId=" + "$_superAdminId" + ", ");
+    buffer.write("requestStatus=" + "$_requestStatus" + ", ");
+    buffer.write("teamId=" + "$_teamId" + ", ");
+    buffer.write("isteamLeader=" + (_isteamLeader != null ? _isteamLeader!.toString() : "null") + ", ");
+    buffer.write("dealIds=" + (_dealIds != null ? _dealIds!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -209,81 +215,105 @@ class userInfo extends amplify_core.Model {
     return buffer.toString();
   }
   
-  userInfo copyWith({String? userName, String? email, String? imageUrl, String? organizationName, String? organizationId, String? adminId}) {
+  userInfo copyWith({String? userName, String? email, String? imageUrl, bool? isadmin, String? organizationId, String? superAdminId, String? requestStatus, String? teamId, bool? isteamLeader, List<String>? dealIds}) {
     return userInfo._internal(
-      uid: uid,
+      userUid: userUid,
       userName: userName ?? this.userName,
       email: email ?? this.email,
       imageUrl: imageUrl ?? this.imageUrl,
-      organizationName: organizationName ?? this.organizationName,
+      isadmin: isadmin ?? this.isadmin,
       organizationId: organizationId ?? this.organizationId,
-      adminId: adminId ?? this.adminId);
+      superAdminId: superAdminId ?? this.superAdminId,
+      requestStatus: requestStatus ?? this.requestStatus,
+      teamId: teamId ?? this.teamId,
+      isteamLeader: isteamLeader ?? this.isteamLeader,
+      dealIds: dealIds ?? this.dealIds);
   }
   
   userInfo copyWithModelFieldValues({
     ModelFieldValue<String>? userName,
     ModelFieldValue<String>? email,
     ModelFieldValue<String>? imageUrl,
-    ModelFieldValue<String>? organizationName,
-    ModelFieldValue<String>? organizationId,
-    ModelFieldValue<String>? adminId
+    ModelFieldValue<bool?>? isadmin,
+    ModelFieldValue<String?>? organizationId,
+    ModelFieldValue<String?>? superAdminId,
+    ModelFieldValue<String?>? requestStatus,
+    ModelFieldValue<String?>? teamId,
+    ModelFieldValue<bool?>? isteamLeader,
+    ModelFieldValue<List<String>?>? dealIds
   }) {
     return userInfo._internal(
-      uid: uid,
+      userUid: userUid,
       userName: userName == null ? this.userName : userName.value,
       email: email == null ? this.email : email.value,
       imageUrl: imageUrl == null ? this.imageUrl : imageUrl.value,
-      organizationName: organizationName == null ? this.organizationName : organizationName.value,
+      isadmin: isadmin == null ? this.isadmin : isadmin.value,
       organizationId: organizationId == null ? this.organizationId : organizationId.value,
-      adminId: adminId == null ? this.adminId : adminId.value
+      superAdminId: superAdminId == null ? this.superAdminId : superAdminId.value,
+      requestStatus: requestStatus == null ? this.requestStatus : requestStatus.value,
+      teamId: teamId == null ? this.teamId : teamId.value,
+      isteamLeader: isteamLeader == null ? this.isteamLeader : isteamLeader.value,
+      dealIds: dealIds == null ? this.dealIds : dealIds.value
     );
   }
   
   userInfo.fromJson(Map<String, dynamic> json)  
-    : _uid = json['uid'],
+    : _userUid = json['userUid'],
       _userName = json['userName'],
       _email = json['email'],
       _imageUrl = json['imageUrl'],
-      _organizationName = json['organizationName'],
+      _isadmin = json['isadmin'],
       _organizationId = json['organizationId'],
-      _adminId = json['adminId'],
+      _superAdminId = json['superAdminId'],
+      _requestStatus = json['requestStatus'],
+      _teamId = json['teamId'],
+      _isteamLeader = json['isteamLeader'],
+      _dealIds = json['dealIds']?.cast<String>(),
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'uid': _uid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'organizationName': _organizationName, 'organizationId': _organizationId, 'adminId': _adminId, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'userUid': _userUid, 'userName': _userName, 'email': _email, 'imageUrl': _imageUrl, 'isadmin': _isadmin, 'organizationId': _organizationId, 'superAdminId': _superAdminId, 'requestStatus': _requestStatus, 'teamId': _teamId, 'isteamLeader': _isteamLeader, 'dealIds': _dealIds, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'uid': _uid,
+    'userUid': _userUid,
     'userName': _userName,
     'email': _email,
     'imageUrl': _imageUrl,
-    'organizationName': _organizationName,
+    'isadmin': _isadmin,
     'organizationId': _organizationId,
-    'adminId': _adminId,
+    'superAdminId': _superAdminId,
+    'requestStatus': _requestStatus,
+    'teamId': _teamId,
+    'isteamLeader': _isteamLeader,
+    'dealIds': _dealIds,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
   static final amplify_core.QueryModelIdentifier<userInfoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<userInfoModelIdentifier>();
-  static final UID = amplify_core.QueryField(fieldName: "uid");
+  static final USERUID = amplify_core.QueryField(fieldName: "userUid");
   static final USERNAME = amplify_core.QueryField(fieldName: "userName");
   static final EMAIL = amplify_core.QueryField(fieldName: "email");
   static final IMAGEURL = amplify_core.QueryField(fieldName: "imageUrl");
-  static final ORGANIZATIONNAME = amplify_core.QueryField(fieldName: "organizationName");
+  static final ISADMIN = amplify_core.QueryField(fieldName: "isadmin");
   static final ORGANIZATIONID = amplify_core.QueryField(fieldName: "organizationId");
-  static final ADMINID = amplify_core.QueryField(fieldName: "adminId");
+  static final SUPERADMINID = amplify_core.QueryField(fieldName: "superAdminId");
+  static final REQUESTSTATUS = amplify_core.QueryField(fieldName: "requestStatus");
+  static final TEAMID = amplify_core.QueryField(fieldName: "teamId");
+  static final ISTEAMLEADER = amplify_core.QueryField(fieldName: "isteamLeader");
+  static final DEALIDS = amplify_core.QueryField(fieldName: "dealIds");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "userInfo";
     modelSchemaDefinition.pluralName = "userInfos";
     
     modelSchemaDefinition.indexes = [
-      amplify_core.ModelIndex(fields: const ["uid"], name: null)
+      amplify_core.ModelIndex(fields: const ["userUid"], name: null)
     ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: userInfo.UID,
+      key: userInfo.USERUID,
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
@@ -307,21 +337,46 @@ class userInfo extends amplify_core.Model {
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: userInfo.ORGANIZATIONNAME,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+      key: userInfo.ISADMIN,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.bool)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.ORGANIZATIONID,
-      isRequired: true,
+      isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: userInfo.ADMINID,
-      isRequired: true,
+      key: userInfo.SUPERADMINID,
+      isRequired: false,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.REQUESTSTATUS,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.TEAMID,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.ISTEAMLEADER,
+      isRequired: false,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.bool)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: userInfo.DEALIDS,
+      isRequired: false,
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -359,15 +414,15 @@ class _userInfoModelType extends amplify_core.ModelType<userInfo> {
  * of [userInfo] in your schema.
  */
 class userInfoModelIdentifier implements amplify_core.ModelIdentifier<userInfo> {
-  final String uid;
+  final String userUid;
 
-  /** Create an instance of userInfoModelIdentifier using [uid] the primary key. */
+  /** Create an instance of userInfoModelIdentifier using [userUid] the primary key. */
   const userInfoModelIdentifier({
-    required this.uid});
+    required this.userUid});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'uid': uid
+    'userUid': userUid
   });
   
   @override
@@ -380,7 +435,7 @@ class userInfoModelIdentifier implements amplify_core.ModelIdentifier<userInfo> 
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'userInfoModelIdentifier(uid: $uid)';
+  String toString() => 'userInfoModelIdentifier(userUid: $userUid)';
   
   @override
   bool operator ==(Object other) {
@@ -389,10 +444,10 @@ class userInfoModelIdentifier implements amplify_core.ModelIdentifier<userInfo> 
     }
     
     return other is userInfoModelIdentifier &&
-      uid == other.uid;
+      userUid == other.userUid;
   }
   
   @override
   int get hashCode =>
-    uid.hashCode;
+    userUid.hashCode;
 }

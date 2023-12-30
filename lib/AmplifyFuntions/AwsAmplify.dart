@@ -142,6 +142,25 @@ class AwsIncube {
   //         e.toString());
   //   }
   // }
+  Future<userInfo?> getUser(String email) async {
+    safePrint('we are search user with email: $email');
+    safePrint('in getUser method of AwsIncube class');
+    try {
+      final queryPredicate = userInfo.EMAIL.eq(email);
+
+      final request = ModelQueries.list<userInfo>(
+        userInfo.classType,
+        where: queryPredicate,
+      );
+      final response = await Amplify.API.query(request: request).response;
+      return response.data?.items.first;
+    } catch (e) {
+      safePrint(
+          'we have encountered an error in getUser method of AwsIncube class');
+      safePrint('here is the error: ${e.toString()}');
+      return null;
+    }
+  }
 
   Future<void> addOrganization(
     String org_name,
@@ -156,66 +175,54 @@ class AwsIncube {
     safePrint('_addEvent is running');
     try {
       safePrint('we are trying to add the organization');
-      final org_team = Team(
-          org_id: "org_id2",
-          userUid: "user Uid 2",
-          userName: "user Nam2",
-          userAdmin: "user admin 2",
-          teamName: "main team 2");
-
       final organizationModel = Organization(
           org_name: org_name,
-          org_admin: org_admin,
-          uid: adminUid,
-          userName: adminName,
-          email: adminEmail,
+          org_admin: [org_admin],
+          superAdminId: adminUid,
           org_team: [
             Team(
-                org_id: "org_id4",
-                userUid: "user Uid 4",
-                userName: "user Nam4",
-                userAdmin: "user admin 4",
-                teamName: "main team 4"),
+              teamLeader: "Team leader",
+              teamName: "main team 4",
+              dealIDs: ['1', '2', '3'],
+            ),
             Team(
-                org_id: "org_id5",
-                userUid: "user Uid 5",
-                userName: "user Nam5",
-                userAdmin: "user admin 5",
-                teamName: "main team 5"),
+              teamLeader: "Team leader",
+              teamName: "main team 4",
+              dealIDs: ['1', '2', '3'],
+            ),
             Team(
-                org_id: "org_id6",
-                userUid: "user Uid 6",
-                userName: "user Nam6",
-                userAdmin: "user admin 6",
-                teamName: "main team 6")
+              teamLeader: "Team leader",
+              teamName: "main team 4",
+              dealIDs: ['1', '2', '3'],
+            ),
           ],
           org_deals: [
             Deals(
+                teamId: '1',
                 company_logo: "https:///",
                 company_description: "new company",
                 company_name: "new company",
                 status: "pending",
                 seeking: "555"),
             Deals(
+                teamId: '1',
                 company_logo: "https:///",
                 company_description: "new company",
                 company_name: "new company",
                 status: "pending",
                 seeking: "555"),
             Deals(
+                teamId: '1',
                 company_logo: "https:///",
                 company_description: "new company",
                 company_name: "new company",
                 status: "pending",
-                seeking: "555")
+                seeking: "555"),
           ],
-          imageUrl: adminImageUrl);
+          request: []);
 
       final request = ModelMutations.create(organizationModel);
-      final response =
-          await Amplify.API.mutate(request: request).response.whenComplete(() {
-        // fetchOrganizations();
-      });
+      final response = await Amplify.API.mutate(request: request).response;
 
       Organization? createdTodo = response.data;
       if (createdTodo == null) {
@@ -223,6 +230,7 @@ class AwsIncube {
         return;
       }
       safePrint('Mutation result org_name: ${createdTodo.org_name}');
+      safePrint('Mutation result org_admin: ${createdTodo.org_admin}');
     } on ApiException catch (e) {
       safePrint('Mutation failed: $e');
     }
@@ -240,26 +248,27 @@ class AwsIncube {
   }
 
   Future<void> updateDeals(Organization originalTodo, List<Deals> ls) async {
-    final todoWithNewName = originalTodo.copyWith(org_deals: ls);
+    final updatedOrganization = originalTodo.copyWith(org_deals: ls);
     safePrint("updateDeals method of awsIncube class is running");
 
-    final request = ModelMutations.update(todoWithNewName);
+    final request = ModelMutations.update(updatedOrganization);
     final response = await Amplify.API.mutate(request: request).response;
     safePrint("this is the length of the list after adding new deal " +
         response.data!.org_deals!.length.toString());
   }
 
-  Future<Organization?> getOrganizationByAdminId(String adminId) async {
+  Future<Organization?> getOrganizationByAdminId(String superAdminId) async {
     safePrint('getOrganizationByAdminId method is running');
     try {
-      final queryPredicate =
-          Organization.ORG_ADMIN.eq('cf34947c-32cd-4bec-8311-2391d2203b9a');
-
+      final queryPredicate = Organization.SUPERADMINID.contains(superAdminId);
       final request = ModelQueries.list<Organization>(
         Organization.classType,
         where: queryPredicate,
       );
       final response = await Amplify.API.query(request: request).response;
+      safePrint('${response.data!.items.length} is the length of the list');
+      safePrint('${response.data?.items.first!.org_admin} is the admin');
+      safePrint('${response.data?.items.first!.org_name} is the name');
       return response.data?.items.first;
     } catch (e) {
       safePrint('getOrganizationsByAdminId is giving error' + e.toString());

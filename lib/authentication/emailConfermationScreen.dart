@@ -1,16 +1,12 @@
 import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/models/userInfo.dart';
+import 'package:incube/models/ModelProvider.dart';
+import 'package:incube/organizations/organization.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/route.dart';
 import 'package:provider/provider.dart';
 import '../AmplifyFuntions/AwsAmplify.dart';
-import 'dart:html' as html;
-
-import 'package:amplify_storage_s3/amplify_storage_s3.dart';
-import 'package:aws_common/web.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   final String email;
@@ -50,7 +46,6 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   Widget build(BuildContext context) {
     final IncubeProvider _incubeProvider =
         Provider.of<IncubeProvider>(context, listen: false);
-
     Future<void> _submitCode() async {
       final confirmationCode = _confirmationCodeController.text;
       safePrint('submit code button is started');
@@ -61,15 +56,6 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         safePrint('error in confirmation of code');
         safePrint(e.toString());
       }
-    }
-
-    Future<void> _getUserId() async {
-      final result = await amplifyFunction.getCurrentUser();
-      safePrint('we are retriving users uid');
-      setState(() {
-        uid = result.userId.toString();
-      });
-      safePrint('this is the user uid' + uid);
     }
 
     // Future<String> uploadHtmlFile(String imageData) async {
@@ -104,8 +90,47 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
     void _gotoOrganizationScreen() {
       safePrint('goingtoOrganizationScreen is running');
-      Navigator.popAndPushNamed(context, AppRoutes.OrganizationPage);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => OrganizationPage(
+                  fromLogin: false,
+                )),
+      );
       safePrint('goingtoOrganizationScreen is completed');
+    }
+
+    Future<void> setProvider() async {
+      final response = await Amplify.Auth.getCurrentUser();
+      final userUid = response.userId.toString();
+      _incubeProvider.userId = userUid;
+      safePrint('we set the _userId to provider: ${_incubeProvider.userId}');
+      safePrint(
+          'we set the _userName to provider: ${_incubeProvider.userName}');
+      safePrint('we set the _email to provider: ${_incubeProvider.email}');
+      safePrint(
+          'we set the _imageFile to provider: ${_incubeProvider.imageFile}');
+    }
+
+    Future<void> setUserDataBase() async {
+      try {
+        userInfo _userModel = userInfo(
+            userUid: _incubeProvider.userId,
+            userName: _incubeProvider.userName,
+            email: _incubeProvider.email,
+            imageUrl: _incubeProvider.imageFile);
+        final request = ModelMutations.create(_userModel);
+        final response = await Amplify.API.mutate(request: request).response;
+
+        userInfo? createdTodo = response.data;
+        if (createdTodo == null) {
+          safePrint('errors: ${response.errors}');
+          return;
+        }
+        safePrint('Mutation result userName: ${createdTodo.userName}');
+      } on ApiException catch (e) {
+        safePrint('Mutation failed: $e');
+      }
     }
 
     Future<void> _executeMethods() async {
@@ -113,8 +138,13 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         await amplifyFunction
             .login(widget.email, widget.password)
             .whenComplete(() async {
-          await storingImage().whenComplete(() async {
-            _gotoOrganizationScreen();
+          await setProvider().whenComplete(() async {
+            await storingImage().whenComplete(() async {
+              //here form a user database
+              await setUserDataBase().whenComplete(() {
+                _gotoOrganizationScreen();
+              });
+            });
           });
         });
       });

@@ -10,7 +10,7 @@ import 'package:incube/authentication/auth.dart';
 import 'package:incube/authentication/login.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+// import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import './models/ModelProvider.dart';
 
 Future<void> main() async {
@@ -31,7 +31,7 @@ Future<void> _configureAmplify() async {
     await Amplify.addPlugins([
       AmplifyAPI(modelProvider: ModelProvider.instance),
       AmplifyAuthCognito(),
-      AmplifyStorageS3(),
+      // AmplifyStorageS3(),
     ]);
     await Amplify.configure(amplifyconfig);
     safePrint('configured');
@@ -49,10 +49,9 @@ class MyApp extends StatelessWidget {
       title: 'Incube',
       initialRoute: AppRoutes.auth,
       routes: {
-        AppRoutes.auth: (context) => const AuthScreen(),
+        AppRoutes.auth: (context) => const SignUpScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
-        AppRoutes.OrganizationPage: (context) => const OrganizationPage(),
       },
     );
   }

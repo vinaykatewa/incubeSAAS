@@ -5,5 +5,4 @@ class AppRoutes {
   static const String EmailConfirmationScreen = '/EmailConfirmationScreen';
   static const String dashboard = '/dashboard';
   static const String messageList = '/messageList';
-  static const String OrganizationPage = '/OrganizationPage';
 }

@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:incube/models/Organization.dart';
 
 class IncubeProvider extends ChangeNotifier {
-  String _email = 'init email';
-  String _userName = 'init user name';
-  String _imageFile = 'init image file';
-
   String _userId = 'init user id';
-  String _organizationName = 'init organization name';
+  String _userName = 'init user name';
+  String _email = 'init email';
+  String _imageFile = 'init image file';
+  late bool _isAdmin;
+
   String _organizationId = 'init organization id';
-  String _adminId = 'init admin id';
+  String _superAdmin = 'init super admin id';
+  String _requestStatus = 'new';
+  String _teamId = 'default team id';
+  late bool _isteamLeader;
 
   String get email => _email;
   String get userName => _userName;
   String get imageFile => _imageFile;
   String get userId => _userId;
-  String get organizationName => _organizationName;
   String get organizationId => _organizationId;
-  String get adminId => _adminId;
+  bool get isAdmin => _isAdmin;
+  String get superAdmin => _superAdmin;
+  String get requestStatus => _requestStatus;
+  String get teamId => _teamId;
+  bool get isteamLeader => _isteamLeader;
 
   set email(String value) {
     _email = value;
@@ -39,27 +45,33 @@ class IncubeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set organizationName(String value) {
-    _organizationName = value;
-    notifyListeners();
-  }
-
   set organizationId(String value) {
     _organizationId = value;
     notifyListeners();
   }
 
-  set adminId(String value) {
-    _adminId = value;
+  set isAdmin(bool value) {
+    _isAdmin = value;
     notifyListeners();
   }
 
-  // List<Organization?> get orgList => _orgList;
+  set superAdmin(String value) {
+    _superAdmin = value;
+    notifyListeners();
+  }
 
-  // List<Organization?> org_list = [];
+  set requestStatus(String value) {
+    _requestStatus = value;
+    notifyListeners();
+  }
 
-  // addAllOrganization(List<Organization?> org) {
-  //   org_list = org;
-  //   notifyListeners();
-  // }
+  set teamId(String value) {
+    _teamId = value;
+    notifyListeners();
+  }
+
+  set isteamLeader(bool value) {
+    _isteamLeader = value;
+    notifyListeners();
+  }
 }

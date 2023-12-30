@@ -35,45 +35,45 @@ class _AddDealState extends State<AddDeal> {
     final IncubeProvider _incubeProvider =
         Provider.of<IncubeProvider>(context, listen: false);
 
-    Future<String> uploadHtmlFile(String imageData) async {
-      safePrint('file uploading is starting');
-      final bytes = imageData.codeUnits;
-      final awsFile = AWSFilePlatform.fromData(bytes);
-      final fileName = DateTime.now().toIso8601String();
-      try {
-        safePrint('trying to uoplaod file');
-        final uploadResult = await Amplify.Storage.uploadFile(
-          localFile: awsFile,
-          key: fileName,
-        ).result;
-        safePrint('file uplaoded successfully');
-        safePrint('Uploaded file: ${uploadResult.uploadedItem.key}');
-        return uploadResult.uploadedItem.key;
-      } on StorageException catch (e) {
-        safePrint('Error uploading file: ${e.message}');
-        rethrow;
-      }
-    }
+    // Future<String> uploadHtmlFile(String imageData) async {
+    //   safePrint('file uploading is starting');
+    //   final bytes = imageData.codeUnits;
+    //   final awsFile = AWSFilePlatform.fromData(bytes);
+    //   final fileName = DateTime.now().toIso8601String();
+    //   try {
+    //     safePrint('trying to uoplaod file');
+    //     final uploadResult = await Amplify.Storage.uploadFile(
+    //       localFile: awsFile,
+    //       key: fileName,
+    //     ).result;
+    //     safePrint('file uplaoded successfully');
+    //     safePrint('Uploaded file: ${uploadResult.uploadedItem.key}');
+    //     return uploadResult.uploadedItem.key;
+    //   } on StorageException catch (e) {
+    //     safePrint('Error uploading file: ${e.message}');
+    //     rethrow;
+    //   }
+    // }
 
     Future<void> storingImage() async {
-      final imageKey = await uploadHtmlFile(selectedImage!);
-      final result = await Amplify.Storage.getUrl(key: imageKey).result;
-      setState(() {
-        _imageUrl = result.url.toString();
-      });
-      safePrint('here is your download url');
-      safePrint(_imageUrl);
+      // final imageKey = await uploadHtmlFile(selectedImage!);
+      // final result = await Amplify.Storage.getUrl(key: imageKey).result;
+      // setState(() {
+      //   _imageUrl = result.url.toString();
+      // });
+      // safePrint('here is your download url');
+      // safePrint(_imageUrl);
     }
 
     Future<void> _submit() async {
       await storingImage().whenComplete(() async {
-        final _deals = Deals(
-            company_logo: _imageUrl,
-            company_name: companyNameController.text,
-            company_description: companyDescriptionController.text,
-            seeking: seekingController.text,
-            status: "review pending");
-        await amplifyFunction.addDeals(_incubeProvider.adminId, _deals);
+        // final _deals = Deals(
+        //     company_logo: _imageUrl,
+        //     company_name: companyNameController.text,
+        //     company_description: companyDescriptionController.text,
+        //     seeking: seekingController.text,
+        //     status: "review pending");
+        // await amplifyFunction.addDeals(_incubeProvider.adminId, _deals);
       });
     }
 

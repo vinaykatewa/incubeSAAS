@@ -12,14 +12,14 @@ import './userImage.dart';
 import 'dart:typed_data';
 import '../AmplifyFuntions/AwsAmplify.dart';
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

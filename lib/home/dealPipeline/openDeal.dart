@@ -18,6 +18,7 @@ class OpenDeals extends StatefulWidget {
 class _OpenDealsState extends State<OpenDeals> {
   List<Deals?> _dealList = [];
   final _awsIncube = AwsIncube();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -28,16 +29,19 @@ class _OpenDealsState extends State<OpenDeals> {
   }
 
   Future<void> fetchDeals(BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
     safePrint('fetchDeals method is running');
     final IncubeProvider _incubeProvider =
         Provider.of<IncubeProvider>(context, listen: false);
     try {
       safePrint('fetchDeals is trying to get the data');
 
-      safePrint('this is the admin id of the organization: ' +
-          _incubeProvider.adminId);
-      final _organization =
-          await _awsIncube.getOrganizationByAdminId(_incubeProvider.adminId);
+      // safePrint('this is the admin id of the organization: ' +
+      //     _incubeProvider.adminId);
+      final _organization = await _awsIncube
+          .getOrganizationByAdminId(_incubeProvider.organizationId);
       setState(() {
         _dealList = _organization!.org_deals!
             .where((element) => element.status == "open deals")
@@ -47,6 +51,9 @@ class _OpenDealsState extends State<OpenDeals> {
       safePrint('Query failed: $e');
       safePrint('queryListItems method is failed');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -56,9 +63,13 @@ class _OpenDealsState extends State<OpenDeals> {
     final IncubeProvider _incubeProvider =
         Provider.of<IncubeProvider>(context, listen: false);
 
-    if (_dealList.isEmpty) {
-      return Center(
+    if (isLoading) {
+      return const Center(
         child: CircularProgressIndicator(),
+      );
+    } else if (!isLoading && _dealList.isEmpty) {
+      return const Center(
+        child: Text("No deal is present at this time"),
       );
     }
 
