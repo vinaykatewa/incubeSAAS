@@ -4,7 +4,6 @@ import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:incube/amplifyconfiguration.dart';
 import 'package:incube/home/home.dart';
-import 'package:incube/organizations/organization.dart';
 import 'route.dart';
 import 'package:incube/authentication/auth.dart';
 import 'package:incube/authentication/login.dart';

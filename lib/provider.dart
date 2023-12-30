@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:incube/models/Organization.dart';
 
 class IncubeProvider extends ChangeNotifier {
   String _userId = 'init user id';

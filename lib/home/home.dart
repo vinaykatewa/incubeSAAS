@@ -1,10 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
-
-import 'dart:convert';
-import 'dart:js_interop';
-
 import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
-
 import 'package:incube/route.dart';
 import 'package:provider/provider.dart';
-
 import '../AmplifyFuntions/AwsAmplify.dart';
 import '../uiThemes.dart';
 import './communications/communications.dart';
@@ -26,7 +18,6 @@ import './portfolioAnalytics/portfolioAnalytics.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
-
   @override
   State<Home> createState() => _HomeState();
 }
@@ -96,6 +87,7 @@ class NavigationBar extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBar> {
   List<userRequest> _userRequests = [];
+  List<Team> _teams = [];
   final _awsAmplify = AwsIncube();
 
   @override
@@ -123,7 +115,29 @@ class _NavigationBarState extends State<NavigationBar> {
       }
     }
 
-    Future<void> acceptRequest(String requestUserId) async {
+    Future<void> fetchTeams() async {
+      safePrint('we are using this admin id in fetchTeams method: ' +
+          _incubeProvider.superAdmin);
+      try {
+        Organization? _org = await _awsAmplify
+            .getOrganizationByAdminId(_incubeProvider.superAdmin);
+        if (_org == null) {
+          safePrint('we got the null organization in fetchTeams method');
+          return;
+        }
+        if (_org!.org_team!.isEmpty) {
+          safePrint('there are no requests right now');
+        }
+        setState(() {
+          _teams = _org.org_team!;
+        });
+        safePrint('fetching requests is done');
+      } on Exception catch (e) {
+        safePrint('fetchUserRequest is giving error: ' + e.toString());
+      }
+    }
+
+    Future<void> acceptRequest(String requestUserId, String teamId) async {
       safePrint(
           'we are using this superAdminId in acceptRequest method: ${_incubeProvider.superAdmin}');
       Organization? requestedOrg = await _awsAmplify
@@ -133,24 +147,37 @@ class _NavigationBarState extends State<NavigationBar> {
         return;
       }
       List<userRequest?> _list = requestedOrg.request!;
-      int index =
+      int requestIndex =
           requestedOrg.request!.indexWhere((r) => r.userId == requestUserId);
-      if (index == -1) {
+      if (requestIndex == -1) {
         safePrint('the list is returning index -1 in acceptRequest method');
         return;
       }
       //now we have the index of the specific request
       //take userId from it and delete it
-      final _userEmail = requestedOrg.request![index].userEmail;
+      final _userEmail = requestedOrg.request![requestIndex].userEmail;
 
-      requestedOrg.request!.removeAt(index);
+      requestedOrg.request!.removeAt(requestIndex);
+
+      //now add the userId to the team DB
+      //query team using teamId
+      List<Team?> _team = requestedOrg.org_team!;
+      if (_team == null) {
+        safePrint('_team is null in acceptRequest method');
+        return;
+      }
+      int teamIndex =
+          requestedOrg.org_team!.indexWhere((element) => element.id == teamId);
+      Team? specificTeam = requestedOrg.org_team![teamIndex];
+      specificTeam.member!.add(requestUserId);
+      requestedOrg.org_team![teamIndex] = specificTeam;
 
       await _awsAmplify.updateOrganization(requestedOrg).whenComplete(() {
         safePrint("we are done update the status of the request ");
       });
 
-      //automatically make him team leader
-      //now query the userDb and mark the request as accepted
+      //query the userDb provide teamid to user DB
+      // also mark the request as accepted
       userInfo? _userDbObject = await _awsAmplify.getUser(_userEmail);
       if (_userDbObject == null) {
         safePrint('_userDbObject is null in acceptRequest method');
@@ -158,7 +185,7 @@ class _NavigationBarState extends State<NavigationBar> {
       }
       final updatedUserDbObject = _userDbObject.copyWith(
         requestStatus: "accepted",
-        teamId: 'temporary team',
+        teamId: teamId,
         isteamLeader: true,
       );
       try {
@@ -211,9 +238,55 @@ class _NavigationBarState extends State<NavigationBar> {
       }
     }
 
+    void showTeamsAlertDialog(BuildContext context, String requestingUserName,
+        String requestingUserId) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Assign team to $requestingUserName"),
+            content: Container(
+              height: 300, // Adjust the height as needed
+              width: 300, // Adjust the width as needed
+              child: ListView.builder(
+                itemCount: _teams.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(_teams[index].teamName),
+                    onTap: () async {
+                      safePrint(
+                          'this is we are providing to the team id: ${_teams[index].id}');
+                      safePrint(
+                          'this is we are providing to the team request id: $requestingUserId');
+                      await acceptRequest(requestingUserId, _teams[index].id)
+                          .whenComplete(() async {
+                        await fetchUserRequests().whenComplete(() {
+                          safePrint(
+                              'we are done update list after modifying the requests');
+                        }).whenComplete(() {
+                          Navigator.of(context).pop();
+                        });
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     void _showRightSheet() {
       final screenHeight = MediaQuery.of(context).size.height;
-
       showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -248,12 +321,15 @@ class _NavigationBarState extends State<NavigationBar> {
                           title: Text(_userRequests[index].userName),
                           leading: IconButton(
                             onPressed: () async {
-                              await acceptRequest(_userRequests[index].userId)
-                                  .whenComplete(() async {
-                                await fetchUserRequests().whenComplete(() {
-                                  safePrint(
-                                      'we are done update list after modifying the requests');
-                                });
+                              await fetchTeams().whenComplete(() {
+                                safePrint(
+                                    'we are providing showTeamsAlertDialog userName ${_userRequests[index].userName}');
+                                safePrint(
+                                    'we are providing showTeamsAlertDialog userId${_userRequests[index].userId}');
+                                showTeamsAlertDialog(
+                                    context,
+                                    _userRequests[index].userName,
+                                    _userRequests[index].userId);
                               });
                             },
                             icon: FaIcon(FontAwesomeIcons.check),
@@ -357,17 +433,19 @@ class _NavigationBarState extends State<NavigationBar> {
                 ),
               ),
             ),
-            IconButton(
-                onPressed: () async {
-                  await fetchUserRequests().whenComplete(() {
-                    _showRightSheet();
-                  });
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.bars,
-                  color: Colors.white.withOpacity(0.9),
-                  size: screenWidth * 0.01,
-                ))
+            _incubeProvider.isAdmin
+                ? IconButton(
+                    onPressed: () async {
+                      await fetchUserRequests().whenComplete(() {
+                        _showRightSheet();
+                      });
+                    },
+                    icon: FaIcon(
+                      FontAwesomeIcons.bars,
+                      color: Colors.white.withOpacity(0.9),
+                      size: screenWidth * 0.01,
+                    ))
+                : SizedBox()
           ],
         ),
       ),
