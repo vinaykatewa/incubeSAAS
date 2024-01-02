@@ -23,7 +23,7 @@ class DealPipeline extends StatefulWidget {
 }
 
 class _DealPipelineState extends State<DealPipeline> {
-  int selctedIndex = 1;
+  int selctedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
