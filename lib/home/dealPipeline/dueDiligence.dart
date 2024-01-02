@@ -8,14 +8,14 @@ import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:provider/provider.dart';
 
-class OpenDeals extends StatefulWidget {
-  const OpenDeals({super.key});
+class DueDiligence extends StatefulWidget {
+  const DueDiligence({super.key});
 
   @override
-  State<OpenDeals> createState() => _OpenDealsState();
+  State<DueDiligence> createState() => _DueDiligenceState();
 }
 
-class _OpenDealsState extends State<OpenDeals> {
+class _DueDiligenceState extends State<DueDiligence> {
   List<Deals?> _dealList = [];
   final _awsIncube = AwsIncube();
   bool isLoading = false;
@@ -68,7 +68,8 @@ class _OpenDealsState extends State<OpenDeals> {
         List<Deals> tempDealList = [];
         for (String s in listOfDealIds) {
           _dealList.add(organization.org_deals
-              .where((element) => element.id == s && element.status == "open")
+              .where((element) =>
+                  element.id == s && element.status == "due diligence")
               .first);
           safePrint('length of tempDealList is: ${tempDealList.length}');
           setState(() {
@@ -79,7 +80,7 @@ class _OpenDealsState extends State<OpenDeals> {
       } else {
         setState(() {
           _dealList = organization.org_deals
-              .where((element) => element.status == 'open')
+              .where((element) => element.status == 'due diligence')
               .toList();
         });
         safePrint('length of _dealList is: ${_dealList.length}');

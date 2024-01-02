@@ -15,7 +15,7 @@ type userInfo @model {
   requestStatus: String
   teamId: String
   isteamLeader: Boolean
-  dealIds: [String]
+  dealIds: [String]!
   
 }
 
@@ -24,8 +24,8 @@ type Team {
 id: ID!
 teamName: String!
 teamLeader: String!
-member: [String]
-dealIDs:[String]
+member: [String]!
+dealIDs:[String]!
 }
 
 type Organization @model {
@@ -33,9 +33,9 @@ type Organization @model {
   org_name: String!
   superAdminId: String!
   org_admin: [String]!
-  request: [userRequest]
-  org_team: [Team]
-  org_deals: [Deals]
+  request: [userRequest]!
+  org_team: [Team]!
+  org_deals: [Deals]!
 }
 
 type userRequest{

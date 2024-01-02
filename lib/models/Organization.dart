@@ -89,16 +89,43 @@ class Organization extends amplify_core.Model {
     }
   }
   
-  List<userRequest>? get request {
-    return _request;
+  List<userRequest> get request {
+    try {
+      return _request!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  List<Team>? get org_team {
-    return _org_team;
+  List<Team> get org_team {
+    try {
+      return _org_team!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  List<Deals>? get org_deals {
-    return _org_deals;
+  List<Deals> get org_deals {
+    try {
+      return _org_deals!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -109,9 +136,9 @@ class Organization extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Organization._internal({required this.id, required org_name, required superAdminId, required org_admin, request, org_team, org_deals, createdAt, updatedAt}): _org_name = org_name, _superAdminId = superAdminId, _org_admin = org_admin, _request = request, _org_team = org_team, _org_deals = org_deals, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Organization._internal({required this.id, required org_name, required superAdminId, required org_admin, required request, required org_team, required org_deals, createdAt, updatedAt}): _org_name = org_name, _superAdminId = superAdminId, _org_admin = org_admin, _request = request, _org_team = org_team, _org_deals = org_deals, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Organization({String? id, required String org_name, required String superAdminId, required List<String> org_admin, List<userRequest>? request, List<Team>? org_team, List<Deals>? org_deals}) {
+  factory Organization({String? id, required String org_name, required String superAdminId, required List<String> org_admin, required List<userRequest> request, required List<Team> org_team, required List<Deals> org_deals}) {
     return Organization._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       org_name: org_name,
@@ -268,21 +295,21 @@ class Organization extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'request',
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'userRequest')
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'org_team',
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Team')
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'org_deals',
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Deals')
     ));

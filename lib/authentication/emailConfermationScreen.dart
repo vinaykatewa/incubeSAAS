@@ -118,7 +118,8 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             userUid: _incubeProvider.userId,
             userName: _incubeProvider.userName,
             email: _incubeProvider.email,
-            imageUrl: _incubeProvider.imageFile);
+            imageUrl: _incubeProvider.imageFile,
+            dealIds: []);
         final request = ModelMutations.create(_userModel);
         final response = await Amplify.API.mutate(request: request).response;
 

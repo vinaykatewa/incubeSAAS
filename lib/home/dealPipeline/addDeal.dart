@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
+import 'package:incube/uiThemes.dart';
 import 'package:provider/provider.dart';
 
 import '../../authentication/userImage.dart';
@@ -17,7 +18,7 @@ class AddDeal extends StatefulWidget {
 
 class _AddDealState extends State<AddDeal> {
   final amplifyFunction = AwsIncube();
-  String _imageUrl = '';
+  String _imageUrl = 'initial image path';
   String? selectedImage;
   TextEditingController companyNameController = TextEditingController();
   TextEditingController companyDescriptionController = TextEditingController();
@@ -64,23 +65,27 @@ class _AddDealState extends State<AddDeal> {
       // safePrint('here is your download url');
       // safePrint(_imageUrl);
     }
-
-    Future<void> _submit() async {
-      await storingImage().whenComplete(() async {
-        // final _deals = Deals(
-        //     company_logo: _imageUrl,
-        //     company_name: companyNameController.text,
-        //     company_description: companyDescriptionController.text,
-        //     seeking: seekingController.text,
-        //     status: "review pending");
-        // await amplifyFunction.addDeals(_incubeProvider.adminId, _deals);
-      });
-    }
-
     void clearAll() {
       companyNameController.clear();
       companyDescriptionController.clear();
       seekingController.clear();
+    }
+
+    Future<void> submit() async {
+      await storingImage().whenComplete(() async {
+        final _deals = Deals(
+            company_logo: _imageUrl,
+            company_name: companyNameController.text,
+            company_description: companyDescriptionController.text,
+            seeking: seekingController.text,
+            status: "review pending",
+            teamId: 'teamprary');
+        await amplifyFunction
+            .addDeals(_incubeProvider.superAdmin, _deals)
+            .whenComplete(() {
+          clearAll();
+        });
+      });
     }
 
     return Card(
@@ -127,14 +132,28 @@ class _AddDealState extends State<AddDeal> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                  ),
+                  elevation: 2,
+                ),
                 onPressed: () {
                   clearAll();
                 },
                 child: Text('Clear'),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                  ),
+                  elevation: 2,
+                ),
                 onPressed: () {
-                  _submit();
+                  submit();
                 },
                 child: Text('Submit'),
               ),

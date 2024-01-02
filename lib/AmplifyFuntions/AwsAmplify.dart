@@ -15,13 +15,6 @@ class AwsIncube {
     return result.isSignedIn;
   }
 
-  Future<AuthUser> getCurrentUser() async {
-    final user = await Amplify.Auth.getCurrentUser();
-    safePrint(user.userId.toString());
-    safePrint('conferm the uid');
-    return user;
-  }
-
   Future<void> signUpUser({
     required String password,
     required String email,
@@ -179,46 +172,8 @@ class AwsIncube {
           org_name: org_name,
           org_admin: [org_admin],
           superAdminId: adminUid,
-          org_team: [
-            Team(
-              teamLeader: "Team leader",
-              teamName: "main team 4",
-              dealIDs: ['1', '2', '3'],
-            ),
-            Team(
-              teamLeader: "Team leader",
-              teamName: "main team 4",
-              dealIDs: ['1', '2', '3'],
-            ),
-            Team(
-              teamLeader: "Team leader",
-              teamName: "main team 4",
-              dealIDs: ['1', '2', '3'],
-            ),
-          ],
-          org_deals: [
-            Deals(
-                teamId: '1',
-                company_logo: "https:///",
-                company_description: "new company",
-                company_name: "new company",
-                status: "pending",
-                seeking: "555"),
-            Deals(
-                teamId: '1',
-                company_logo: "https:///",
-                company_description: "new company",
-                company_name: "new company",
-                status: "pending",
-                seeking: "555"),
-            Deals(
-                teamId: '1',
-                company_logo: "https:///",
-                company_description: "new company",
-                company_name: "new company",
-                status: "pending",
-                seeking: "555"),
-          ],
+          org_team: [],
+          org_deals: [],
           request: []);
 
       final request = ModelMutations.create(organizationModel);
@@ -277,15 +232,20 @@ class AwsIncube {
   }
 
   Future<void> dealProcessing(
-      String adminId, String status, String dealId) async {
-    final _org = await getOrganizationByAdminId(adminId);
-    int index = _org!.org_deals!.indexWhere((deal) => deal.id == dealId);
+      String superAdminId, String status, String dealId) async {
+    safePrint(
+        'In dealProcessing, we are using this superadminId to find the organization $superAdminId');
+    final _org = await getOrganizationByAdminId(superAdminId);
+    safePrint(
+        'In dealProcessing, we are using this dealId to find the deal $dealId');
+    int index = _org!.org_deals.indexWhere((deal) => deal.id == dealId);
+
     if (index == -1) {
       safePrint('the list is returning index -1');
       return;
     }
-    Deals _updatedDeals = _org.org_deals![index].copyWith(status: status);
-    _org.org_deals![index] = _updatedDeals;
+    Deals _updatedDeals = _org.org_deals[index].copyWith(status: status);
+    _org.org_deals[index] = _updatedDeals;
     await updateOrganization(_org).whenComplete(() {
       safePrint("we are done update the status of the deal ");
     });

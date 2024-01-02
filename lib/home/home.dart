@@ -25,70 +25,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedButtonIndex = 0;
   late String uid;
-  final awsFunction = AwsIncube();
-  @override
-  void initState() {
-    super.initState();
-    awsFunction.getCurrentUser();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          NavigationBar(
-            selectedButtonIndex: selectedButtonIndex,
-            onButtonTapped: (index) {
-              setState(() {
-                selectedButtonIndex = index;
-              });
-            },
-          ),
-          Expanded(
-            child: _buildScreen(selectedButtonIndex),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScreen(int index) {
-    switch (index) {
-      case 0:
-        return const Dashboard();
-      case 1:
-        return const DealPipeline();
-      case 2:
-        return const InvestmentTracking();
-      case 3:
-        return const PortfolioAnalytics();
-      case 4:
-        return const Communications();
-      default:
-        return Container();
-    }
-  }
-}
-
-class NavigationBar extends StatefulWidget {
-  final Function(int) onButtonTapped;
-  final int selectedButtonIndex;
-
-  const NavigationBar(
-      {Key? key,
-      required this.selectedButtonIndex,
-      required this.onButtonTapped})
-      : super(key: key);
-
-  @override
-  State<NavigationBar> createState() => _NavigationBarState();
-}
-
-class _NavigationBarState extends State<NavigationBar> {
   List<userRequest> _userRequests = [];
   List<Team> _teams = [];
   final _awsAmplify = AwsIncube();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,9 +80,13 @@ class _NavigationBarState extends State<NavigationBar> {
       }
     }
 
-    Future<void> acceptRequest(String requestUserId, String teamId) async {
+    Future<void> acceptRequest(
+        String requestUserId, String teamId, bool isteamLeader) async {
       safePrint(
-          'we are using this superAdminId in acceptRequest method: ${_incubeProvider.superAdmin}');
+          'In acceptRequest method, we are using this requestUserId: $requestUserId');
+      safePrint('In acceptRequest method, we are using this teamId: $teamId');
+      safePrint(
+          'In acceptRequest method, we are using this superAdmin: ${_incubeProvider.superAdmin}');
       Organization? requestedOrg = await _awsAmplify
           .getOrganizationByAdminId(_incubeProvider.superAdmin);
       if (requestedOrg == null) {
@@ -147,30 +94,46 @@ class _NavigationBarState extends State<NavigationBar> {
         return;
       }
       List<userRequest?> _list = requestedOrg.request!;
+      if (_list.isEmpty) {
+        safePrint('In acceptRequest method, _list of userRequest is empty');
+        return;
+      }
       int requestIndex =
           requestedOrg.request!.indexWhere((r) => r.userId == requestUserId);
       if (requestIndex == -1) {
-        safePrint('the list is returning index -1 in acceptRequest method');
+        safePrint('In acceptRequest method, is returning index -1');
         return;
       }
       //now we have the index of the specific request
       //take userId from it and delete it
       final _userEmail = requestedOrg.request![requestIndex].userEmail;
-
+      safePrint(
+          'In acceptRequest method, this is the user email we got from list of userRequest: $_userEmail');
       requestedOrg.request!.removeAt(requestIndex);
 
       //now add the userId to the team DB
       //query team using teamId
-      List<Team?> _team = requestedOrg.org_team!;
-      if (_team == null) {
-        safePrint('_team is null in acceptRequest method');
+      if (requestedOrg.org_team == null) {
+        safePrint('requestedOrg.org_team is null in acceptRequest method');
         return;
       }
       int teamIndex =
           requestedOrg.org_team!.indexWhere((element) => element.id == teamId);
+      if (teamIndex == -1) {
+        safePrint('In acceptRequest method, teamIndex is giving -1');
+        return;
+      }
       Team? specificTeam = requestedOrg.org_team![teamIndex];
-      specificTeam.member!.add(requestUserId);
-      requestedOrg.org_team![teamIndex] = specificTeam;
+      if (specificTeam == null) {
+        safePrint('In acceptRequest method, specificTeam is null');
+        return;
+      }
+      safePrint(
+          'In acceptRequest method, this is length of team member list before: ${specificTeam.member.length}');
+      specificTeam.member.add(requestUserId);
+      safePrint(
+          'In acceptRequest method, this is length of team member list after adding: ${specificTeam.member!.length}');
+      requestedOrg.org_team[teamIndex] = specificTeam;
 
       await _awsAmplify.updateOrganization(requestedOrg).whenComplete(() {
         safePrint("we are done update the status of the request ");
@@ -178,21 +141,29 @@ class _NavigationBarState extends State<NavigationBar> {
 
       //query the userDb provide teamid to user DB
       // also mark the request as accepted
-      userInfo? _userDbObject = await _awsAmplify.getUser(_userEmail);
-      if (_userDbObject == null) {
-        safePrint('_userDbObject is null in acceptRequest method');
+      safePrint(
+          'In acceptRequest method, this is teamId we are for userDB: $teamId');
+      userInfo? userDbObject = await _awsAmplify.getUser(_userEmail);
+      if (userDbObject == null) {
+        safePrint('In acceptRequest method, we got _userDbObject null');
+        safePrint('mean we did not find any user with this email');
         return;
       }
-      final updatedUserDbObject = _userDbObject.copyWith(
+      final updatedUserDbObject = userDbObject.copyWith(
         requestStatus: "accepted",
         teamId: teamId,
-        isteamLeader: true,
+        isteamLeader: isteamLeader,
       );
+      safePrint(
+          'In acceptRequest method, we have updated the user status here it is: ${updatedUserDbObject.requestStatus}');
       try {
         final request = ModelMutations.update(updatedUserDbObject);
         final response = await Amplify.API.mutate(request: request).response;
         safePrint(
-            'we are done updating the userDB: ${response.data!.requestStatus}');
+            'In acceptRequest method, we are done updating the userDB here is the new details');
+        safePrint('status: ${response.data!.requestStatus}');
+        safePrint('teamId: ${response.data!.teamId}');
+        safePrint('isteamLeader: ${response.data!.isteamLeader.toString()}');
       } catch (e) {
         safePrint('we got the error: ${e.toString()}');
       }
@@ -238,39 +209,147 @@ class _NavigationBarState extends State<NavigationBar> {
       }
     }
 
+    Future<void> getTeamAndCallAcceptRequest(
+        String teamName, String teamLeader, String requestUserId) async {
+      try {
+        Organization? org = await _awsAmplify
+            .getOrganizationByAdminId(_incubeProvider.superAdmin);
+        if (org == null) {
+          safePrint('we got null org in addTeams method');
+          return;
+        }
+        int specificTeamIndex = org.org_team.indexWhere((element) =>
+            element.teamName == teamName && element.teamLeader == teamLeader);
+        if (specificTeamIndex == -1) {
+          safePrint(
+              'In getTeamAndCallAcceptRequest, we got specificTeamIndex -1');
+          return;
+        }
+        String teamId = org.org_team[specificTeamIndex].id;
+        //now pass this teamId to acceptRequest method
+        acceptRequest(requestUserId, teamId, true);
+        safePrint(
+            'In getTeamAndCallAcceptRequest, we got this teamId: $teamId');
+      } catch (e) {}
+    }
+
+    Future<void> addTeams(
+        String teamName, String teamLeader, String requestUserId) async {
+      safePrint('In addTeams, we got this teamName: $teamName');
+      safePrint('In addTeams, we got this teamLeader: $teamLeader');
+      safePrint('In addTeams, we got this requestUserId: $requestUserId');
+      try {
+        Organization? org = await _awsAmplify
+            .getOrganizationByAdminId(_incubeProvider.superAdmin);
+        if (org == null) {
+          safePrint('we got null org in addTeams method');
+          return;
+        }
+        org.org_team.add(Team(
+            teamName: teamName,
+            teamLeader: teamLeader,
+            member: [],
+            dealIDs: []));
+        Organization updatedOrg = org.copyWith(org_team: org.org_team);
+        final request = ModelMutations.update(updatedOrg);
+        final response = await Amplify.API.mutate(request: request).response;
+        safePrint(
+            "this is the length of the list after adding new deal:${response.data!.org_deals.length.toString()} ");
+      } catch (e) {
+        safePrint(
+            'try block of addTeam method is giving an error: ${e.toString()}');
+      }
+      //after this call
+      getTeamAndCallAcceptRequest(teamName, teamLeader, requestUserId);
+    }
+
+    void addTeamAlertDialog(
+        BuildContext context, String teamLeaderEmail, String requestUserId) {
+      String teamName = '';
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Add Team'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  decoration: InputDecoration(labelText: 'Team Name'),
+                  onChanged: (value) {
+                    teamName = value;
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () async {
+                  if (teamName.isNotEmpty) {
+                    safePrint('Team Name: $teamName');
+                    safePrint('Team Leader: $teamLeaderEmail');
+                    await addTeams(teamName, teamLeaderEmail, requestUserId);
+                    Navigator.of(context).pop();
+                  } else {
+                    print('Please fill in all fields.');
+                  }
+                },
+                child: Text('Add Team'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+//addTeamAlertDialog
     void showTeamsAlertDialog(BuildContext context, String requestingUserName,
-        String requestingUserId) {
+        String requestingUserId, String requestingUserEmail) {
+      safePrint(
+          'in showTeamsAlertDialog we are provide this requestingUserName: $requestingUserName');
+      safePrint(
+          'in showTeamsAlertDialog we are provide this requestingUserId: $requestingUserId');
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Assign team to $requestingUserName"),
             content: Container(
-              height: 300, // Adjust the height as needed
-              width: 300, // Adjust the width as needed
-              child: ListView.builder(
-                itemCount: _teams.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(_teams[index].teamName),
-                    onTap: () async {
-                      safePrint(
-                          'this is we are providing to the team id: ${_teams[index].id}');
-                      safePrint(
-                          'this is we are providing to the team request id: $requestingUserId');
-                      await acceptRequest(requestingUserId, _teams[index].id)
-                          .whenComplete(() async {
-                        await fetchUserRequests().whenComplete(() {
-                          safePrint(
-                              'we are done update list after modifying the requests');
-                        }).whenComplete(() {
-                          Navigator.of(context).pop();
-                        });
-                      });
-                    },
-                  );
-                },
-              ),
+              height: 300,
+              width: 300,
+              child: _teams.isEmpty
+                  ? const Center(
+                      child: Text('No team exist'),
+                    )
+                  : ListView.builder(
+                      itemCount: _teams.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(_teams[index].teamName),
+                          onTap: () async {
+                            safePrint(
+                                'here ontap on list item, we are providing to the team id: ${_teams[index].id}');
+                            safePrint(
+                                'here ontap on list item, we are providing to the requestingUserId: $requestingUserId');
+                            await acceptRequest(
+                                    requestingUserId, _teams[index].id, false)
+                                .whenComplete(() async {
+                              safePrint(
+                                  'acceptRequest method is completed in showTeamAlertDialog method');
+                              safePrint(
+                                  'now we will call fetchUserRequests method');
+                              await fetchUserRequests().whenComplete(() {
+                                safePrint(
+                                    'we are done update list after modifying the requests');
+                              }).whenComplete(() {
+                                Navigator.of(context).pop();
+                              });
+                            });
+                          },
+                        );
+                      },
+                    ),
             ),
             actions: <Widget>[
               TextButton(
@@ -279,13 +358,23 @@ class _NavigationBarState extends State<NavigationBar> {
                 },
                 child: Text('Close'),
               ),
+              TextButton(
+                onPressed: () {
+                  safePrint(
+                      'In showTeamsAlertDialog, add and assign team button is pressed');
+                  Navigator.of(context).pop();
+                  addTeamAlertDialog(
+                      context, requestingUserEmail, requestingUserId);
+                },
+                child: Text('Add and Assign team'),
+              ),
             ],
           );
         },
       );
     }
 
-    void _showRightSheet() {
+    void showRequests() {
       final screenHeight = MediaQuery.of(context).size.height;
       showModalBottomSheet(
         context: context,
@@ -308,7 +397,7 @@ class _NavigationBarState extends State<NavigationBar> {
                   Text(
                     'Someone wants to join your organization',
                     style: LabelSmall().copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: secondaryColor(),
                     ),
                   ),
                   SizedBox(height: 16),
@@ -325,11 +414,14 @@ class _NavigationBarState extends State<NavigationBar> {
                                 safePrint(
                                     'we are providing showTeamsAlertDialog userName ${_userRequests[index].userName}');
                                 safePrint(
-                                    'we are providing showTeamsAlertDialog userId${_userRequests[index].userId}');
+                                    'we are providing showTeamsAlertDialog userId ${_userRequests[index].userId}');
+                                Navigator.of(context).pop();
                                 showTeamsAlertDialog(
-                                    context,
-                                    _userRequests[index].userName,
-                                    _userRequests[index].userId);
+                                  context,
+                                  _userRequests[index].userName,
+                                  _userRequests[index].userId,
+                                  _userRequests[index].userEmail,
+                                );
                               });
                             },
                             icon: FaIcon(FontAwesomeIcons.check),
@@ -358,8 +450,41 @@ class _NavigationBarState extends State<NavigationBar> {
       );
     }
 
-    return Material(
-      child: Container(
+    Future<void> signOutCurrentUser() async {
+      final result = await Amplify.Auth.signOut();
+      if (result is CognitoCompleteSignOut) {
+        Navigator.popAndPushNamed(context, AppRoutes.auth);
+        safePrint('Sign out completed successfully');
+      } else if (result is CognitoFailedSignOut) {
+        safePrint('Error signing user out: ${result.exception.message}');
+      }
+    }
+
+    String _getButtonText(int index) {
+      switch (index) {
+        case 0:
+          return 'DashBoard';
+        case 1:
+          return 'Deal Pipeline';
+        case 2:
+          return 'Investment Tracking';
+        case 3:
+          return 'Portfolio Analytics';
+        case 4:
+          return 'Communications';
+        default:
+          return '';
+      }
+    }
+
+    void onButtonTapped(index) {
+      setState(() {
+        selectedButtonIndex = index;
+      });
+    }
+
+    Widget Navigation() {
+      return Container(
         margin: const EdgeInsets.all(0),
         padding: EdgeInsets.only(
             left: screenWidth * 0.01, right: screenWidth * 0.01),
@@ -385,7 +510,7 @@ class _NavigationBarState extends State<NavigationBar> {
                   (index) => Container(
                     margin: EdgeInsets.only(left: screenWidth * 0.02),
                     decoration: BoxDecoration(
-                        color: widget.selectedButtonIndex == index
+                        color: selectedButtonIndex == index
                             ? tertiaryColor1()
                             : Colors.transparent,
                         borderRadius: BorderRadius.all(
@@ -393,12 +518,12 @@ class _NavigationBarState extends State<NavigationBar> {
                         )),
                     child: TextButton(
                       onPressed: () {
-                        widget.onButtonTapped(index);
+                        onButtonTapped(index);
                       },
                       child: Text(
                         _getButtonText(index),
                         style: LabelMedium().copyWith(
-                          color: widget.selectedButtonIndex == index
+                          color: selectedButtonIndex == index
                               ? Colors.black
                               : Colors.white.withOpacity(0.9),
                         ),
@@ -437,7 +562,7 @@ class _NavigationBarState extends State<NavigationBar> {
                 ? IconButton(
                     onPressed: () async {
                       await fetchUserRequests().whenComplete(() {
-                        _showRightSheet();
+                        showRequests();
                       });
                     },
                     icon: FaIcon(
@@ -445,38 +570,39 @@ class _NavigationBarState extends State<NavigationBar> {
                       color: Colors.white.withOpacity(0.9),
                       size: screenWidth * 0.01,
                     ))
-                : SizedBox()
+                : SizedBox(),
           ],
         ),
+      );
+    }
+
+    Widget _buildScreen(int index) {
+      switch (index) {
+        case 0:
+          return const Dashboard();
+        case 1:
+          return const DealPipeline();
+        case 2:
+          return const InvestmentTracking();
+        case 3:
+          return const PortfolioAnalytics();
+        case 4:
+          return const Communications();
+        default:
+          return Container();
+      }
+    }
+
+    return Scaffold(
+      body: Column(
+        children: [
+          Navigation(),
+          Expanded(
+            child: _buildScreen(selectedButtonIndex),
+          ),
+        ],
       ),
     );
-  }
-
-  Future<void> signOutCurrentUser() async {
-    final result = await Amplify.Auth.signOut();
-    if (result is CognitoCompleteSignOut) {
-      Navigator.popAndPushNamed(context, AppRoutes.auth);
-      safePrint('Sign out completed successfully');
-    } else if (result is CognitoFailedSignOut) {
-      safePrint('Error signing user out: ${result.exception.message}');
-    }
-  }
-
-  String _getButtonText(int index) {
-    switch (index) {
-      case 0:
-        return 'DashBoard';
-      case 1:
-        return 'Deal Pipeline';
-      case 2:
-        return 'Investment Tracking';
-      case 3:
-        return 'Portfolio Analytics';
-      case 4:
-        return 'Communications';
-      default:
-        return '';
-    }
   }
 }
 

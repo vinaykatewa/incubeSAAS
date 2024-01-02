@@ -58,17 +58,35 @@ class Team {
     }
   }
   
-  List<String>? get member {
-    return _member;
+  List<String> get member {
+    try {
+      return _member!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  List<String>? get dealIDs {
-    return _dealIDs;
+  List<String> get dealIDs {
+    try {
+      return _dealIDs!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  const Team._internal({required this.id, required teamName, required teamLeader, member, dealIDs}): _teamName = teamName, _teamLeader = teamLeader, _member = member, _dealIDs = dealIDs;
+  const Team._internal({required this.id, required teamName, required teamLeader, required member, required dealIDs}): _teamName = teamName, _teamLeader = teamLeader, _member = member, _dealIDs = dealIDs;
   
-  factory Team({String? id, required String teamName, required String teamLeader, List<String>? member, List<String>? dealIDs}) {
+  factory Team({String? id, required String teamName, required String teamLeader, required List<String> member, required List<String> dealIDs}) {
     return Team._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       teamName: teamName,
@@ -178,14 +196,14 @@ class Team {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
       fieldName: 'member',
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
       fieldName: 'dealIDs',
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
     ));

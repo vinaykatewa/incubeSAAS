@@ -139,8 +139,17 @@ class userInfo extends amplify_core.Model {
     return _isteamLeader;
   }
   
-  List<String>? get dealIds {
-    return _dealIds;
+  List<String> get dealIds {
+    try {
+      return _dealIds!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -151,9 +160,9 @@ class userInfo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const userInfo._internal({required userUid, required userName, required email, required imageUrl, isadmin, organizationId, superAdminId, requestStatus, teamId, isteamLeader, dealIds, createdAt, updatedAt}): _userUid = userUid, _userName = userName, _email = email, _imageUrl = imageUrl, _isadmin = isadmin, _organizationId = organizationId, _superAdminId = superAdminId, _requestStatus = requestStatus, _teamId = teamId, _isteamLeader = isteamLeader, _dealIds = dealIds, _createdAt = createdAt, _updatedAt = updatedAt;
+  const userInfo._internal({required userUid, required userName, required email, required imageUrl, isadmin, organizationId, superAdminId, requestStatus, teamId, isteamLeader, required dealIds, createdAt, updatedAt}): _userUid = userUid, _userName = userName, _email = email, _imageUrl = imageUrl, _isadmin = isadmin, _organizationId = organizationId, _superAdminId = superAdminId, _requestStatus = requestStatus, _teamId = teamId, _isteamLeader = isteamLeader, _dealIds = dealIds, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory userInfo({required String userUid, required String userName, required String email, required String imageUrl, bool? isadmin, String? organizationId, String? superAdminId, String? requestStatus, String? teamId, bool? isteamLeader, List<String>? dealIds}) {
+  factory userInfo({required String userUid, required String userName, required String email, required String imageUrl, bool? isadmin, String? organizationId, String? superAdminId, String? requestStatus, String? teamId, bool? isteamLeader, required List<String> dealIds}) {
     return userInfo._internal(
       userUid: userUid,
       userName: userName,
@@ -374,7 +383,7 @@ class userInfo extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: userInfo.DEALIDS,
-      isRequired: false,
+      isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
     ));
