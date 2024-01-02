@@ -16,12 +16,11 @@ type userInfo @model {
   teamId: String
   isteamLeader: Boolean
   dealIds: [String]!
-  
 }
 
 
 type Team {
-id: ID!
+idTeam: ID!
 teamName: String!
 teamLeader: String!
 member: [String]!
@@ -47,7 +46,7 @@ type userRequest{
 }
 
 type Deals{
-id: ID!
+idDeal: String!
 teamId: String!
 company_logo: String!
 company_name: String!

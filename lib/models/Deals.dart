@@ -25,7 +25,7 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 /** This is an auto generated class representing the Deals type in your schema. */
 class Deals {
-  final String id;
+  final String? _idDeal;
   final String? _teamId;
   final String? _company_logo;
   final String? _company_name;
@@ -33,6 +33,19 @@ class Deals {
   final String? _seeking;
   final String? _status;
 
+  String get idDeal {
+    try {
+      return _idDeal!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   String get teamId {
     try {
       return _teamId!;
@@ -111,11 +124,11 @@ class Deals {
     }
   }
   
-  const Deals._internal({required this.id, required teamId, required company_logo, required company_name, required company_description, required seeking, required status}): _teamId = teamId, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status;
+  const Deals._internal({required idDeal, required teamId, required company_logo, required company_name, required company_description, required seeking, required status}): _idDeal = idDeal, _teamId = teamId, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status;
   
-  factory Deals({String? id, required String teamId, required String company_logo, required String company_name, required String company_description, required String seeking, required String status}) {
+  factory Deals({required String idDeal, required String teamId, required String company_logo, required String company_name, required String company_description, required String seeking, required String status}) {
     return Deals._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
+      idDeal: idDeal,
       teamId: teamId,
       company_logo: company_logo,
       company_name: company_name,
@@ -132,7 +145,7 @@ class Deals {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Deals &&
-      id == other.id &&
+      _idDeal == other._idDeal &&
       _teamId == other._teamId &&
       _company_logo == other._company_logo &&
       _company_name == other._company_name &&
@@ -149,7 +162,7 @@ class Deals {
     var buffer = new StringBuffer();
     
     buffer.write("Deals {");
-    buffer.write("id=" + "$id" + ", ");
+    buffer.write("idDeal=" + "$_idDeal" + ", ");
     buffer.write("teamId=" + "$_teamId" + ", ");
     buffer.write("company_logo=" + "$_company_logo" + ", ");
     buffer.write("company_name=" + "$_company_name" + ", ");
@@ -161,9 +174,9 @@ class Deals {
     return buffer.toString();
   }
   
-  Deals copyWith({String? id, String? teamId, String? company_logo, String? company_name, String? company_description, String? seeking, String? status}) {
+  Deals copyWith({String? idDeal, String? teamId, String? company_logo, String? company_name, String? company_description, String? seeking, String? status}) {
     return Deals._internal(
-      id: id ?? this.id,
+      idDeal: idDeal ?? this.idDeal,
       teamId: teamId ?? this.teamId,
       company_logo: company_logo ?? this.company_logo,
       company_name: company_name ?? this.company_name,
@@ -173,7 +186,7 @@ class Deals {
   }
   
   Deals copyWithModelFieldValues({
-    ModelFieldValue<String>? id,
+    ModelFieldValue<String>? idDeal,
     ModelFieldValue<String>? teamId,
     ModelFieldValue<String>? company_logo,
     ModelFieldValue<String>? company_name,
@@ -182,7 +195,7 @@ class Deals {
     ModelFieldValue<String>? status
   }) {
     return Deals._internal(
-      id: id == null ? this.id : id.value,
+      idDeal: idDeal == null ? this.idDeal : idDeal.value,
       teamId: teamId == null ? this.teamId : teamId.value,
       company_logo: company_logo == null ? this.company_logo : company_logo.value,
       company_name: company_name == null ? this.company_name : company_name.value,
@@ -193,7 +206,7 @@ class Deals {
   }
   
   Deals.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
+    : _idDeal = json['idDeal'],
       _teamId = json['teamId'],
       _company_logo = json['company_logo'],
       _company_name = json['company_name'],
@@ -202,11 +215,11 @@ class Deals {
       _status = json['status'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'teamId': _teamId, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status
+    'idDeal': _idDeal, 'teamId': _teamId, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status
   };
   
   Map<String, Object?> toMap() => {
-    'id': id,
+    'idDeal': _idDeal,
     'teamId': _teamId,
     'company_logo': _company_logo,
     'company_name': _company_name,
@@ -220,7 +233,7 @@ class Deals {
     modelSchemaDefinition.pluralName = "Deals";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'id',
+      fieldName: 'idDeal',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));

@@ -100,9 +100,11 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
       }
       //step 1: updating teamId
       List<Deals> dealList = org.org_deals;
-      int dealIndex = dealList.indexWhere((element) => element.id == dealId);
+      int dealIndex =
+          dealList.indexWhere((element) => element.idDeal == dealId);
       var specificDeal = dealList[dealIndex];
       dealList[dealIndex] = Deals(
+          idDeal: specificDeal.idDeal,
           teamId: teamId,
           company_logo: specificDeal.company_logo,
           company_name: specificDeal.company_name,
@@ -112,10 +114,11 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
 
       //step 2: update dealId in team list
       List<Team> teamLs = org.org_team;
-      int teamIndex = teamLs.indexWhere((element) => element.id == teamId);
+      int teamIndex = teamLs.indexWhere((element) => element.idTeam == teamId);
       var specificTeam = teamLs[teamIndex];
       specificTeam.dealIDs.add(dealId);
       teamLs[teamIndex] = Team(
+          idTeam: specificTeam.idTeam,
           teamName: specificTeam.teamName,
           teamLeader: specificTeam.teamLeader,
           member: specificTeam.member,
@@ -185,10 +188,10 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
                           title: Text(teamsList[index].teamName),
                           onTap: () async {
                             safePrint(
-                                'here ontap on list item, we are providing to the team id: ${teamsList[index].id}');
+                                'here ontap on list item, we are providing to the team id: ${teamsList[index].idTeam}');
                             safePrint(
                                 'here ontap on list item, we are providing to the requestingUserId: $dealId');
-                            await assignToTeam(dealId, teamsList[index].id,
+                            await assignToTeam(dealId, teamsList[index].idTeam,
                                 teamsList[index].teamLeader);
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
@@ -290,11 +293,11 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
                         ),
                         onPressed: () async {
                           safePrint(
-                              'this is the dealId of the ontaped list: ${_dealList[index]!.id}');
+                              'this is the dealId of the ontaped list: ${_dealList[index]!.idDeal}');
                           safePrint(
                               'this is the dealName of the ontaped list: ${_dealList[index]!.company_name}');
                           await fetchTeams().whenComplete(() {
-                            showTeamsAlertDialog(_dealList[index]!.id,
+                            showTeamsAlertDialog(_dealList[index]!.idDeal,
                                 _dealList[index]!.company_name);
                           });
                         },

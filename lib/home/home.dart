@@ -117,8 +117,8 @@ class _HomeState extends State<Home> {
         safePrint('requestedOrg.org_team is null in acceptRequest method');
         return;
       }
-      int teamIndex =
-          requestedOrg.org_team!.indexWhere((element) => element.id == teamId);
+      int teamIndex = requestedOrg.org_team!
+          .indexWhere((element) => element.idTeam == teamId);
       if (teamIndex == -1) {
         safePrint('In acceptRequest method, teamIndex is giving -1');
         return;
@@ -183,7 +183,7 @@ class _HomeState extends State<Home> {
         safePrint('the list is returning index -1 in acceptRequest method');
         return;
       }
-      final _userEmail = requestedOrg.request![index].userEmail;
+      final _userEmail = requestedOrg.request[index].userEmail;
       requestedOrg.request!.removeAt(index);
       await _awsAmplify.updateOrganization(requestedOrg).whenComplete(() {
         safePrint(
@@ -225,7 +225,7 @@ class _HomeState extends State<Home> {
               'In getTeamAndCallAcceptRequest, we got specificTeamIndex -1');
           return;
         }
-        String teamId = org.org_team[specificTeamIndex].id;
+        String teamId = org.org_team[specificTeamIndex].idTeam;
         //now pass this teamId to acceptRequest method
         acceptRequest(requestUserId, teamId, true);
         safePrint(
@@ -235,6 +235,7 @@ class _HomeState extends State<Home> {
 
     Future<void> addTeams(
         String teamName, String teamLeader, String requestUserId) async {
+      final teamId = _awsAmplify.generateUid();
       safePrint('In addTeams, we got this teamName: $teamName');
       safePrint('In addTeams, we got this teamLeader: $teamLeader');
       safePrint('In addTeams, we got this requestUserId: $requestUserId');
@@ -246,6 +247,7 @@ class _HomeState extends State<Home> {
           return;
         }
         org.org_team.add(Team(
+            idTeam: teamId,
             teamName: teamName,
             teamLeader: teamLeader,
             member: [],
@@ -329,11 +331,11 @@ class _HomeState extends State<Home> {
                           title: Text(_teams[index].teamName),
                           onTap: () async {
                             safePrint(
-                                'here ontap on list item, we are providing to the team id: ${_teams[index].id}');
+                                'here ontap on list item, we are providing to the team id: ${_teams[index].idTeam}');
                             safePrint(
                                 'here ontap on list item, we are providing to the requestingUserId: $requestingUserId');
-                            await acceptRequest(
-                                    requestingUserId, _teams[index].id, false)
+                            await acceptRequest(requestingUserId,
+                                    _teams[index].idTeam, false)
                                 .whenComplete(() async {
                               safePrint(
                                   'acceptRequest method is completed in showTeamAlertDialog method');

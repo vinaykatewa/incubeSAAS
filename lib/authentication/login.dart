@@ -262,6 +262,8 @@ class _LoginFormState extends State<LoginForm> {
           _incubeProvider.organizationId = _user.organizationId!;
           _incubeProvider.superAdmin = _user.superAdminId!;
           _incubeProvider.requestStatus = _user.requestStatus!;
+          _incubeProvider.teamId = _user.teamId!;
+          _incubeProvider.isteamLeader = _user.isteamLeader!;
 
           safePrint('we have set the provider details of the user');
           safePrint('this is the userId:' + _incubeProvider.userId);
@@ -276,6 +278,8 @@ class _LoginFormState extends State<LoginForm> {
           safePrint(
               'this is the requestStatus:' + _incubeProvider.requestStatus);
           safePrint('this is the teamId:' + _incubeProvider.teamId);
+          safePrint('this is the isTeamLeader:' +
+              _incubeProvider.isteamLeader.toString());
         } else {
           safePrint(
               'we got the null value from user while running getUserData in login class');

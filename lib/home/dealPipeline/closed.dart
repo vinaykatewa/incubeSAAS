@@ -42,8 +42,8 @@ class _ClosedState extends State<Closed> {
         safePrint('In fetchDeals, userDB is null');
         return;
       }
-      final organization = await _awsIncube
-          .getOrganizationByAdminId(incubeProvider.organizationId);
+      final organization =
+          await _awsIncube.getOrganizationByAdminId(incubeProvider.superAdmin);
       if (organization == null) {
         safePrint('In fetchDeals, organization is null');
         return;
@@ -52,8 +52,9 @@ class _ClosedState extends State<Closed> {
         List<String> listOfDealIds = userDB.dealIds;
         List<Deals> tempDealList = [];
         for (String s in listOfDealIds) {
-          _dealList.add(
-              organization.org_deals.where((element) => element.id == s).first);
+          _dealList.add(organization.org_deals
+              .where((element) => element.idDeal == s)
+              .first);
         }
         safePrint('length of tempDealList is: ${tempDealList.length}');
         setState(() {
@@ -62,13 +63,14 @@ class _ClosedState extends State<Closed> {
         safePrint('length of _dealList is: ${_dealList.length}');
       } else if (!incubeProvider.isAdmin && incubeProvider.isteamLeader) {
         List<String> listOfDealIds = organization.org_team
-            .where((element) => element.id == incubeProvider.teamId)
+            .where((element) => element.dealIDs == incubeProvider.teamId)
             .first
             .dealIDs;
         List<Deals> tempDealList = [];
         for (String s in listOfDealIds) {
           _dealList.add(organization.org_deals
-              .where((element) => element.id == s && element.status == "closed")
+              .where((element) =>
+                  element.idDeal == s && element.status == "closed")
               .first);
           safePrint('length of tempDealList is: ${tempDealList.length}');
           setState(() {

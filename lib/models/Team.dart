@@ -26,12 +26,25 @@ import 'package:collection/collection.dart';
 
 /** This is an auto generated class representing the Team type in your schema. */
 class Team {
-  final String id;
+  final String? _idTeam;
   final String? _teamName;
   final String? _teamLeader;
   final List<String>? _member;
   final List<String>? _dealIDs;
 
+  String get idTeam {
+    try {
+      return _idTeam!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   String get teamName {
     try {
       return _teamName!;
@@ -84,11 +97,11 @@ class Team {
     }
   }
   
-  const Team._internal({required this.id, required teamName, required teamLeader, required member, required dealIDs}): _teamName = teamName, _teamLeader = teamLeader, _member = member, _dealIDs = dealIDs;
+  const Team._internal({required idTeam, required teamName, required teamLeader, required member, required dealIDs}): _idTeam = idTeam, _teamName = teamName, _teamLeader = teamLeader, _member = member, _dealIDs = dealIDs;
   
-  factory Team({String? id, required String teamName, required String teamLeader, required List<String> member, required List<String> dealIDs}) {
+  factory Team({required String idTeam, required String teamName, required String teamLeader, required List<String> member, required List<String> dealIDs}) {
     return Team._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
+      idTeam: idTeam,
       teamName: teamName,
       teamLeader: teamLeader,
       member: member != null ? List<String>.unmodifiable(member) : member,
@@ -103,7 +116,7 @@ class Team {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Team &&
-      id == other.id &&
+      _idTeam == other._idTeam &&
       _teamName == other._teamName &&
       _teamLeader == other._teamLeader &&
       DeepCollectionEquality().equals(_member, other._member) &&
@@ -118,7 +131,7 @@ class Team {
     var buffer = new StringBuffer();
     
     buffer.write("Team {");
-    buffer.write("id=" + "$id" + ", ");
+    buffer.write("idTeam=" + "$_idTeam" + ", ");
     buffer.write("teamName=" + "$_teamName" + ", ");
     buffer.write("teamLeader=" + "$_teamLeader" + ", ");
     buffer.write("member=" + (_member != null ? _member!.toString() : "null") + ", ");
@@ -128,9 +141,9 @@ class Team {
     return buffer.toString();
   }
   
-  Team copyWith({String? id, String? teamName, String? teamLeader, List<String>? member, List<String>? dealIDs}) {
+  Team copyWith({String? idTeam, String? teamName, String? teamLeader, List<String>? member, List<String>? dealIDs}) {
     return Team._internal(
-      id: id ?? this.id,
+      idTeam: idTeam ?? this.idTeam,
       teamName: teamName ?? this.teamName,
       teamLeader: teamLeader ?? this.teamLeader,
       member: member ?? this.member,
@@ -138,14 +151,14 @@ class Team {
   }
   
   Team copyWithModelFieldValues({
-    ModelFieldValue<String>? id,
+    ModelFieldValue<String>? idTeam,
     ModelFieldValue<String>? teamName,
     ModelFieldValue<String>? teamLeader,
     ModelFieldValue<List<String>?>? member,
     ModelFieldValue<List<String>?>? dealIDs
   }) {
     return Team._internal(
-      id: id == null ? this.id : id.value,
+      idTeam: idTeam == null ? this.idTeam : idTeam.value,
       teamName: teamName == null ? this.teamName : teamName.value,
       teamLeader: teamLeader == null ? this.teamLeader : teamLeader.value,
       member: member == null ? this.member : member.value,
@@ -154,18 +167,18 @@ class Team {
   }
   
   Team.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
+    : _idTeam = json['idTeam'],
       _teamName = json['teamName'],
       _teamLeader = json['teamLeader'],
       _member = json['member']?.cast<String>(),
       _dealIDs = json['dealIDs']?.cast<String>();
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'teamName': _teamName, 'teamLeader': _teamLeader, 'member': _member, 'dealIDs': _dealIDs
+    'idTeam': _idTeam, 'teamName': _teamName, 'teamLeader': _teamLeader, 'member': _member, 'dealIDs': _dealIDs
   };
   
   Map<String, Object?> toMap() => {
-    'id': id,
+    'idTeam': _idTeam,
     'teamName': _teamName,
     'teamLeader': _teamLeader,
     'member': _member,
@@ -177,7 +190,7 @@ class Team {
     modelSchemaDefinition.pluralName = "Teams";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'id',
+      fieldName: 'idTeam',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));

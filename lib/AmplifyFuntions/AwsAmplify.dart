@@ -5,9 +5,22 @@ import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/models/Organization.dart';
 import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class AwsIncube {
-  // final _incubeProvider = Provider.of<IncubeProvider>(context, listen: false);
+  String generateUid() {
+    Random random = Random();
+    const String characters =
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    String uid = '';
+    for (int i = 0; i < 50; i++) {
+      uid += characters[random.nextInt(characters.length)];
+    }
+
+    return uid;
+  }
+
   Future<bool> isUserSignedIn() async {
     final result = await Amplify.Auth.fetchAuthSession();
     safePrint(result.isSignedIn.toString());
@@ -238,7 +251,7 @@ class AwsIncube {
     final _org = await getOrganizationByAdminId(superAdminId);
     safePrint(
         'In dealProcessing, we are using this dealId to find the deal $dealId');
-    int index = _org!.org_deals.indexWhere((deal) => deal.id == dealId);
+    int index = _org!.org_deals.indexWhere((deal) => deal.idDeal == dealId);
 
     if (index == -1) {
       safePrint('the list is returning index -1');

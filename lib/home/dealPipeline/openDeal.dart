@@ -23,7 +23,7 @@ class _OpenDealsState extends State<OpenDeals> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchDeals(context);
     });
   }
@@ -42,47 +42,65 @@ class _OpenDealsState extends State<OpenDeals> {
         safePrint('In fetchDeals, userDB is null');
         return;
       }
-      final organization = await _awsIncube
-          .getOrganizationByAdminId(incubeProvider.organizationId);
+      safePrint(
+          'In fetchDeals, we are using this superAdmin id: ${incubeProvider.superAdmin}');
+      final organization =
+          await _awsIncube.getOrganizationByAdminId(incubeProvider.superAdmin);
       if (organization == null) {
         safePrint('In fetchDeals, organization is null');
         return;
       }
-      if (!incubeProvider.isAdmin && !incubeProvider.isteamLeader) {
-        List<String> listOfDealIds = userDB.dealIds;
-        List<Deals> tempDealList = [];
-        for (String s in listOfDealIds) {
-          _dealList.add(
-              organization.org_deals.where((element) => element.id == s).first);
-        }
-        safePrint('length of tempDealList is: ${tempDealList.length}');
-        setState(() {
-          _dealList = tempDealList;
-        });
-        safePrint('length of _dealList is: ${_dealList.length}');
-      } else if (!incubeProvider.isAdmin && incubeProvider.isteamLeader) {
-        List<String> listOfDealIds = organization.org_team
-            .where((element) => element.id == incubeProvider.teamId)
-            .first
-            .dealIDs;
-        List<Deals> tempDealList = [];
-        for (String s in listOfDealIds) {
-          _dealList.add(organization.org_deals
-              .where((element) => element.id == s && element.status == "open")
-              .first);
-          safePrint('length of tempDealList is: ${tempDealList.length}');
-          setState(() {
-            _dealList = tempDealList;
-          });
-          safePrint('length of _dealList is: ${_dealList.length}');
-        }
-      } else {
+      // if user is admin
+      if (incubeProvider.isAdmin) {
         setState(() {
           _dealList = organization.org_deals
               .where((element) => element.status == 'open')
               .toList();
         });
-        safePrint('length of _dealList is: ${_dealList.length}');
+        safePrint('Admin Case: length of _dealList is: ${_dealList.length}');
+      }
+      //if the user is team leader
+      else if (incubeProvider.isteamLeader) {
+        List<String> listOfDealIds = organization.org_team
+            .where((element) => element.idTeam == incubeProvider.teamId)
+            .first
+            .dealIDs;
+        safePrint('Team Leader Case: listOfDealIds: $listOfDealIds');
+        List<Deals> tempDealList = [];
+        for (String s in listOfDealIds) {
+          int index = organization.org_deals.indexWhere(
+              (element) => element.idDeal == s && element.status == 'open');
+          if (index == -1) {
+            safePrint('In fetchDeals, index is -1 for deal ID: $s');
+            safePrint(
+                'Organization Deals IDs: ${organization.org_deals.map((deal) => deal.idDeal)}');
+            safePrint(
+                'Organization Deals Status: ${organization.org_deals.map((deal) => deal.status)}');
+            continue; // Skip this deal and proceed to the next one
+          }
+          tempDealList.add(organization.org_deals[index]);
+          safePrint('Team Leader Case: Added deal with ID $s to tempDealList');
+        }
+        setState(() {
+          _dealList = tempDealList;
+        });
+        safePrint(
+            'Team Leader Case: length of _dealList is: ${_dealList.length}');
+      }
+      // if the user is normal user
+      else {
+        List<String> listOfDealIds = userDB.dealIds;
+        List<Deals> tempDealList = [];
+        for (String s in listOfDealIds) {
+          tempDealList.add(organization.org_deals
+              .where((element) => element.idDeal == s)
+              .first);
+        }
+        setState(() {
+          _dealList = tempDealList;
+        });
+        safePrint(
+            'Normal User Case: length of _dealList is: ${_dealList.length}');
       }
     } on ApiException catch (e) {
       safePrint('Query failed: $e');

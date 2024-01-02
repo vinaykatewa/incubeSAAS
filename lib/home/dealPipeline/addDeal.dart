@@ -72,8 +72,10 @@ class _AddDealState extends State<AddDeal> {
     }
 
     Future<void> submit() async {
+      String id = amplifyFunction.generateUid();
       await storingImage().whenComplete(() async {
         final _deals = Deals(
+            idDeal: id,
             company_logo: _imageUrl,
             company_name: companyNameController.text,
             company_description: companyDescriptionController.text,
@@ -133,7 +135,7 @@ class _AddDealState extends State<AddDeal> {
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: secondaryColor(),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(borderRadiusAuth()),
                   ),
@@ -146,7 +148,7 @@ class _AddDealState extends State<AddDeal> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: secondaryColor(),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(borderRadiusAuth()),
                   ),
