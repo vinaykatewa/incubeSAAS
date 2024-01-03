@@ -24,17 +24,16 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
 
 
-/** This is an auto generated class representing the Team type in your schema. */
-class Team {
-  final String? _idTeam;
-  final String? _teamName;
-  final String? _teamLeader;
-  final List<Members>? _member;
-  final List<String>? _dealIDs;
+/** This is an auto generated class representing the Members type in your schema. */
+class Members {
+  final String? _userId;
+  final String? _memberName;
+  final String? _memberEmail;
+  final List<String>? _deals;
 
-  String get idTeam {
+  String get userId {
     try {
-      return _idTeam!;
+      return _userId!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -45,9 +44,9 @@ class Team {
     }
   }
   
-  String get teamName {
+  String get memberName {
     try {
-      return _teamName!;
+      return _memberName!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -58,9 +57,9 @@ class Team {
     }
   }
   
-  String get teamLeader {
+  String get memberEmail {
     try {
-      return _teamLeader!;
+      return _memberEmail!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -71,9 +70,9 @@ class Team {
     }
   }
   
-  List<Members> get member {
+  List<String> get deals {
     try {
-      return _member!;
+      return _deals!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -84,28 +83,14 @@ class Team {
     }
   }
   
-  List<String> get dealIDs {
-    try {
-      return _dealIDs!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
+  const Members._internal({required userId, required memberName, required memberEmail, required deals}): _userId = userId, _memberName = memberName, _memberEmail = memberEmail, _deals = deals;
   
-  const Team._internal({required idTeam, required teamName, required teamLeader, required member, required dealIDs}): _idTeam = idTeam, _teamName = teamName, _teamLeader = teamLeader, _member = member, _dealIDs = dealIDs;
-  
-  factory Team({required String idTeam, required String teamName, required String teamLeader, required List<Members> member, required List<String> dealIDs}) {
-    return Team._internal(
-      idTeam: idTeam,
-      teamName: teamName,
-      teamLeader: teamLeader,
-      member: member != null ? List<Members>.unmodifiable(member) : member,
-      dealIDs: dealIDs != null ? List<String>.unmodifiable(dealIDs) : dealIDs);
+  factory Members({required String userId, required String memberName, required String memberEmail, required List<String> deals}) {
+    return Members._internal(
+      userId: userId,
+      memberName: memberName,
+      memberEmail: memberEmail,
+      deals: deals != null ? List<String>.unmodifiable(deals) : deals);
   }
   
   bool equals(Object other) {
@@ -115,12 +100,11 @@ class Team {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Team &&
-      _idTeam == other._idTeam &&
-      _teamName == other._teamName &&
-      _teamLeader == other._teamLeader &&
-      DeepCollectionEquality().equals(_member, other._member) &&
-      DeepCollectionEquality().equals(_dealIDs, other._dealIDs);
+    return other is Members &&
+      _userId == other._userId &&
+      _memberName == other._memberName &&
+      _memberEmail == other._memberEmail &&
+      DeepCollectionEquality().equals(_deals, other._deals);
   }
   
   @override
@@ -130,97 +114,79 @@ class Team {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Team {");
-    buffer.write("idTeam=" + "$_idTeam" + ", ");
-    buffer.write("teamName=" + "$_teamName" + ", ");
-    buffer.write("teamLeader=" + "$_teamLeader" + ", ");
-    buffer.write("member=" + (_member != null ? _member!.toString() : "null") + ", ");
-    buffer.write("dealIDs=" + (_dealIDs != null ? _dealIDs!.toString() : "null"));
+    buffer.write("Members {");
+    buffer.write("userId=" + "$_userId" + ", ");
+    buffer.write("memberName=" + "$_memberName" + ", ");
+    buffer.write("memberEmail=" + "$_memberEmail" + ", ");
+    buffer.write("deals=" + (_deals != null ? _deals!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Team copyWith({String? idTeam, String? teamName, String? teamLeader, List<Members>? member, List<String>? dealIDs}) {
-    return Team._internal(
-      idTeam: idTeam ?? this.idTeam,
-      teamName: teamName ?? this.teamName,
-      teamLeader: teamLeader ?? this.teamLeader,
-      member: member ?? this.member,
-      dealIDs: dealIDs ?? this.dealIDs);
+  Members copyWith({String? userId, String? memberName, String? memberEmail, List<String>? deals}) {
+    return Members._internal(
+      userId: userId ?? this.userId,
+      memberName: memberName ?? this.memberName,
+      memberEmail: memberEmail ?? this.memberEmail,
+      deals: deals ?? this.deals);
   }
   
-  Team copyWithModelFieldValues({
-    ModelFieldValue<String>? idTeam,
-    ModelFieldValue<String>? teamName,
-    ModelFieldValue<String>? teamLeader,
-    ModelFieldValue<List<Members>?>? member,
-    ModelFieldValue<List<String>?>? dealIDs
+  Members copyWithModelFieldValues({
+    ModelFieldValue<String>? userId,
+    ModelFieldValue<String>? memberName,
+    ModelFieldValue<String>? memberEmail,
+    ModelFieldValue<List<String>?>? deals
   }) {
-    return Team._internal(
-      idTeam: idTeam == null ? this.idTeam : idTeam.value,
-      teamName: teamName == null ? this.teamName : teamName.value,
-      teamLeader: teamLeader == null ? this.teamLeader : teamLeader.value,
-      member: member == null ? this.member : member.value,
-      dealIDs: dealIDs == null ? this.dealIDs : dealIDs.value
+    return Members._internal(
+      userId: userId == null ? this.userId : userId.value,
+      memberName: memberName == null ? this.memberName : memberName.value,
+      memberEmail: memberEmail == null ? this.memberEmail : memberEmail.value,
+      deals: deals == null ? this.deals : deals.value
     );
   }
   
-  Team.fromJson(Map<String, dynamic> json)  
-    : _idTeam = json['idTeam'],
-      _teamName = json['teamName'],
-      _teamLeader = json['teamLeader'],
-      _member = json['member'] is List
-        ? (json['member'] as List)
-          .where((e) => e != null)
-          .map((e) => Members.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
-        : null,
-      _dealIDs = json['dealIDs']?.cast<String>();
+  Members.fromJson(Map<String, dynamic> json)  
+    : _userId = json['userId'],
+      _memberName = json['memberName'],
+      _memberEmail = json['memberEmail'],
+      _deals = json['deals']?.cast<String>();
   
   Map<String, dynamic> toJson() => {
-    'idTeam': _idTeam, 'teamName': _teamName, 'teamLeader': _teamLeader, 'member': _member?.map((Members? e) => e?.toJson()).toList(), 'dealIDs': _dealIDs
+    'userId': _userId, 'memberName': _memberName, 'memberEmail': _memberEmail, 'deals': _deals
   };
   
   Map<String, Object?> toMap() => {
-    'idTeam': _idTeam,
-    'teamName': _teamName,
-    'teamLeader': _teamLeader,
-    'member': _member,
-    'dealIDs': _dealIDs
+    'userId': _userId,
+    'memberName': _memberName,
+    'memberEmail': _memberEmail,
+    'deals': _deals
   };
 
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Team";
-    modelSchemaDefinition.pluralName = "Teams";
+    modelSchemaDefinition.name = "Members";
+    modelSchemaDefinition.pluralName = "Members";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'idTeam',
+      fieldName: 'userId',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'teamName',
+      fieldName: 'memberName',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'teamLeader',
+      fieldName: 'memberEmail',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
-      fieldName: 'member',
-      isRequired: true,
-      isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Members')
-    ));
-    
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'dealIDs',
+      fieldName: 'deals',
       isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)

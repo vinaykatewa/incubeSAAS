@@ -80,8 +80,8 @@ class _HomeState extends State<Home> {
       }
     }
 
-    Future<void> acceptRequest(
-        String requestUserId, String teamId, bool isteamLeader) async {
+    Future<void> acceptRequest(String requestUserId, String memberName,
+        String memberEmail, String teamId, bool isteamLeader) async {
       safePrint(
           'In acceptRequest method, we are using this requestUserId: $requestUserId');
       safePrint('In acceptRequest method, we are using this teamId: $teamId');
@@ -123,16 +123,20 @@ class _HomeState extends State<Home> {
         safePrint('In acceptRequest method, teamIndex is giving -1');
         return;
       }
-      Team? specificTeam = requestedOrg.org_team![teamIndex];
+      Team? specificTeam = requestedOrg.org_team[teamIndex];
       if (specificTeam == null) {
         safePrint('In acceptRequest method, specificTeam is null');
         return;
       }
       safePrint(
           'In acceptRequest method, this is length of team member list before: ${specificTeam.member.length}');
-      specificTeam.member.add(requestUserId);
+      specificTeam.member.add(Members(
+          userId: requestUserId,
+          memberName: memberName,
+          memberEmail: memberEmail,
+          deals: []));
       safePrint(
-          'In acceptRequest method, this is length of team member list after adding: ${specificTeam.member!.length}');
+          'In acceptRequest method, this is length of team member list after adding: ${specificTeam.member.length}');
       requestedOrg.org_team[teamIndex] = specificTeam;
 
       await _awsAmplify.updateOrganization(requestedOrg).whenComplete(() {
@@ -209,8 +213,8 @@ class _HomeState extends State<Home> {
       }
     }
 
-    Future<void> getTeamAndCallAcceptRequest(
-        String teamName, String teamLeader, String requestUserId) async {
+    Future<void> getTeamAndCallAcceptRequest(String teamName, String teamLeader,
+        String requestUserId, String requestUserName) async {
       try {
         Organization? org = await _awsAmplify
             .getOrganizationByAdminId(_incubeProvider.superAdmin);
@@ -227,14 +231,14 @@ class _HomeState extends State<Home> {
         }
         String teamId = org.org_team[specificTeamIndex].idTeam;
         //now pass this teamId to acceptRequest method
-        acceptRequest(requestUserId, teamId, true);
+        acceptRequest(requestUserId, requestUserName, teamLeader, teamId, true);
         safePrint(
             'In getTeamAndCallAcceptRequest, we got this teamId: $teamId');
       } catch (e) {}
     }
 
-    Future<void> addTeams(
-        String teamName, String teamLeader, String requestUserId) async {
+    Future<void> addTeams(String teamName, String teamLeader,
+        String requestUserId, String requestUserName) async {
       final teamId = _awsAmplify.generateUid();
       safePrint('In addTeams, we got this teamName: $teamName');
       safePrint('In addTeams, we got this teamLeader: $teamLeader');
@@ -262,11 +266,12 @@ class _HomeState extends State<Home> {
             'try block of addTeam method is giving an error: ${e.toString()}');
       }
       //after this call
-      getTeamAndCallAcceptRequest(teamName, teamLeader, requestUserId);
+      getTeamAndCallAcceptRequest(
+          teamName, teamLeader, requestUserId, requestUserName);
     }
 
-    void addTeamAlertDialog(
-        BuildContext context, String teamLeaderEmail, String requestUserId) {
+    void addTeamAlertDialog(BuildContext context, String teamLeaderEmail,
+        String requestUserId, String requestingUserName) {
       String teamName = '';
 
       showDialog(
@@ -291,7 +296,8 @@ class _HomeState extends State<Home> {
                   if (teamName.isNotEmpty) {
                     safePrint('Team Name: $teamName');
                     safePrint('Team Leader: $teamLeaderEmail');
-                    await addTeams(teamName, teamLeaderEmail, requestUserId);
+                    await addTeams(teamName, teamLeaderEmail, requestUserId,
+                        requestingUserName);
                     Navigator.of(context).pop();
                   } else {
                     print('Please fill in all fields.');
@@ -334,8 +340,12 @@ class _HomeState extends State<Home> {
                                 'here ontap on list item, we are providing to the team id: ${_teams[index].idTeam}');
                             safePrint(
                                 'here ontap on list item, we are providing to the requestingUserId: $requestingUserId');
-                            await acceptRequest(requestingUserId,
-                                    _teams[index].idTeam, false)
+                            await acceptRequest(
+                                    requestingUserId,
+                                    requestingUserName,
+                                    requestingUserEmail,
+                                    _teams[index].idTeam,
+                                    false)
                                 .whenComplete(() async {
                               safePrint(
                                   'acceptRequest method is completed in showTeamAlertDialog method');
@@ -365,8 +375,8 @@ class _HomeState extends State<Home> {
                   safePrint(
                       'In showTeamsAlertDialog, add and assign team button is pressed');
                   Navigator.of(context).pop();
-                  addTeamAlertDialog(
-                      context, requestingUserEmail, requestingUserId);
+                  addTeamAlertDialog(context, requestingUserEmail,
+                      requestingUserId, requestingUserName);
                 },
                 child: Text('Add and Assign team'),
               ),

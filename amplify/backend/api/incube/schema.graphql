@@ -23,8 +23,15 @@ type Team {
 idTeam: ID!
 teamName: String!
 teamLeader: String!
-member: [String]!
+member: [Members]!
 dealIDs:[String]!
+}
+
+type Members {
+userId:String!
+memberName: String!
+memberEmail: String!
+deals: [String]!
 }
 
 type Organization @model {

@@ -24,11 +24,13 @@ import 'Events.dart';
 import 'Organization.dart';
 import 'userInfo.dart';
 import 'Deals.dart';
+import 'Members.dart';
 import 'Team.dart';
 import 'userRequest.dart';
 
 export 'Deals.dart';
 export 'Events.dart';
+export 'Members.dart';
 export 'Organization.dart';
 export 'Team.dart';
 export 'userInfo.dart';
@@ -36,11 +38,11 @@ export 'userRequest.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "02da94110b555ed3881ed267a2d9d2e9";
+  String version = "106a328dbd69baa7a4d58ec5764794c4";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [Events.schema, Organization.schema, userInfo.schema];
   @override
-  List<amplify_core.ModelSchema> customTypeSchemas = [Deals.schema, Team.schema, userRequest.schema];
+  List<amplify_core.ModelSchema> customTypeSchemas = [Deals.schema, Members.schema, Team.schema, userRequest.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
