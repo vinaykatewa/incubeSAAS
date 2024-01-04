@@ -60,6 +60,13 @@ company_name: String!
 company_description: String!
 seeking: String!
 status: String!
+calls: [DealsCall]!
+}
+
+type DealsCall{
+tabName: String!
+tabContentHeader: [String]!
+tabContentBody: [String]!
 }
 
 

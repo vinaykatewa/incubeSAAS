@@ -81,7 +81,8 @@ class _AddDealState extends State<AddDeal> {
             company_description: companyDescriptionController.text,
             seeking: seekingController.text,
             status: "review pending",
-            teamId: 'teamprary');
+            teamId: 'teamprary',
+            calls: []);
         await amplifyFunction
             .addDeals(_incubeProvider.superAdmin, _deals)
             .whenComplete(() {

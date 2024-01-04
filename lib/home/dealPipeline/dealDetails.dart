@@ -1,14 +1,10 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
 import 'package:incube/models/ModelProvider.dart';
-import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
-import 'package:provider/provider.dart';
 
 class DealDetails extends StatefulWidget {
   final Deals deal;
-  const DealDetails({required this.deal});
+  const DealDetails({super.key, required this.deal});
 
   @override
   State<DealDetails> createState() => _DealDetailsState();
@@ -16,71 +12,98 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails>
     with TickerProviderStateMixin {
-  final _awsIncube = AwsIncube();
-  Team mainTeam =
-      Team(dealIDs: [], idTeam: "", teamName: "", teamLeader: "", member: []);
+  // final _awsIncube = AwsIncube();
+  Team mainTeam = Team(
+    dealIDs: ["Ilbo1uIlsz47M6sPJRKvvwY0B3WNjRxNtF8nv4Mj5dr1rysWRA"],
+    idTeam: "G9qeWQM9gGSAglqD59USBvqnxknHPzZCRSa0iS97bOTu4Ry8Cq",
+    teamName: "third team",
+    teamLeader: "imvinaykatewa@gmail.com",
+    member: [
+      Members(
+        userId: "2cf18d84-42c4-4572-b496-af9f99a5d13a",
+        memberName: "teamLeader",
+        memberEmail: "imvinaykatewa@gmail.com",
+        deals: [],
+      ),
+      Members(
+        userId: "8c4bea95-8cf2-4992-a88e-943179e6dd21",
+        memberName: "normal user",
+        memberEmail: "vinaykatewa2605@gmail.com",
+        deals: ["Ilbo1uIlsz47M6sPJRKvvwY0B3WNjRxNtF8nv4Mj5dr1rysWRA"],
+      ),
+    ],
+  );
   bool isLoading = false;
-  List<String> tabTitles = [];
-  List<Widget> tabContents = [];
-  late TabController _tabController;
+
+  List<Tab> tabList = [];
+  List<TabContentModel> tabContents = [];
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: tabContents.length, vsync: this);
+    setTabs();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getMainTeam(context);
     });
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  void setTabs() {
+    setState(() {
+      final List<DealsCall> calls = widget.deal.calls;
+      tabList = calls.map((call) => Tab(child: Text(call.tabName))).toList();
+      tabContents = calls.map((call) {
+        return TabContentModel(
+          title: call.tabContentBody[0],
+          description: call.tabContentBody[1],
+        );
+      }).toList();
+    });
   }
 
-  void _onTabAdd(int index) {
+  void _onTabAdd() {
     setState(() {
-      tabTitles.add("Tab ${tabTitles.length}");
+      final newTabIndex = tabList.length;
+
       tabContents.add(
-        Container(
-          color: Colors.red,
-          height: 200,
-          width: 200,
-        ),
+        TabContentModel(
+            title: "title ${tabList.length + 1}",
+            description: "description ${tabList.length}"),
       );
-      _tabController = TabController(length: tabContents.length, vsync: this);
+      tabList.add(Tab(
+        child: Text(tabContents[newTabIndex].title),
+      ));
     });
   }
 
   Future<void> getMainTeam(BuildContext context) async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final IncubeProvider incubeProvider =
-          Provider.of<IncubeProvider>(context, listen: false);
-      final teamId = widget.deal.teamId;
-      final organization =
-          await _awsIncube.getOrganizationByAdminId(incubeProvider.superAdmin);
-      if (organization == null) {
-        safePrint('In fetchMembers, organization is null');
-        return;
-      }
-      Team temp = organization.org_team
-          .where((element) => element.idTeam == teamId)
-          .first;
-      setState(() {
-        mainTeam = temp;
-      });
-      safePrint(
-          'In getMembers method, we are done setting mainteam: ${mainTeam.teamName}');
-    } catch (e) {
-      safePrint('We got an error in getMainTeam method: ${e.toString()}');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    // setState(() {
+    //   isLoading = true;
+    // });
+    // try {
+    //   final IncubeProvider incubeProvider =
+    //       Provider.of<IncubeProvider>(context, listen: false);
+    //   final teamId = widget.deal.teamId;
+    //   final organization =
+    //       await _awsIncube.getOrganizationByAdminId(incubeProvider.superAdmin);
+    //   if (organization == null) {
+    //     safePrint('In fetchMembers, organization is null');
+    //     return;
+    //   }
+    //   Team temp = organization.org_team
+    //       .where((element) => element.idTeam == teamId)
+    //       .first;
+    //   setState(() {
+    //     mainTeam = temp;
+    //   });
+    //   safePrint(
+    //       'In getMembers method, we are done setting mainteam: ${mainTeam.teamName}');
+    // } catch (e) {
+    //   safePrint('We got an error in getMainTeam method: ${e.toString()}');
+    // } finally {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // }
   }
 
   @override
@@ -95,83 +118,48 @@ class _DealDetailsState extends State<DealDetails>
         ),
       );
     } else {
-      Widget showingTeamDetails() {
-        return SingleChildScrollView(
-          child: Container(
-            // Remove the fixed width and use flexible width
-            width: screenWidth * 0.2,
-            decoration: BoxDecoration(color: Colors.blueGrey),
-            child: Column(
-              children: [
-                Text(
-                  "team name: ${mainTeam.teamName}",
-                  style: BodyMedium().copyWith(color: secondaryColor()),
-                ),
-                Divider(
-                  color: secondaryColor(),
-                ),
-                Text(
-                  'Members:',
-                  style: BodySmall().copyWith(color: secondaryColor()),
-                ),
-                Container(
-                  height: screenHeight * 0.4,
-                  width: double.infinity,
-                  child: ListView.builder(
-                    itemCount: mainTeam.member.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(
-                          mainTeam.member[index].memberName,
-                          style: BodySmall().copyWith(color: secondaryColor()),
-                        ),
-                        onTap: () async {},
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-
-      return MaterialApp(
-        home: Scaffold(
+      return DefaultTabController(
+        length: tabList.length,
+        child: Scaffold(
           appBar: AppBar(
-            backgroundColor: null,
-            title: Text(widget.deal.company_name,
-                style: BodyLarge().copyWith(color: secondaryColor())),
-            centerTitle: true,
-            actions: [
-              ElevatedButton(
-                child: const Text('+'),
-                onPressed: () => _onTabAdd(_tabController.index),
-              ),
-            ],
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(40.0),
-              child: Expanded(
-                child: TabBar(
-                  controller: _tabController,
-                  tabs: tabTitles.map((title) => Tab(text: title)).toList(),
-                ),
-              ),
+            bottom: TabBar(
+              tabs: tabList.toList(),
             ),
-          ),
-          body: Row(
-            children: [
-              showingTeamDetails(),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: tabContents,
-                ),
-              ),
+            title: Text(widget.deal.company_name),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    _onTabAdd();
+                  },
+                  icon: const Icon(Icons.add))
             ],
+          ),
+          body: TabBarView(
+            children: tabContents.map((tabContent) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(tabContent.title, style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 10),
+                    Text(tabContent.description,
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
       );
     }
   }
+}
+
+//tab content model
+class TabContentModel {
+  final String title;
+  final String description;
+
+  TabContentModel({required this.description, required this.title});
 }
