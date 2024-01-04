@@ -14,16 +14,41 @@ class DealDetails extends StatefulWidget {
   State<DealDetails> createState() => _DealDetailsState();
 }
 
-class _DealDetailsState extends State<DealDetails> {
+class _DealDetailsState extends State<DealDetails>
+    with TickerProviderStateMixin {
   final _awsIncube = AwsIncube();
   Team mainTeam =
       Team(dealIDs: [], idTeam: "", teamName: "", teamLeader: "", member: []);
   bool isLoading = false;
+  List<String> tabTitles = [];
+  List<Widget> tabContents = [];
+  late TabController _tabController;
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: tabContents.length, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getMainTeam(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onTabAdd(int index) {
+    setState(() {
+      tabTitles.add("Tab ${tabTitles.length}");
+      tabContents.add(
+        Container(
+          color: Colors.red,
+          height: 200,
+          width: 200,
+        ),
+      );
+      _tabController = TabController(length: tabContents.length, vsync: this);
     });
   }
 
@@ -111,19 +136,42 @@ class _DealDetailsState extends State<DealDetails> {
         );
       }
 
-      return Scaffold(
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(widget.deal.company_name,
-              style: BodyLarge().copyWith(color: secondaryColor())),
-          SizedBox(
-            height: screenHeight * 0.1,
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            backgroundColor: null,
+            title: Text(widget.deal.company_name,
+                style: BodyLarge().copyWith(color: secondaryColor())),
+            centerTitle: true,
+            actions: [
+              ElevatedButton(
+                child: const Text('+'),
+                onPressed: () => _onTabAdd(_tabController.index),
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(40.0),
+              child: Expanded(
+                child: TabBar(
+                  controller: _tabController,
+                  tabs: tabTitles.map((title) => Tab(text: title)).toList(),
+                ),
+              ),
+            ),
           ),
-          showingTeamDetails(),
-        ],
-      ));
+          body: Row(
+            children: [
+              showingTeamDetails(),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: tabContents,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
   }
 }

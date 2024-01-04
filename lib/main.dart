@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Incube',
-      initialRoute: AppRoutes.auth,
+      initialRoute: AppRoutes.home,
+      // initialRoute: AppRoutes.auth,
       routes: {
         AppRoutes.auth: (context) => const SignUpScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
