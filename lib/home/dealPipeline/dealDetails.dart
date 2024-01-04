@@ -36,7 +36,9 @@ class _DealDetailsState extends State<DealDetails>
   bool isLoading = false;
 
   List<Tab> tabList = [];
-  List<TabContentModel> tabContents = [];
+  List<DealsCall> tabContents = [];
+  // List<TabContentModel> tabContents = [
+  // ];
 
   @override
   void initState() {
@@ -52,10 +54,7 @@ class _DealDetailsState extends State<DealDetails>
       final List<DealsCall> calls = widget.deal.calls;
       tabList = calls.map((call) => Tab(child: Text(call.tabName))).toList();
       tabContents = calls.map((call) {
-        return TabContentModel(
-          title: call.tabContentBody[0],
-          description: call.tabContentBody[1],
-        );
+        return call;
       }).toList();
     });
   }
@@ -65,12 +64,13 @@ class _DealDetailsState extends State<DealDetails>
       final newTabIndex = tabList.length;
 
       tabContents.add(
-        TabContentModel(
-            title: "title ${tabList.length + 1}",
-            description: "description ${tabList.length}"),
-      );
+          DealsCall(tabName: "title", tabContentHeader: [], tabContentBody: [])
+          // TabContentModel(
+          //     title: "title ${tabList.length + 1}",
+          //     description: "description ${tabList.length}"),
+          );
       tabList.add(Tab(
-        child: Text(tabContents[newTabIndex].title),
+        child: Text(tabContents[newTabIndex].tabName),
       ));
     });
   }
@@ -140,12 +140,48 @@ class _DealDetailsState extends State<DealDetails>
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(tabContent.title, style: TextStyle(fontSize: 20)),
-                    SizedBox(height: 10),
-                    Text(tabContent.description,
-                        style: TextStyle(fontSize: 16)),
-                  ],
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: List.generate(
+                    tabContent.tabContentHeader.length,
+                    (index) {
+                      return Container(
+                        width: screenWidth * 0.4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${tabContent.tabContentHeader[index]} ",
+                              style: BodySmall().copyWith(color: textColor()),
+                            ),
+                            // Text(
+                            //   "${tabContent.tabContentHeader[index]}: ${tabContent.tabContentBody[index]}",
+                            //   style: TextStyle(fontSize: 20),
+                            // ),
+                            Container(
+                              width: screenWidth * 0.2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    controller: TextEditingController(
+                                        text: tabContent.tabContentBody[index]),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    maxLines: null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               );
             }).toList(),

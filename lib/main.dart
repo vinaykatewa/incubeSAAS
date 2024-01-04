@@ -76,10 +76,13 @@ class MyApp extends StatelessWidget {
                 tabName: "title 3",
                 tabContentHeader: ["title: ", "description: "],
                 tabContentBody: ["title 3", "description 3"]),
-            DealsCall(
-                tabName: "title 4",
-                tabContentHeader: ["title: ", "description: "],
-                tabContentBody: ["title 4", "description 4"])
+            DealsCall(tabName: "title 4", tabContentHeader: [
+              "title: ",
+              "description: "
+            ], tabContentBody: [
+              "title 4",
+              " description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call"
+            ])
           ])),
     );
   }
