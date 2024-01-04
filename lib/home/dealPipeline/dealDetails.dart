@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/uiThemes.dart';
 
@@ -37,8 +38,7 @@ class _DealDetailsState extends State<DealDetails>
 
   List<Tab> tabList = [];
   List<DealsCall> tabContents = [];
-  // List<TabContentModel> tabContents = [
-  // ];
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -62,16 +62,21 @@ class _DealDetailsState extends State<DealDetails>
   void _onTabAdd() {
     setState(() {
       final newTabIndex = tabList.length;
-
-      tabContents.add(
-          DealsCall(tabName: "title", tabContentHeader: [], tabContentBody: [])
-          // TabContentModel(
-          //     title: "title ${tabList.length + 1}",
-          //     description: "description ${tabList.length}"),
-          );
+      tabContents.add(DealsCall(
+          tabName: "title",
+          tabContent: [tabDetails(tabContentHeader: "", tabContentBody: "")]));
       tabList.add(Tab(
         child: Text(tabContents[newTabIndex].tabName),
       ));
+    });
+  }
+
+  void addField() {
+    setState(() {
+      final currentTabContent = tabContents[selectedIndex];
+      currentTabContent.tabContent.add(
+        tabDetails(tabContentHeader: "", tabContentBody: ""),
+      );
     });
   }
 
@@ -134,68 +139,156 @@ class _DealDetailsState extends State<DealDetails>
                   icon: const Icon(Icons.add))
             ],
           ),
-          body: TabBarView(
-            children: tabContents.map((tabContent) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: List.generate(
-                    tabContent.tabContentHeader.length,
-                    (index) {
+          body: Container(
+            color: tertiaryColor1(),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.04),
+            child: Column(
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    children: tabContents.map((tabContent) {
                       return Container(
-                        width: screenWidth * 0.4,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${tabContent.tabContentHeader[index]} ",
-                              style: BodySmall().copyWith(color: textColor()),
-                            ),
-                            // Text(
-                            //   "${tabContent.tabContentHeader[index]}: ${tabContent.tabContentBody[index]}",
-                            //   style: TextStyle(fontSize: 20),
-                            // ),
-                            Container(
-                              width: screenWidth * 0.2,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: TextEditingController(
-                                        text: tabContent.tabContentBody[index]),
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: List.generate(
+                            tabContent.tabContent.length,
+                            (index) {
+                              return Container(
+                                width: screenWidth * 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: screenWidth * 0.1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextField(
+                                          maxLines: null,
+                                          decoration: InputDecoration(
+                                            labelText: tabContent
+                                                .tabContent[index]
+                                                .tabContentHeader,
+                                            // labelText: tabContent.
+                                            //     .tabContentHeader[index],
+                                            labelStyle: GoogleFonts.roboto(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                height: 1.4285714286,
+                                                color: const Color.fromRGBO(
+                                                    0, 0, 0, 1)),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      borderRadiusAuth()),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      borderRadiusAuth()),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    maxLines: null,
-                                  ),
+                                    Text(
+                                      ":",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1.4285714286,
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1)),
+                                    ),
+                                    //content body
+                                    Container(
+                                      width: screenWidth * 0.3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextField(
+                                          maxLines: null,
+                                          decoration: InputDecoration(
+                                            labelText: tabContent
+                                                .tabContent[index]
+                                                .tabContentBody,
+                                            // tabContent
+                                            //     .tabContentBody[index],
+                                            labelStyle: GoogleFonts.roboto(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                height: 1.4285714286,
+                                                color: textColor()),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      borderRadiusAuth()),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 1),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      borderRadiusAuth()),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                          ],
+                              );
+                            },
+                          ),
                         ),
                       );
-                    },
+                    }).toList(),
                   ),
                 ),
-              );
-            }).toList(),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFb5454fb),
+                          Color(0xFF000649),
+                        ]),
+                  ),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        addField();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(borderRadiusAuth()),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: Text("Add field")),
+                )
+              ],
+            ),
           ),
         ),
       );
     }
   }
-}
-
-//tab content model
-class TabContentModel {
-  final String title;
-  final String description;
-
-  TabContentModel({required this.description, required this.title});
 }

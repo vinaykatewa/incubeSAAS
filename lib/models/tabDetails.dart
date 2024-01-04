@@ -21,17 +21,16 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
-import 'package:collection/collection.dart';
 
 
-/** This is an auto generated class representing the DealsCall type in your schema. */
-class DealsCall {
-  final String? _tabName;
-  final List<tabDetails>? _tabContent;
+/** This is an auto generated class representing the tabDetails type in your schema. */
+class tabDetails {
+  final String? _tabContentHeader;
+  final String? _tabContentBody;
 
-  String get tabName {
+  String get tabContentHeader {
     try {
-      return _tabName!;
+      return _tabContentHeader!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -42,9 +41,9 @@ class DealsCall {
     }
   }
   
-  List<tabDetails> get tabContent {
+  String get tabContentBody {
     try {
-      return _tabContent!;
+      return _tabContentBody!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -55,12 +54,12 @@ class DealsCall {
     }
   }
   
-  const DealsCall._internal({required tabName, required tabContent}): _tabName = tabName, _tabContent = tabContent;
+  const tabDetails._internal({required tabContentHeader, required tabContentBody}): _tabContentHeader = tabContentHeader, _tabContentBody = tabContentBody;
   
-  factory DealsCall({required String tabName, required List<tabDetails> tabContent}) {
-    return DealsCall._internal(
-      tabName: tabName,
-      tabContent: tabContent != null ? List<tabDetails>.unmodifiable(tabContent) : tabContent);
+  factory tabDetails({required String tabContentHeader, required String tabContentBody}) {
+    return tabDetails._internal(
+      tabContentHeader: tabContentHeader,
+      tabContentBody: tabContentBody);
   }
   
   bool equals(Object other) {
@@ -70,9 +69,9 @@ class DealsCall {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is DealsCall &&
-      _tabName == other._tabName &&
-      DeepCollectionEquality().equals(_tabContent, other._tabContent);
+    return other is tabDetails &&
+      _tabContentHeader == other._tabContentHeader &&
+      _tabContentBody == other._tabContentBody;
   }
   
   @override
@@ -82,63 +81,57 @@ class DealsCall {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("DealsCall {");
-    buffer.write("tabName=" + "$_tabName" + ", ");
-    buffer.write("tabContent=" + (_tabContent != null ? _tabContent!.toString() : "null"));
+    buffer.write("tabDetails {");
+    buffer.write("tabContentHeader=" + "$_tabContentHeader" + ", ");
+    buffer.write("tabContentBody=" + "$_tabContentBody");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  DealsCall copyWith({String? tabName, List<tabDetails>? tabContent}) {
-    return DealsCall._internal(
-      tabName: tabName ?? this.tabName,
-      tabContent: tabContent ?? this.tabContent);
+  tabDetails copyWith({String? tabContentHeader, String? tabContentBody}) {
+    return tabDetails._internal(
+      tabContentHeader: tabContentHeader ?? this.tabContentHeader,
+      tabContentBody: tabContentBody ?? this.tabContentBody);
   }
   
-  DealsCall copyWithModelFieldValues({
-    ModelFieldValue<String>? tabName,
-    ModelFieldValue<List<tabDetails>?>? tabContent
+  tabDetails copyWithModelFieldValues({
+    ModelFieldValue<String>? tabContentHeader,
+    ModelFieldValue<String>? tabContentBody
   }) {
-    return DealsCall._internal(
-      tabName: tabName == null ? this.tabName : tabName.value,
-      tabContent: tabContent == null ? this.tabContent : tabContent.value
+    return tabDetails._internal(
+      tabContentHeader: tabContentHeader == null ? this.tabContentHeader : tabContentHeader.value,
+      tabContentBody: tabContentBody == null ? this.tabContentBody : tabContentBody.value
     );
   }
   
-  DealsCall.fromJson(Map<String, dynamic> json)  
-    : _tabName = json['tabName'],
-      _tabContent = json['tabContent'] is List
-        ? (json['tabContent'] as List)
-          .where((e) => e != null)
-          .map((e) => tabDetails.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
-        : null;
+  tabDetails.fromJson(Map<String, dynamic> json)  
+    : _tabContentHeader = json['tabContentHeader'],
+      _tabContentBody = json['tabContentBody'];
   
   Map<String, dynamic> toJson() => {
-    'tabName': _tabName, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
+    'tabContentHeader': _tabContentHeader, 'tabContentBody': _tabContentBody
   };
   
   Map<String, Object?> toMap() => {
-    'tabName': _tabName,
-    'tabContent': _tabContent
+    'tabContentHeader': _tabContentHeader,
+    'tabContentBody': _tabContentBody
   };
 
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "DealsCall";
-    modelSchemaDefinition.pluralName = "DealsCalls";
+    modelSchemaDefinition.name = "tabDetails";
+    modelSchemaDefinition.pluralName = "tabDetails";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'tabName',
+      fieldName: 'tabContentHeader',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
-      fieldName: 'tabContent',
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
+      fieldName: 'tabContentBody',
       isRequired: true,
-      isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'tabDetails')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
   });
 }

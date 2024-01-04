@@ -65,24 +65,52 @@ class MyApp extends StatelessWidget {
               status: "open",
               calls: [
             DealsCall(
-                tabName: "title 1",
-                tabContentHeader: ["title: ", "description: "],
-                tabContentBody: ["title 1", "description 1"]),
+              tabName: "title 1",
+              tabContent: [
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 1"),
+                tabDetails(
+                    tabContentHeader: "description ",
+                    tabContentBody: "description 1"),
+                tabDetails(
+                    tabContentHeader: "meeting link ",
+                    tabContentBody: "https://www.google.com"),
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 1"),
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 1"),
+              ],
+            ),
             DealsCall(
-                tabName: "title 2",
-                tabContentHeader: ["title: ", "description: "],
-                tabContentBody: ["title 2", "description 2"]),
+              tabName: "title 2",
+              tabContent: [
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 2"),
+                tabDetails(
+                    tabContentHeader: "description ",
+                    tabContentBody: "description 2")
+              ],
+            ),
             DealsCall(
-                tabName: "title 3",
-                tabContentHeader: ["title: ", "description: "],
-                tabContentBody: ["title 3", "description 3"]),
-            DealsCall(tabName: "title 4", tabContentHeader: [
-              "title: ",
-              "description: "
-            ], tabContentBody: [
-              "title 4",
-              " description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call description 4. Here we will show all the details about this call"
-            ])
+              tabName: "title 3",
+              tabContent: [
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 3"),
+                tabDetails(
+                    tabContentHeader: "description ",
+                    tabContentBody: "description 3")
+              ],
+            ),
+            DealsCall(
+              tabName: "title 4",
+              tabContent: [
+                tabDetails(
+                    tabContentHeader: "title ", tabContentBody: "title 4"),
+                tabDetails(
+                    tabContentHeader: "description ",
+                    tabContentBody: "description 4")
+              ],
+            ),
           ])),
     );
   }

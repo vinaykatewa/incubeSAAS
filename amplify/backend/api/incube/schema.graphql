@@ -65,8 +65,11 @@ calls: [DealsCall]!
 
 type DealsCall{
 tabName: String!
-tabContentHeader: [String]!
-tabContentBody: [String]!
+tabContent:[tabDetails]!
+}
+type tabDetails{
+tabContentHeader: String!
+tabContentBody: String!
 }
 
 
