@@ -26,12 +26,12 @@ import 'package:collection/collection.dart';
 
 /** This is an auto generated class representing the DealsCall type in your schema. */
 class DealsCall {
-  final String? _tabName;
+  final List<String>? _tabList;
   final List<tabDetails>? _tabContent;
 
-  String get tabName {
+  List<String> get tabList {
     try {
-      return _tabName!;
+      return _tabList!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -55,11 +55,11 @@ class DealsCall {
     }
   }
   
-  const DealsCall._internal({required tabName, required tabContent}): _tabName = tabName, _tabContent = tabContent;
+  const DealsCall._internal({required tabList, required tabContent}): _tabList = tabList, _tabContent = tabContent;
   
-  factory DealsCall({required String tabName, required List<tabDetails> tabContent}) {
+  factory DealsCall({required List<String> tabList, required List<tabDetails> tabContent}) {
     return DealsCall._internal(
-      tabName: tabName,
+      tabList: tabList != null ? List<String>.unmodifiable(tabList) : tabList,
       tabContent: tabContent != null ? List<tabDetails>.unmodifiable(tabContent) : tabContent);
   }
   
@@ -71,7 +71,7 @@ class DealsCall {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is DealsCall &&
-      _tabName == other._tabName &&
+      DeepCollectionEquality().equals(_tabList, other._tabList) &&
       DeepCollectionEquality().equals(_tabContent, other._tabContent);
   }
   
@@ -83,31 +83,31 @@ class DealsCall {
     var buffer = new StringBuffer();
     
     buffer.write("DealsCall {");
-    buffer.write("tabName=" + "$_tabName" + ", ");
+    buffer.write("tabList=" + (_tabList != null ? _tabList!.toString() : "null") + ", ");
     buffer.write("tabContent=" + (_tabContent != null ? _tabContent!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  DealsCall copyWith({String? tabName, List<tabDetails>? tabContent}) {
+  DealsCall copyWith({List<String>? tabList, List<tabDetails>? tabContent}) {
     return DealsCall._internal(
-      tabName: tabName ?? this.tabName,
+      tabList: tabList ?? this.tabList,
       tabContent: tabContent ?? this.tabContent);
   }
   
   DealsCall copyWithModelFieldValues({
-    ModelFieldValue<String>? tabName,
+    ModelFieldValue<List<String>?>? tabList,
     ModelFieldValue<List<tabDetails>?>? tabContent
   }) {
     return DealsCall._internal(
-      tabName: tabName == null ? this.tabName : tabName.value,
+      tabList: tabList == null ? this.tabList : tabList.value,
       tabContent: tabContent == null ? this.tabContent : tabContent.value
     );
   }
   
   DealsCall.fromJson(Map<String, dynamic> json)  
-    : _tabName = json['tabName'],
+    : _tabList = json['tabList']?.cast<String>(),
       _tabContent = json['tabContent'] is List
         ? (json['tabContent'] as List)
           .where((e) => e != null)
@@ -116,11 +116,11 @@ class DealsCall {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'tabName': _tabName, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
+    'tabList': _tabList, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
   };
   
   Map<String, Object?> toMap() => {
-    'tabName': _tabName,
+    'tabList': _tabList,
     'tabContent': _tabContent
   };
 
@@ -129,9 +129,10 @@ class DealsCall {
     modelSchemaDefinition.pluralName = "DealsCalls";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'tabName',
+      fieldName: 'tabList',
       isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
