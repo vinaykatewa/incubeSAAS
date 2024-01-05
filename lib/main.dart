@@ -65,43 +65,6 @@ class MyApp extends StatelessWidget {
               status: "open",
               calls: [
             DealsCall(
-              tabName: "title 1",
-              tabContent: [
-                tabDetails(
-                    tabContentHeader: "title ", tabContentBody: "title 1"),
-                tabDetails(
-                    tabContentHeader: "description ",
-                    tabContentBody: "description 1"),
-                tabDetails(
-                    tabContentHeader: "meeting link ",
-                    tabContentBody: "https://www.google.com"),
-                tabDetails(
-                    tabContentHeader: "title ", tabContentBody: "title 1"),
-                tabDetails(
-                    tabContentHeader: "title ", tabContentBody: "title 1"),
-              ],
-            ),
-            DealsCall(
-              tabName: "title 2",
-              tabContent: [
-                tabDetails(
-                    tabContentHeader: "title ", tabContentBody: "title 2"),
-                tabDetails(
-                    tabContentHeader: "description ",
-                    tabContentBody: "description 2")
-              ],
-            ),
-            DealsCall(
-              tabName: "title 3",
-              tabContent: [
-                tabDetails(
-                    tabContentHeader: "title ", tabContentBody: "title 3"),
-                tabDetails(
-                    tabContentHeader: "description ",
-                    tabContentBody: "description 3")
-              ],
-            ),
-            DealsCall(
               tabName: "title 4",
               tabContent: [
                 tabDetails(
