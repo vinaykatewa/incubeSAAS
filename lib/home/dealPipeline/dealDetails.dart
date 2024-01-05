@@ -14,6 +14,7 @@ class DealDetails extends StatefulWidget {
 class _DealDetailsState extends State<DealDetails>
     with TickerProviderStateMixin {
   List<TextEditingController> _controllers = [];
+  int globalTabCount = 4;
   bool isLoading = false;
   List<String> tabList = ['Tab 1', 'Tab 2', 'Tab 3'];
   List<List<Widget>> tabBarViewList = [
@@ -38,6 +39,7 @@ class _DealDetailsState extends State<DealDetails>
     super.initState();
     _controllers =
         tabList.map((tab) => TextEditingController(text: tab)).toList();
+    globalTabCount = tabList.length + 1;
   }
 
   @override
@@ -62,13 +64,22 @@ class _DealDetailsState extends State<DealDetails>
 
   void addTab() {
     setState(() {
-      int index = tabList.length;
-      tabList.add("Tab $index");
+      tabList.add("Tab $globalTabCount");
+      _controllers.add(TextEditingController(text: "Tab $globalTabCount"));
       tabBarViewList.add([
         TabViewModel(
           tabContentModel: TabContentModel(title: "", content: ""),
         )
       ]);
+      globalTabCount++;
+    });
+  }
+
+  void deleteTap(int index) {
+    setState(() {
+      tabList.removeAt(index);
+      _controllers.removeAt(index);
+      tabBarViewList.removeAt(index);
     });
   }
 
@@ -103,6 +114,49 @@ class _DealDetailsState extends State<DealDetails>
                       widget.deal.company_name,
                       style: HeadlineLarge().copyWith(color: textColor()),
                     ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Builder(builder: (context) {
+                        return TabBar(
+                          labelStyle: LabelLarge()
+                              .copyWith(color: Colors.white.withOpacity(0.9)),
+                          labelColor: Colors.white.withOpacity(0.9),
+                          unselectedLabelColor: textColor().withOpacity(0.5),
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: secondaryColor(),
+                          ),
+                          onTap: (value) {
+                            TabController tabController =
+                                DefaultTabController.of(context);
+                            int previousIndex = tabController.previousIndex;
+                            setState(() {
+                              tabList[previousIndex] =
+                                  _controllers[previousIndex].text;
+                            });
+                          },
+                          tabs: tabList.asMap().entries.map((entry) {
+                            int index =
+                                entry.key; // get the index from the entry
+                            String tab = entry.value;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Tab(
+                                  text: tab,
+                                ),
+                                IconButton(
+                                    onPressed: () => deleteTap(index),
+                                    icon: Icon(Icons.cancel))
+                              ],
+                            );
+                          }).toList(),
+                        );
+                      }),
+                    ),
                     IconButton(
                         onPressed: () {
                           addTab();
@@ -110,32 +164,6 @@ class _DealDetailsState extends State<DealDetails>
                         icon: const Icon(Icons.add))
                   ],
                 ),
-                Builder(builder: (context) {
-                  return TabBar(
-                    labelStyle: LabelLarge()
-                        .copyWith(color: Colors.white.withOpacity(0.9)),
-                    labelColor: Colors.white.withOpacity(0.9),
-                    unselectedLabelColor: textColor().withOpacity(0.5),
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: secondaryColor(),
-                    ),
-                    onTap: (value) {
-                      TabController tabController =
-                          DefaultTabController.of(context);
-                      int previousIndex = tabController.previousIndex;
-                      setState(() {
-                        tabList[previousIndex] =
-                            _controllers[previousIndex].text;
-                      });
-                    },
-                    tabs: tabList.map((String tab) {
-                      return Tab(
-                        text: tab,
-                      );
-                    }).toList(),
-                  );
-                }),
                 SizedBox(height: screenHeight * 0.05),
                 Expanded(
                   child: TabBarView(
