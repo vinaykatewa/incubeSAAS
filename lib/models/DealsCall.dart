@@ -27,11 +27,25 @@ import 'package:collection/collection.dart';
 /** This is an auto generated class representing the DealsCall type in your schema. */
 class DealsCall {
   final List<String>? _tabList;
+  final List<String>? _tabTitles;
   final List<tabDetails>? _tabContent;
 
   List<String> get tabList {
     try {
       return _tabList!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  List<String> get tabTitles {
+    try {
+      return _tabTitles!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -55,11 +69,12 @@ class DealsCall {
     }
   }
   
-  const DealsCall._internal({required tabList, required tabContent}): _tabList = tabList, _tabContent = tabContent;
+  const DealsCall._internal({required tabList, required tabTitles, required tabContent}): _tabList = tabList, _tabTitles = tabTitles, _tabContent = tabContent;
   
-  factory DealsCall({required List<String> tabList, required List<tabDetails> tabContent}) {
+  factory DealsCall({required List<String> tabList, required List<String> tabTitles, required List<tabDetails> tabContent}) {
     return DealsCall._internal(
       tabList: tabList != null ? List<String>.unmodifiable(tabList) : tabList,
+      tabTitles: tabTitles != null ? List<String>.unmodifiable(tabTitles) : tabTitles,
       tabContent: tabContent != null ? List<tabDetails>.unmodifiable(tabContent) : tabContent);
   }
   
@@ -72,6 +87,7 @@ class DealsCall {
     if (identical(other, this)) return true;
     return other is DealsCall &&
       DeepCollectionEquality().equals(_tabList, other._tabList) &&
+      DeepCollectionEquality().equals(_tabTitles, other._tabTitles) &&
       DeepCollectionEquality().equals(_tabContent, other._tabContent);
   }
   
@@ -84,30 +100,35 @@ class DealsCall {
     
     buffer.write("DealsCall {");
     buffer.write("tabList=" + (_tabList != null ? _tabList!.toString() : "null") + ", ");
+    buffer.write("tabTitles=" + (_tabTitles != null ? _tabTitles!.toString() : "null") + ", ");
     buffer.write("tabContent=" + (_tabContent != null ? _tabContent!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  DealsCall copyWith({List<String>? tabList, List<tabDetails>? tabContent}) {
+  DealsCall copyWith({List<String>? tabList, List<String>? tabTitles, List<tabDetails>? tabContent}) {
     return DealsCall._internal(
       tabList: tabList ?? this.tabList,
+      tabTitles: tabTitles ?? this.tabTitles,
       tabContent: tabContent ?? this.tabContent);
   }
   
   DealsCall copyWithModelFieldValues({
     ModelFieldValue<List<String>?>? tabList,
+    ModelFieldValue<List<String>?>? tabTitles,
     ModelFieldValue<List<tabDetails>?>? tabContent
   }) {
     return DealsCall._internal(
       tabList: tabList == null ? this.tabList : tabList.value,
+      tabTitles: tabTitles == null ? this.tabTitles : tabTitles.value,
       tabContent: tabContent == null ? this.tabContent : tabContent.value
     );
   }
   
   DealsCall.fromJson(Map<String, dynamic> json)  
     : _tabList = json['tabList']?.cast<String>(),
+      _tabTitles = json['tabTitles']?.cast<String>(),
       _tabContent = json['tabContent'] is List
         ? (json['tabContent'] as List)
           .where((e) => e != null)
@@ -116,11 +137,12 @@ class DealsCall {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'tabList': _tabList, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
+    'tabList': _tabList, 'tabTitles': _tabTitles, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
   };
   
   Map<String, Object?> toMap() => {
     'tabList': _tabList,
+    'tabTitles': _tabTitles,
     'tabContent': _tabContent
   };
 
@@ -130,6 +152,13 @@ class DealsCall {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
       fieldName: 'tabList',
+      isRequired: true,
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
+      fieldName: 'tabTitles',
       isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)

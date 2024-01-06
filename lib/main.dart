@@ -1,6 +1,7 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/home/dealPipeline/dealDetails.dart';
+import 'package:incube/home/dealPipeline/dealDetails/dealDetails.dart';
+import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:incube/amplifyconfiguration.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => IncubeProvider()),
+        ChangeNotifierProvider(create: (_) => DealDetailsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -64,17 +66,19 @@ class MyApp extends StatelessWidget {
               seeking: "50M",
               status: "open",
               calls: [
-            DealsCall(
-              tabList: ["title", "title2"],
-              tabContent: [
-                tabDetails(
-                    tabContentHeader: "description",
-                    tabContentBody: "this is the description of the tab"),
-                tabDetails(
-                    tabContentHeader: "description",
-                    tabContentBody: "description 4")
-              ],
-            ),
+            DealsCall(tabList: [
+              "title",
+              "title2"
+            ], tabContent: [
+              tabDetails(
+                  tabContentHeader: "description",
+                  tabContentBody: "this is the description of the tab"),
+              tabDetails(
+                  tabContentHeader: "description",
+                  tabContentBody: "description 4")
+            ], tabTitles: [
+              "this is the title"
+            ]),
           ])),
     );
   }

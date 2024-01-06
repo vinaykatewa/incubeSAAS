@@ -2,7 +2,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
-import 'package:incube/home/dealPipeline/dealDetails.dart';
+import 'package:incube/home/dealPipeline/dealDetails/dealDetails.dart';
 import 'package:incube/models/Deals.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';

@@ -65,6 +65,7 @@ calls: [DealsCall]!
 
 type DealsCall{
 tabList: [String]!
+tabTitles: [String]!
 tabContent:[tabDetails]!
 }
 type tabDetails{
