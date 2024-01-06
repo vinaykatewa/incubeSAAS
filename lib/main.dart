@@ -1,6 +1,5 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/home/dealPipeline/dealDetails/dealDetails.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
@@ -55,16 +54,6 @@ class MyApp extends StatelessWidget {
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
       },
-      // home: DealDetails(
-      //     deal: Deals(
-      //         idDeal: "Ilbo1uIlsz47M6sPJRKvvwY0B3WNjRxNtF8nv4Mj5dr1rysWRA",
-      //         teamId: "G9qeWQM9gGSAglqD59USBvqnxknHPzZCRSa0iS97bOTu4Ry8Cq",
-      //         company_logo: "initial image path",
-      //         company_name: "deal 1",
-      //         company_description: "fintech",
-      //         seeking: "50M",
-      //         status: "open",
-      //         calls: DealsCall(tabList: [], tabTitles: [], tabContent: []))),
     );
   }
 }

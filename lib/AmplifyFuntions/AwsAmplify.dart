@@ -226,7 +226,6 @@ class AwsIncube {
   }
 
   Future<Organization?> getOrganizationByAdminId(String superAdminId) async {
-    safePrint("we are getting this supper admin: $superAdminId");
     safePrint('getOrganizationByAdminId method is running');
     try {
       final queryPredicate = Organization.SUPERADMINID.contains(superAdminId);

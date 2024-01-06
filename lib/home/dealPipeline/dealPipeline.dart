@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
+import 'package:incube/home/dealPipeline/dealDetails/dealDetails.dart';
 import 'package:incube/home/dealPipeline/openDeal.dart';
 import 'package:incube/models/Deals.dart';
+import 'package:incube/models/DealsCall.dart';
+import 'package:incube/models/tabContentList.dart';
+import 'package:incube/models/tabDetails.dart';
 import 'package:incube/provider.dart';
 
 import 'package:incube/uiThemes.dart';
@@ -23,7 +27,7 @@ class DealPipeline extends StatefulWidget {
 }
 
 class _DealPipelineState extends State<DealPipeline> {
-  int selctedIndex = 1;
+  int selctedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

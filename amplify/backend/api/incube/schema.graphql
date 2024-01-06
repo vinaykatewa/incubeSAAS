@@ -68,6 +68,8 @@ tabList: [String]!
 tabTitles: [String]!
 tabContent:[tabContentList]!
 }
+
+
 type tabContentList{
 tabDetailsList: [tabDetails]!
 }

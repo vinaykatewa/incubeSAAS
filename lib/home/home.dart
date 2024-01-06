@@ -23,7 +23,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int selectedButtonIndex = 1;
+  int selectedButtonIndex = 0;
   late String uid;
   List<userRequest> _userRequests = [];
   List<Team> _teams = [];
@@ -31,22 +31,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    setData(context);
-  }
-
-  Future<void>? setData(BuildContext context) {
-    final IncubeProvider _incubeProvider =
-        Provider.of<IncubeProvider>(context, listen: false);
-    _incubeProvider.email = "imvinaykatewa@gmail.com";
-    _incubeProvider.userId = "2cf18d84-42c4-4572-b496-af9f99a5d13a";
-    _incubeProvider.userName = "teamLeader";
-    _incubeProvider.isAdmin = false;
-    _incubeProvider.organizationId = "58b9d76f-dfff-4f99-b9b4-48a542f21081";
-    _incubeProvider.superAdmin = "0ca24bdb-6ccf-44fe-a946-0374ad5349a6";
-    _incubeProvider.requestStatus = "accepted";
-    _incubeProvider.teamId =
-        "G9qeWQM9gGSAglqD59USBvqnxknHPzZCRSa0iS97bOTu4Ry8Cq";
-    _incubeProvider.isteamLeader = true;
   }
 
   @override

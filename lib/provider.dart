@@ -5,7 +5,7 @@ class IncubeProvider extends ChangeNotifier {
   String _userName = 'init user name';
   String _email = 'init email';
   String _imageFile = 'init image file';
-  late bool _isAdmin;
+  bool _isAdmin = true;
 
   String _organizationId = 'init organization id';
   String _superAdmin = 'init super admin id';
