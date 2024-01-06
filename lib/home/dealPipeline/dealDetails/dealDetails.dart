@@ -370,82 +370,64 @@ class _TabViewModelState extends State<TabViewModel> {
           width: screenWidth * 0.5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: screenWidth * 0.1,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: tabHeaderController,
-                    maxLines: null,
-                    onChanged: (value) {
-                      _detailsProvider.updateFieldHeader(
-                          widget.tabIndex, widget.fieldIndex, value);
-                    },
-                    decoration: InputDecoration(
-                      // labelText: widget.tabContentModel.title,
-                      labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: const Color.fromRGBO(0, 0, 0, 1)),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                    ),
+                padding: EdgeInsets.only(left: screenWidth * 0.01),
+                decoration: BoxDecoration(
+                  color: secondaryColor(),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    bottomLeft: Radius.circular(50),
                   ),
                 ),
-              ),
-              Text(
-                ":",
-                style: GoogleFonts.roboto(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4285714286,
-                    color: const Color.fromRGBO(0, 0, 0, 1)),
+                child: TextField(
+                  controller: tabHeaderController,
+                  style: BodySmall()
+                      .copyWith(color: Colors.white.withOpacity(0.9)),
+                  maxLines: null,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                ),
               ),
               //content body
               Container(
                 width: screenWidth * 0.3,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: tabBodyController,
-                    maxLines: null,
-                    onChanged: (value) {
-                      _detailsProvider.updateFieldBody(
-                          widget.tabIndex, widget.fieldIndex, value);
-                    },
-                    decoration: InputDecoration(
-                      // labelText: widget.tabContentModel.content,
-                      labelStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4285714286,
-                          color: textColor()),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),
-                        borderRadius: BorderRadius.circular(borderRadiusAuth()),
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.01,
+                  right: screenWidth * 0.01,
+                ),
+                decoration: BoxDecoration(
+                  color: secondaryColor(),
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(50),
+                    bottomRight: Radius.circular(50),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: tabBodyController,
+                        style: BodySmall()
+                            .copyWith(color: Colors.white.withOpacity(0.9)),
+                        maxLines: null,
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
                       ),
                     ),
-                  ),
+                    IconButton(
+                        onPressed: () {
+                          _detailsProvider.updateFieldHeader(widget.tabIndex,
+                              widget.fieldIndex, tabHeaderController.text);
+                          _detailsProvider.updateFieldBody(widget.tabIndex,
+                              widget.fieldIndex, tabBodyController.text);
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.white.withOpacity(0.9),
+                        ))
+                  ],
                 ),
               ),
             ],
