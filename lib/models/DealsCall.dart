@@ -28,7 +28,7 @@ import 'package:collection/collection.dart';
 class DealsCall {
   final List<String>? _tabList;
   final List<String>? _tabTitles;
-  final List<tabDetails>? _tabContent;
+  final List<tabContentList>? _tabContent;
 
   List<String> get tabList {
     try {
@@ -56,7 +56,7 @@ class DealsCall {
     }
   }
   
-  List<tabDetails> get tabContent {
+  List<tabContentList> get tabContent {
     try {
       return _tabContent!;
     } catch(e) {
@@ -71,11 +71,11 @@ class DealsCall {
   
   const DealsCall._internal({required tabList, required tabTitles, required tabContent}): _tabList = tabList, _tabTitles = tabTitles, _tabContent = tabContent;
   
-  factory DealsCall({required List<String> tabList, required List<String> tabTitles, required List<tabDetails> tabContent}) {
+  factory DealsCall({required List<String> tabList, required List<String> tabTitles, required List<tabContentList> tabContent}) {
     return DealsCall._internal(
       tabList: tabList != null ? List<String>.unmodifiable(tabList) : tabList,
       tabTitles: tabTitles != null ? List<String>.unmodifiable(tabTitles) : tabTitles,
-      tabContent: tabContent != null ? List<tabDetails>.unmodifiable(tabContent) : tabContent);
+      tabContent: tabContent != null ? List<tabContentList>.unmodifiable(tabContent) : tabContent);
   }
   
   bool equals(Object other) {
@@ -107,7 +107,7 @@ class DealsCall {
     return buffer.toString();
   }
   
-  DealsCall copyWith({List<String>? tabList, List<String>? tabTitles, List<tabDetails>? tabContent}) {
+  DealsCall copyWith({List<String>? tabList, List<String>? tabTitles, List<tabContentList>? tabContent}) {
     return DealsCall._internal(
       tabList: tabList ?? this.tabList,
       tabTitles: tabTitles ?? this.tabTitles,
@@ -117,7 +117,7 @@ class DealsCall {
   DealsCall copyWithModelFieldValues({
     ModelFieldValue<List<String>?>? tabList,
     ModelFieldValue<List<String>?>? tabTitles,
-    ModelFieldValue<List<tabDetails>?>? tabContent
+    ModelFieldValue<List<tabContentList>?>? tabContent
   }) {
     return DealsCall._internal(
       tabList: tabList == null ? this.tabList : tabList.value,
@@ -132,12 +132,12 @@ class DealsCall {
       _tabContent = json['tabContent'] is List
         ? (json['tabContent'] as List)
           .where((e) => e != null)
-          .map((e) => tabDetails.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .map((e) => tabContentList.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null;
   
   Map<String, dynamic> toJson() => {
-    'tabList': _tabList, 'tabTitles': _tabTitles, 'tabContent': _tabContent?.map((tabDetails? e) => e?.toJson()).toList()
+    'tabList': _tabList, 'tabTitles': _tabTitles, 'tabContent': _tabContent?.map((tabContentList? e) => e?.toJson()).toList()
   };
   
   Map<String, Object?> toMap() => {
@@ -168,7 +168,7 @@ class DealsCall {
       fieldName: 'tabContent',
       isRequired: true,
       isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'tabDetails')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'tabContentList')
     ));
   });
 }

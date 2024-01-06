@@ -49,37 +49,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Incube',
-      // initialRoute: AppRoutes.home,
-      // // initialRoute: AppRoutes.auth,
-      // routes: {
-      //   AppRoutes.auth: (context) => const SignUpScreen(),
-      //   AppRoutes.login: (context) => const LoginScreen(),
-      //   AppRoutes.home: (context) => const Home(),
-      // },
-      home: DealDetails(
-          deal: Deals(
-              idDeal: "Ilbo1uIlsz47M6sPJRKvvwY0B3WNjRxNtF8nv4Mj5dr1rysWRA",
-              teamId: "G9qeWQM9gGSAglqD59USBvqnxknHPzZCRSa0iS97bOTu4Ry8Cq",
-              company_logo: "initial image path",
-              company_name: "deal 1",
-              company_description: "fintech",
-              seeking: "50M",
-              status: "open",
-              calls: [
-            DealsCall(tabList: [
-              "title",
-              "title2"
-            ], tabContent: [
-              tabDetails(
-                  tabContentHeader: "description",
-                  tabContentBody: "this is the description of the tab"),
-              tabDetails(
-                  tabContentHeader: "description",
-                  tabContentBody: "description 4")
-            ], tabTitles: [
-              "this is the title"
-            ]),
-          ])),
+      initialRoute: AppRoutes.auth,
+      routes: {
+        AppRoutes.auth: (context) => const SignUpScreen(),
+        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.home: (context) => const Home(),
+      },
+      // home: DealDetails(
+      //     deal: Deals(
+      //         idDeal: "Ilbo1uIlsz47M6sPJRKvvwY0B3WNjRxNtF8nv4Mj5dr1rysWRA",
+      //         teamId: "G9qeWQM9gGSAglqD59USBvqnxknHPzZCRSa0iS97bOTu4Ry8Cq",
+      //         company_logo: "initial image path",
+      //         company_name: "deal 1",
+      //         company_description: "fintech",
+      //         seeking: "50M",
+      //         status: "open",
+      //         calls: DealsCall(tabList: [], tabTitles: [], tabContent: []))),
     );
   }
 }

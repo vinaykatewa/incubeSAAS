@@ -3,6 +3,8 @@ import 'package:incube/models/ModelProvider.dart';
 
 class DealDetailsProvider extends ChangeNotifier {
   List<String> tabList = ['Tab 1', 'Tab 2', 'Tab 3'];
+  List<String> tabTitles = ['Title 1', 'Title 2', 'Title 3'];
+
   List<List<tabDetails>> tabContent = [
     [tabDetails(tabContentHeader: "Header 1", tabContentBody: "Body 1")],
     [
@@ -26,6 +28,7 @@ class DealDetailsProvider extends ChangeNotifier {
 
   void addTab(String tabTitle) {
     tabList.add(tabTitle);
+    tabTitles.add(tabTitle);
     _controllers.add(TextEditingController(text: tabTitle));
     tabContent.add([
       tabDetails(tabContentHeader: "new header", tabContentBody: "new body"),
@@ -50,7 +53,8 @@ class DealDetailsProvider extends ChangeNotifier {
   void deleteTab(int index) {
     tabList.removeAt(index);
     _controllers.removeAt(index);
-    // tabContent.removeAt(index);
+    tabTitles.removeAt(index);
+    tabContent.removeAt(index);
     notifyListeners();
   }
 

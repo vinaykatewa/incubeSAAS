@@ -111,7 +111,7 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
           company_description: specificDeal.company_description,
           seeking: specificDeal.seeking,
           status: specificDeal.status,
-          calls: []);
+          calls: specificDeal.calls);
 
       //step 2: update dealId in team list
       List<Team> teamLs = org.org_team;

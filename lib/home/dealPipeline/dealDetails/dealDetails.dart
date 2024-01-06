@@ -1,8 +1,11 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/models/ModelProvider.dart';
+import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:provider/provider.dart';
 
@@ -16,20 +19,48 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails>
     with TickerProviderStateMixin {
-  // List<TextEditingController> _controllers = [];
   bool isLoading = false;
-  // List<String> tabList = ['Tab 1', 'Tab 2', 'Tab 3'];
-  // List<List<tabDetails>> tabContent = [
-  //   [tabDetails(tabContentHeader: "Header 1", tabContentBody: "Body 1")],
-  //   [tabDetails(tabContentHeader: "Header 2", tabContentBody: "Body 2")],
-  //   [tabDetails(tabContentHeader: "Header 3", tabContentBody: "Body 3")],
-  // ];
+  final AwsIncube awsAmplify = AwsIncube();
 
-  // void _onTextChanged(int index, String value) {
-  //   setState(() {
-  //     tabList[index] = value;
-  //   });
-  // }
+  Future<void> saveDataInDB(BuildContext context, int currentTabIndex) async {
+    //update the deal calls
+    final DealDetailsProvider dealDetailProvider =
+        Provider.of<DealDetailsProvider>(context, listen: false);
+    final IncubeProvider incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    Organization? org =
+        await awsAmplify.getOrganizationByAdminId(incubeProvider.superAdmin);
+    if (org == null) {
+      safePrint('In assignToTeam method, we are receiving null value for org');
+      return;
+    }
+    List<Deals> dealList = org.org_deals;
+    int dealIndex =
+        dealList.indexWhere((element) => element.idDeal == widget.deal.idDeal);
+    var specificDealCall = dealList[dealIndex].calls;
+    //updating all 3 list
+    specificDealCall.tabList[currentTabIndex] =
+        dealDetailProvider.tabList[currentTabIndex];
+    specificDealCall.tabTitles[currentTabIndex] =
+        dealDetailProvider.tabTitles[currentTabIndex];
+    specificDealCall.tabContent[currentTabIndex] = tabContentList(
+        tabDetailsList: dealDetailProvider.tabContent[currentTabIndex]);
+    // Update Deals
+    Deals updatedDeal = dealList[dealIndex].copyWith(calls: specificDealCall);
+    dealList[dealIndex] = updatedDeal;
+
+    // Update Organization
+    Organization updatedOrganization = org.copyWith(org_deals: dealList);
+
+    // Perform the mutation to update the organization
+    try {
+      final request = ModelMutations.update(updatedOrganization);
+      final response = await Amplify.API.mutate(request: request).response;
+      print('Organization updated successfully');
+    } catch (e) {
+      print('Error updating organization: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +110,8 @@ class _DealDetailsState extends State<DealDetails>
                               unselectedLabelColor:
                                   textColor().withOpacity(0.5),
                               indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius:
+                                    BorderRadius.circular(MainBorderRadius()),
                                 color: secondaryColor(),
                               ),
                               onTap: (value) {
@@ -99,8 +131,7 @@ class _DealDetailsState extends State<DealDetails>
                                 int index = entry.key;
                                 String tab = entry.value;
                                 return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Tab(
                                       text: tab,
@@ -146,16 +177,15 @@ class _DealDetailsState extends State<DealDetails>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TabTitle(
-                                  tabContentModel: TabContentModel(
-                                    title: "title $index",
-                                    content: "content $index",
-                                  ),
+                                  tabIndex: index,
+                                  title: _detailsProvider.tabTitles[index],
                                   controller:
                                       _detailsProvider.controllers[index],
                                 ),
+                                SizedBox(height: screenHeight * 0.01),
                                 Container(
-                                  width: screenWidth * 0.9,
-                                  height: screenHeight * 0.6,
+                                  width: screenWidth * 0.6,
+                                  height: screenHeight * 0.5,
                                   child: Center(
                                     child: Builder(builder: (context) {
                                       TabController tabController =
@@ -165,19 +195,26 @@ class _DealDetailsState extends State<DealDetails>
                                             .tabContent[tabController.index]
                                             .length,
                                         itemBuilder: (context, itemIndex) {
-                                          return TabViewModel(
-                                            tabIndex: tabController.index,
-                                            fieldIndex: itemIndex,
-                                            tabContentModel: TabContentModel(
-                                              title: _detailsProvider
-                                                  .tabContent[tabController
-                                                      .index][itemIndex]
-                                                  .tabContentHeader,
-                                              content: _detailsProvider
-                                                  .tabContent[tabController
-                                                      .index][itemIndex]
-                                                  .tabContentBody,
-                                            ),
+                                          return Column(
+                                            children: [
+                                              TabViewModel(
+                                                tabIndex: tabController.index,
+                                                fieldIndex: itemIndex,
+                                                tabContentModel:
+                                                    TabContentModel(
+                                                  title: _detailsProvider
+                                                      .tabContent[tabController
+                                                          .index][itemIndex]
+                                                      .tabContentHeader,
+                                                  content: _detailsProvider
+                                                      .tabContent[tabController
+                                                          .index][itemIndex]
+                                                      .tabContentBody,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  height: screenHeight * 0.01),
+                                            ],
                                           );
                                         },
                                       );
@@ -187,33 +224,85 @@ class _DealDetailsState extends State<DealDetails>
                                 SizedBox(
                                   height: screenHeight * 0.05,
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        borderRadiusAuth()),
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Color(0xFb5454fb),
-                                        Color(0xFF000649),
-                                      ],
-                                    ),
-                                  ),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      _detailsProvider.addField(index);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            borderRadiusAuth()),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              borderRadiusAuth()),
+                                          color: secondaryColor()),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          _detailsProvider.addField(index);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                borderRadiusAuth()),
+                                          ),
+                                          elevation: 2,
+                                        ),
+                                        child: Text(
+                                          "Add field",
+                                          style: BodySmall().copyWith(
+                                              color: Colors.white
+                                                  .withOpacity(0.9)),
+                                        ),
                                       ),
-                                      elevation: 2,
                                     ),
-                                    child: const Text("Add field"),
-                                  ),
+                                    //hive
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              borderRadiusAuth()),
+                                          color: secondaryColor()),
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                borderRadiusAuth()),
+                                          ),
+                                          elevation: 2,
+                                        ),
+                                        child: Text(
+                                          "Add Notes",
+                                          style: BodySmall().copyWith(
+                                              color: Colors.white
+                                                  .withOpacity(0.9)),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              borderRadiusAuth()),
+                                          color: secondaryColor()),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          saveDataInDB(context, index);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                borderRadiusAuth()),
+                                          ),
+                                          elevation: 2,
+                                        ),
+                                        child: Text(
+                                          "Save the edits",
+                                          style: BodySmall().copyWith(
+                                              color: Colors.white
+                                                  .withOpacity(0.9)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -240,97 +329,87 @@ class TabContentModel {
 }
 
 class TabTitle extends StatefulWidget {
-  final TabContentModel tabContentModel;
+  final String title;
   final TextEditingController controller;
+  final int tabIndex;
   const TabTitle(
-      {Key? key, required this.tabContentModel, required this.controller})
+      {Key? key,
+      required this.title,
+      required this.controller,
+      required this.tabIndex})
       : super(key: key);
   @override
   State<TabTitle> createState() => _TabTitleState();
 }
 
 class _TabTitleState extends State<TabTitle> {
-  TextEditingController tabTitleController = TextEditingController();
+  TextEditingController titleHaderController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    titleHaderController.text = "Title";
+    widget.controller.text = widget.title;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      width: screenWidth * 0.5,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: screenWidth * 0.1,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                maxLines: null,
-                readOnly: true,
-                decoration: InputDecoration(
-                  labelText: widget.tabContentModel.title,
-                  labelStyle: GoogleFonts.roboto(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      height: 1.4285714286,
-                      color: const Color.fromRGBO(0, 0, 0, 1)),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
-                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
-                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
+    return Consumer<DealDetailsProvider>(
+      builder: (context, _detailsProvider, child) {
+        return Container(
+          width: screenWidth * 0.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: screenWidth * 0.1,
+                padding: EdgeInsets.only(left: screenWidth * 0.01),
+                decoration: BoxDecoration(
+                  color: secondaryColor(),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(MainBorderRadius()),
+                    bottomLeft: Radius.circular(MainBorderRadius()),
                   ),
                 ),
+                child: TextField(
+                    readOnly: true,
+                    controller: titleHaderController,
+                    style: BodySmall()
+                        .copyWith(color: Colors.white.withOpacity(0.9)),
+                    maxLines: null,
+                    decoration:
+                        const InputDecoration(border: InputBorder.none)),
               ),
-            ),
-          ),
-          Text(
-            ":",
-            style: GoogleFonts.roboto(
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
-                height: 1.4285714286,
-                color: const Color.fromRGBO(0, 0, 0, 1)),
-          ),
-          //content body
-          Container(
-            width: screenWidth * 0.3,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: widget.controller,
-                maxLines: null,
-                decoration: InputDecoration(
-                  labelText: widget.tabContentModel.content,
-                  labelStyle: GoogleFonts.roboto(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      height: 1.4285714286,
-                      color: textColor()),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
-                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                    ),
-                    borderRadius: BorderRadius.circular(borderRadiusAuth()),
+              //content body
+              Container(
+                width: screenWidth * 0.3,
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.01,
+                  right: screenWidth * 0.01,
+                ),
+                decoration: BoxDecoration(
+                  color: secondaryColor(),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(MainBorderRadius()),
+                    bottomRight: Radius.circular(MainBorderRadius()),
                   ),
                 ),
+                child: TextField(
+                  controller: widget.controller,
+                  onChanged: (value) {
+                    _detailsProvider.tabTitles[widget.tabIndex] = value;
+                  },
+                  style: BodySmall()
+                      .copyWith(color: Colors.white.withOpacity(0.9)),
+                  maxLines: null,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -363,7 +442,6 @@ class _TabViewModelState extends State<TabViewModel> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Consumer<DealDetailsProvider>(
       builder: (context, _detailsProvider, child) {
         return Container(
@@ -377,13 +455,20 @@ class _TabViewModelState extends State<TabViewModel> {
                 padding: EdgeInsets.only(left: screenWidth * 0.01),
                 decoration: BoxDecoration(
                   color: secondaryColor(),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    bottomLeft: Radius.circular(50),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(MainBorderRadius()),
+                    bottomLeft: Radius.circular(MainBorderRadius()),
                   ),
                 ),
                 child: TextField(
                   controller: tabHeaderController,
+                  onChanged: (value) {
+                    _detailsProvider.tabContent[widget.tabIndex]
+                            [widget.fieldIndex] =
+                        _detailsProvider.tabContent[widget.tabIndex]
+                                [widget.fieldIndex]
+                            .copyWith(tabContentHeader: value);
+                  },
                   style: BodySmall()
                       .copyWith(color: Colors.white.withOpacity(0.9)),
                   maxLines: null,
@@ -399,9 +484,9 @@ class _TabViewModelState extends State<TabViewModel> {
                 ),
                 decoration: BoxDecoration(
                   color: secondaryColor(),
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(MainBorderRadius()),
+                    bottomRight: Radius.circular(MainBorderRadius()),
                   ),
                 ),
                 child: Row(
@@ -409,6 +494,13 @@ class _TabViewModelState extends State<TabViewModel> {
                     Expanded(
                       child: TextField(
                         controller: tabBodyController,
+                        onChanged: (value) {
+                          _detailsProvider.tabContent[widget.tabIndex]
+                                  [widget.fieldIndex] =
+                              _detailsProvider.tabContent[widget.tabIndex]
+                                      [widget.fieldIndex]
+                                  .copyWith(tabContentBody: value);
+                        },
                         style: BodySmall()
                             .copyWith(color: Colors.white.withOpacity(0.9)),
                         maxLines: null,
