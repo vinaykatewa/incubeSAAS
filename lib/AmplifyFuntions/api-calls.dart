@@ -14,7 +14,7 @@ class ApiCalls {
       "contents": [
         {
           "parts": [
-            {"text": "$prompt in 50 words"}
+            {"text": "$prompt"}
           ]
         }
       ]
