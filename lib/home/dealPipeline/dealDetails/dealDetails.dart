@@ -3,10 +3,12 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
+import 'package:incube/AmplifyFuntions/api-calls.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DealDetails extends StatefulWidget {
@@ -83,231 +85,303 @@ class _DealDetailsState extends State<DealDetails>
               body: Container(
                 color: tertiaryColor1(),
                 padding: EdgeInsets.only(
-                  left: screenWidth * 0.04,
-                  right: screenWidth * 0.04,
-                  top: screenWidth * 0.01,
-                ),
-                child: Column(
+                    left: screenWidth * 0.04,
+                    right: screenWidth * 0.04,
+                    top: screenWidth * 0.01,
+                    bottom: screenHeight * 0.01),
+                child: Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(),
-                        Text(
-                          widget.deal.company_name,
-                          style: HeadlineLarge().copyWith(color: textColor()),
-                        ),
-                      ],
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        width: screenWidth * 0.2,
+                        height: screenHeight * 0.2,
+                        color: Colors.blueGrey,
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Builder(builder: (context) {
-                            return TabBar(
-                              labelStyle: LabelLarge().copyWith(
-                                  color: Colors.white.withOpacity(0.9)),
-                              labelColor: Colors.white.withOpacity(0.9),
-                              unselectedLabelColor:
-                                  textColor().withOpacity(0.5),
-                              indicator: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(MainBorderRadius()),
-                                color: secondaryColor(),
-                              ),
-                              onTap: (value) {
-                                TabController tabController =
-                                    DefaultTabController.of(context);
-                                int previousIndex = tabController.previousIndex;
-                                setState(() {
-                                  _detailsProvider.tabList[previousIndex] =
-                                      _detailsProvider
-                                          .controllers[previousIndex].text;
-                                });
-                              },
-                              tabs: _detailsProvider.tabList
+                    VerticalDivider(
+                      color: secondaryColor(),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Column(
+                        children: [
+                          Text(
+                            widget.deal.company_name,
+                            style:
+                                TitleLarge().copyWith(color: secondaryColor()),
+                          ),
+                          Divider(
+                            color: secondaryColor(),
+                          ),
+                          SizedBox(
+                            height: screenHeight * 0.01,
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.4,
+                            child: Expanded(
+                              child: Builder(builder: (context) {
+                                return TabBar(
+                                  isScrollable: true,
+                                  // labelStyle: LabelLarge().copyWith(
+                                  //     color: Colors.white.withOpacity(0.9)),
+                                  labelColor: Colors.white.withOpacity(0.9),
+                                  unselectedLabelColor:
+                                      textColor().withOpacity(0.5),
+                                  // indicator: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       MainBorderRadius()),
+                                  //   color: secondaryColor(),
+                                  // ),
+                                  onTap: (value) {
+                                    TabController tabController =
+                                        DefaultTabController.of(context);
+                                    int previousIndex =
+                                        tabController.previousIndex;
+                                    setState(() {
+                                      _detailsProvider.tabList[previousIndex] =
+                                          _detailsProvider
+                                              .controllers[previousIndex].text;
+                                    });
+                                  },
+                                  tabs: _detailsProvider.tabList
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    int index = entry.key;
+                                    String tab = entry.value;
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: index ==
+                                                    _detailsProvider.tabList
+                                                        .indexWhere((element) =>
+                                                            element == tab)
+                                                ? secondaryColor()
+                                                : secondaryColor()
+                                                    .withOpacity(0.7),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                    MainBorderRadius())),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: screenWidth * 0.01,
+                                              ),
+                                              Tab(
+                                                child: Text(
+                                                  tab,
+                                                  style: BodySmall().copyWith(
+                                                      color: _detailsProvider
+                                                                  .controllers[
+                                                                      index]
+                                                                  .text ==
+                                                              tab
+                                                          ? Colors.white
+                                                          : Colors.white
+                                                              .withOpacity(
+                                                                  0.7)),
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {
+                                                  safePrint(
+                                                      'we are providing this index: $index');
+                                                  safePrint(
+                                                      'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
+                                                  safePrint(
+                                                      'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
+                                                  _detailsProvider
+                                                      .deleteTab(index);
+                                                },
+                                                icon: Icon(
+                                                  Icons.cancel,
+                                                  color: _detailsProvider
+                                                              .controllers[
+                                                                  index]
+                                                              .text ==
+                                                          tab
+                                                      ? Colors.white
+                                                      : Colors.white
+                                                          .withOpacity(0.7),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * 0.01,
+                                        ),
+                                        if (index ==
+                                            _detailsProvider.tabList.length - 1)
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: secondaryColor(),
+                                            ),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                _detailsProvider.addTab(
+                                                    "tab $globalTabCount");
+                                                globalTabCount++;
+                                              },
+                                              icon: const Icon(
+                                                Icons.add,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                );
+                              }),
+                            ),
+                          ),
+                          // SizedBox(height: screenHeight * 0.02),
+                          Expanded(
+                            child: TabBarView(
+                              children: _detailsProvider.tabList
                                   .asMap()
                                   .entries
                                   .map((entry) {
                                 int index = entry.key;
-                                String tab = entry.value;
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Tab(
-                                      text: tab,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        safePrint(
-                                            'we are providing this index: $index');
-                                        safePrint(
-                                            'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
-                                        safePrint(
-                                            'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
-                                        _detailsProvider.deleteTab(index);
-                                      },
-                                      icon: Icon(Icons.cancel),
-                                    ),
-                                  ],
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      TabTitle(
+                                        tabIndex: index,
+                                        title:
+                                            _detailsProvider.tabTitles[index],
+                                        controller:
+                                            _detailsProvider.controllers[index],
+                                      ),
+                                      SizedBox(height: screenHeight * 0.01),
+                                      Container(
+                                        width: screenWidth * 0.6,
+                                        height: screenHeight * 0.5,
+                                        child: Center(
+                                          child: Builder(builder: (context) {
+                                            TabController tabController =
+                                                DefaultTabController.of(
+                                                    context);
+                                            return ListView.builder(
+                                              itemCount: _detailsProvider
+                                                  .tabContent[
+                                                      tabController.index]
+                                                  .length,
+                                              itemBuilder:
+                                                  (context, itemIndex) {
+                                                return Column(
+                                                  children: [
+                                                    TabViewModel(
+                                                      tabIndex:
+                                                          tabController.index,
+                                                      fieldIndex: itemIndex,
+                                                      tabContentModel:
+                                                          TabContentModel(
+                                                        title: _detailsProvider
+                                                            .tabContent[
+                                                                tabController
+                                                                    .index]
+                                                                [itemIndex]
+                                                            .tabContentHeader,
+                                                        content: _detailsProvider
+                                                            .tabContent[
+                                                                tabController
+                                                                    .index]
+                                                                [itemIndex]
+                                                            .tabContentBody,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: screenHeight *
+                                                            0.01),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: screenHeight * 0.01,
+                                      ),
+                                      Divider(
+                                        color: secondaryColor(),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomButton(
+                                              text: "field",
+                                              onPressed: () {
+                                                _detailsProvider
+                                                    .addField(index);
+                                              },
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colors.white
+                                                    .withOpacity(0.9),
+                                              ),
+                                              screenWidth: screenWidth),
+                                          SizedBox(
+                                            width: screenWidth * 0.008,
+                                          ),
+                                          CustomButton(
+                                              text: "Calender",
+                                              onPressed: () {
+                                                _calendar(context);
+                                              },
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colors.white
+                                                    .withOpacity(0.9),
+                                              ),
+                                              screenWidth: screenWidth),
+                                          SizedBox(
+                                            width: screenWidth * 0.008,
+                                          ),
+                                          CustomButton(
+                                              text: "Save the edits",
+                                              onPressed: () {
+                                                saveDataInDB(context, index);
+                                              },
+                                              icon: Icon(Icons.save,
+                                                  color: Colors.white
+                                                      .withOpacity(0.9)),
+                                              screenWidth: screenWidth),
+                                        ],
+                                      ),
+                                      Divider(
+                                        color: secondaryColor(),
+                                      )
+                                    ],
+                                  ),
                                 );
                               }).toList(),
-                            );
-                          }),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _detailsProvider.addTab("tab $globalTabCount");
-                            globalTabCount++;
-                          },
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                    Expanded(
-                      child: TabBarView(
-                        children: _detailsProvider.tabList
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TabTitle(
-                                  tabIndex: index,
-                                  title: _detailsProvider.tabTitles[index],
-                                  controller:
-                                      _detailsProvider.controllers[index],
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                Container(
-                                  width: screenWidth * 0.6,
-                                  height: screenHeight * 0.5,
-                                  child: Center(
-                                    child: Builder(builder: (context) {
-                                      TabController tabController =
-                                          DefaultTabController.of(context);
-                                      return ListView.builder(
-                                        itemCount: _detailsProvider
-                                            .tabContent[tabController.index]
-                                            .length,
-                                        itemBuilder: (context, itemIndex) {
-                                          return Column(
-                                            children: [
-                                              TabViewModel(
-                                                tabIndex: tabController.index,
-                                                fieldIndex: itemIndex,
-                                                tabContentModel:
-                                                    TabContentModel(
-                                                  title: _detailsProvider
-                                                      .tabContent[tabController
-                                                          .index][itemIndex]
-                                                      .tabContentHeader,
-                                                  content: _detailsProvider
-                                                      .tabContent[tabController
-                                                          .index][itemIndex]
-                                                      .tabContentBody,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: screenHeight * 0.01),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenHeight * 0.05,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              borderRadiusAuth()),
-                                          color: secondaryColor()),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          _detailsProvider.addField(index);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                borderRadiusAuth()),
-                                          ),
-                                          elevation: 2,
-                                        ),
-                                        child: Text(
-                                          "Add field",
-                                          style: BodySmall().copyWith(
-                                              color: Colors.white
-                                                  .withOpacity(0.9)),
-                                        ),
-                                      ),
-                                    ),
-                                    //hive
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              borderRadiusAuth()),
-                                          color: secondaryColor()),
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                borderRadiusAuth()),
-                                          ),
-                                          elevation: 2,
-                                        ),
-                                        child: Text(
-                                          "Add Notes",
-                                          style: BodySmall().copyWith(
-                                              color: Colors.white
-                                                  .withOpacity(0.9)),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              borderRadiusAuth()),
-                                          color: secondaryColor()),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          saveDataInDB(context, index);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                borderRadiusAuth()),
-                                          ),
-                                          elevation: 2,
-                                        ),
-                                        child: Text(
-                                          "Save the edits",
-                                          style: BodySmall().copyWith(
-                                              color: Colors.white
-                                                  .withOpacity(0.9)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
                             ),
-                          );
-                        }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    VerticalDivider(
+                      color: secondaryColor(),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        width: screenWidth * 0.2,
+                        height: screenHeight * 0.2,
+                        child: buildCalender(),
                       ),
                     ),
                   ],
@@ -319,6 +393,139 @@ class _DealDetailsState extends State<DealDetails>
       );
     }
   }
+}
+
+Widget buildCalender() {
+  return Consumer<DealDetailsProvider>(
+    builder: (context, _dealDetailProvider, child) {
+      return ListView.builder(
+        itemCount: _dealDetailProvider.calender.length,
+        itemBuilder: (context, index) {
+          Meeting meeting = _dealDetailProvider.calender[index];
+          DateTime meetingDateTime;
+          try {
+            meetingDateTime =
+                DateFormat('EEEE, yyyy-MM-dd – kk:mm').parse(meeting.date);
+          } catch (e) {
+            // Handle the exception
+            print('Invalid date format: ${meeting.date}');
+            return Container(); // Return an empty container
+          }
+
+          return Column(
+            children: <Widget>[
+              Text(
+                DateFormat('EEEE').format(meetingDateTime), // Weekday
+                style: TextStyle(fontSize: 20),
+              ),
+              Text(
+                DateFormat('d').format(meetingDateTime), // Date
+                style: TextStyle(fontSize: 20),
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(Icons.access_time), // Clock icon
+                  Text(
+                    DateFormat('hh:mm a').format(meetingDateTime), // Time
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+              Text(
+                meeting.link, // Meeting link
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+void _calendar(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      TextEditingController linkController = TextEditingController();
+      DateTime selectedDate = DateTime.now();
+      TimeOfDay selectedTime = TimeOfDay.now();
+
+      return AlertDialog(
+        title: Text('Add Meeting'),
+        content: Column(
+          children: <Widget>[
+            ElevatedButton(
+              child: Text("Select date and time"),
+              onPressed: () async {
+                // Show the date picker
+                final DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: selectedDate,
+                  firstDate: DateTime(2015, 8),
+                  lastDate: DateTime(2101),
+                );
+                if (pickedDate != null) {
+                  selectedDate = pickedDate;
+
+                  // Show the time picker
+                  final TimeOfDay? pickedTime = await showTimePicker(
+                    context: context,
+                    initialTime: selectedTime,
+                  );
+                  if (pickedTime != null) {
+                    selectedTime = pickedTime;
+                  }
+                }
+              },
+            ),
+            TextField(
+              controller: linkController,
+              decoration: InputDecoration(hintText: "Enter meeting link"),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Consumer<DealDetailsProvider>(
+            builder: (context, _dealDetailProvider, child) {
+              return TextButton(
+                child: Text(
+                  'Save',
+                  style: BodySmall()
+                      .copyWith(color: secondaryColor().withOpacity(0.9)),
+                ),
+                onPressed: () {
+                  // Format the date and time as a string
+                  String formattedDate =
+                      DateFormat('EEEE, yyyy-MM-dd – kk:mm').format(DateTime(
+                    selectedDate.year,
+                    selectedDate.month,
+                    selectedDate.day,
+                    selectedTime.hour,
+                    selectedTime.minute,
+                  ));
+
+                  // Create a new Meeting object
+                  Meeting newMeeting = Meeting(
+                    date: formattedDate,
+                    link: linkController.text,
+                  );
+
+                  // Add the new meeting to the provider's list
+                  _dealDetailProvider.addMeeting(newMeeting);
+                  safePrint(
+                      "we have added this meeting to the list: ${_dealDetailProvider.calender[0].date}");
+
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class TabContentModel {
@@ -357,53 +564,57 @@ class _TabTitleState extends State<TabTitle> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Consumer<DealDetailsProvider>(
       builder: (context, _detailsProvider, child) {
-        return Container(
-          width: screenWidth * 0.5,
+        return SizedBox(
+          width: screenWidth * 0.3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: screenWidth * 0.1,
-                padding: EdgeInsets.only(left: screenWidth * 0.01),
-                decoration: BoxDecoration(
-                  color: secondaryColor(),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(MainBorderRadius()),
-                    bottomLeft: Radius.circular(MainBorderRadius()),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.only(left: screenWidth * 0.01),
+                  decoration: BoxDecoration(
+                    color: secondaryColor(),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(MainBorderRadius()),
+                      bottomLeft: Radius.circular(MainBorderRadius()),
+                    ),
                   ),
+                  child: TextField(
+                      readOnly: true,
+                      controller: titleHaderController,
+                      style: BodySmall()
+                          .copyWith(color: Colors.white.withOpacity(0.9)),
+                      maxLines: null,
+                      decoration:
+                          const InputDecoration(border: InputBorder.none)),
                 ),
-                child: TextField(
-                    readOnly: true,
-                    controller: titleHaderController,
+              ),
+              //content body
+              Expanded(
+                flex: 4,
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: screenWidth * 0.01,
+                    right: screenWidth * 0.01,
+                  ),
+                  decoration: BoxDecoration(
+                    color: secondaryColor(),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(MainBorderRadius()),
+                      bottomRight: Radius.circular(MainBorderRadius()),
+                    ),
+                  ),
+                  child: TextField(
+                    controller: widget.controller,
+                    onChanged: (value) {
+                      _detailsProvider.tabTitles[widget.tabIndex] = value;
+                    },
                     style: BodySmall()
                         .copyWith(color: Colors.white.withOpacity(0.9)),
                     maxLines: null,
-                    decoration:
-                        const InputDecoration(border: InputBorder.none)),
-              ),
-              //content body
-              Container(
-                width: screenWidth * 0.3,
-                padding: EdgeInsets.only(
-                  left: screenWidth * 0.01,
-                  right: screenWidth * 0.01,
-                ),
-                decoration: BoxDecoration(
-                  color: secondaryColor(),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(MainBorderRadius()),
-                    bottomRight: Radius.circular(MainBorderRadius()),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
-                ),
-                child: TextField(
-                  controller: widget.controller,
-                  onChanged: (value) {
-                    _detailsProvider.tabTitles[widget.tabIndex] = value;
-                  },
-                  style: BodySmall()
-                      .copyWith(color: Colors.white.withOpacity(0.9)),
-                  maxLines: null,
-                  decoration: const InputDecoration(border: InputBorder.none),
                 ),
               ),
             ],
@@ -439,87 +650,111 @@ class _TabViewModelState extends State<TabViewModel> {
     tabBodyController.text = widget.tabContentModel.content;
   }
 
+  final ApiCalls apiCallClass = ApiCalls();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Consumer<DealDetailsProvider>(
       builder: (context, _detailsProvider, child) {
-        return Container(
-          width: screenWidth * 0.5,
+        return SizedBox(
+          width: screenWidth * 0.3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: screenWidth * 0.1,
-                padding: EdgeInsets.only(left: screenWidth * 0.01),
-                decoration: BoxDecoration(
-                  color: secondaryColor(),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(MainBorderRadius()),
-                    bottomLeft: Radius.circular(MainBorderRadius()),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  width: screenWidth * 0.05,
+                  padding: EdgeInsets.only(left: screenWidth * 0.01),
+                  decoration: BoxDecoration(
+                    color: secondaryColor(),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(MainBorderRadius()),
+                      bottomLeft: Radius.circular(MainBorderRadius()),
+                    ),
                   ),
-                ),
-                child: TextField(
-                  controller: tabHeaderController,
-                  onChanged: (value) {
-                    _detailsProvider.tabContent[widget.tabIndex]
-                            [widget.fieldIndex] =
-                        _detailsProvider.tabContent[widget.tabIndex]
-                                [widget.fieldIndex]
-                            .copyWith(tabContentHeader: value);
-                  },
-                  style: BodySmall()
-                      .copyWith(color: Colors.white.withOpacity(0.9)),
-                  maxLines: null,
-                  decoration: const InputDecoration(border: InputBorder.none),
+                  child: TextField(
+                    controller: tabHeaderController,
+                    onChanged: (value) {
+                      _detailsProvider.tabContent[widget.tabIndex]
+                              [widget.fieldIndex] =
+                          _detailsProvider.tabContent[widget.tabIndex]
+                                  [widget.fieldIndex]
+                              .copyWith(tabContentHeader: value);
+                    },
+                    style: BodySmall()
+                        .copyWith(color: Colors.white.withOpacity(0.9)),
+                    maxLines: null,
+                    decoration: const InputDecoration(border: InputBorder.none),
+                  ),
                 ),
               ),
               //content body
-              Container(
-                width: screenWidth * 0.3,
-                padding: EdgeInsets.only(
-                  left: screenWidth * 0.01,
-                  right: screenWidth * 0.01,
-                ),
-                decoration: BoxDecoration(
-                  color: secondaryColor(),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(MainBorderRadius()),
-                    bottomRight: Radius.circular(MainBorderRadius()),
+              Expanded(
+                flex: 4,
+                child: Container(
+                  width: screenWidth * 0.25,
+                  padding: EdgeInsets.only(
+                    left: screenWidth * 0.01,
+                    right: screenWidth * 0.01,
                   ),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: tabBodyController,
-                        onChanged: (value) {
-                          _detailsProvider.tabContent[widget.tabIndex]
-                                  [widget.fieldIndex] =
-                              _detailsProvider.tabContent[widget.tabIndex]
-                                      [widget.fieldIndex]
-                                  .copyWith(tabContentBody: value);
-                        },
-                        style: BodySmall()
-                            .copyWith(color: Colors.white.withOpacity(0.9)),
-                        maxLines: null,
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                      ),
+                  decoration: BoxDecoration(
+                    color: secondaryColor(),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(MainBorderRadius()),
+                      bottomRight: Radius.circular(MainBorderRadius()),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          _detailsProvider.updateFieldHeader(widget.tabIndex,
-                              widget.fieldIndex, tabHeaderController.text);
-                          _detailsProvider.updateFieldBody(widget.tabIndex,
-                              widget.fieldIndex, tabBodyController.text);
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          color: Colors.white.withOpacity(0.9),
-                        ))
-                  ],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: tabBodyController,
+                          onChanged: (value) {
+                            _detailsProvider.tabContent[widget.tabIndex]
+                                    [widget.fieldIndex] =
+                                _detailsProvider.tabContent[widget.tabIndex]
+                                        [widget.fieldIndex]
+                                    .copyWith(tabContentBody: value);
+                          },
+                          style: BodySmall()
+                              .copyWith(color: Colors.white.withOpacity(0.9)),
+                          maxLines: null,
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            String? response = await apiCallClass
+                                .postApi(tabBodyController.text);
+                            setState(() {
+                              response != null
+                                  ? tabBodyController.text = response
+                                  : tabBodyController.text =
+                                      "Sorry our ai is down right now, please try again";
+                            });
+                          },
+                          icon: Icon(
+                            Icons.generating_tokens_outlined,
+                            color: Colors.white.withOpacity(0.9),
+                          )),
+                      IconButton(
+                          onPressed: () async {
+                            _detailsProvider.updateFieldHeader(widget.tabIndex,
+                                widget.fieldIndex, tabHeaderController.text);
+                            _detailsProvider.updateFieldBody(widget.tabIndex,
+                                widget.fieldIndex, tabBodyController.text);
+                          },
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.white.withOpacity(0.9),
+                          ))
+                    ],
+                  ),
                 ),
               ),
             ],

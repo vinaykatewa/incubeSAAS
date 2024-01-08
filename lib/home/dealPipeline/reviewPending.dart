@@ -104,15 +104,15 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
           dealList.indexWhere((element) => element.idDeal == dealId);
       var specificDeal = dealList[dealIndex];
       dealList[dealIndex] = Deals(
-        idDeal: specificDeal.idDeal,
-        teamId: teamId,
-        company_logo: specificDeal.company_logo,
-        company_name: specificDeal.company_name,
-        company_description: specificDeal.company_description,
-        seeking: specificDeal.seeking,
-        status: specificDeal.status,
-        calls: specificDeal.calls,
-      );
+          idDeal: specificDeal.idDeal,
+          teamId: teamId,
+          company_logo: specificDeal.company_logo,
+          company_name: specificDeal.company_name,
+          company_description: specificDeal.company_description,
+          seeking: specificDeal.seeking,
+          status: specificDeal.status,
+          calls: specificDeal.calls,
+          meetings: []);
 
       //step 2: update dealId in team list
       List<Team> teamLs = org.org_team;

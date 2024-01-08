@@ -4,17 +4,38 @@ import 'package:incube/models/ModelProvider.dart';
 class DealDetailsProvider extends ChangeNotifier {
   List<String> tabList = ['Tab 1', 'Tab 2', 'Tab 3'];
   List<String> tabTitles = ['Title 1', 'Title 2', 'Title 3'];
+  List<Meeting> calender = [];
 
   List<List<tabDetails>> tabContent = [
-    [tabDetails(tabContentHeader: "Header 1", tabContentBody: "Body 1")],
     [
-      tabDetails(tabContentHeader: "Header 2", tabContentBody: "Body 2"),
-      tabDetails(tabContentHeader: "Header 2", tabContentBody: "Body 2")
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
     ],
     [
-      tabDetails(tabContentHeader: "Header 3", tabContentBody: "Body 3"),
-      tabDetails(tabContentHeader: "Header 3", tabContentBody: "Body 3"),
-      tabDetails(tabContentHeader: "Header 3", tabContentBody: "Body 3"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
+    ],
+    [
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
     ],
   ];
   List<TextEditingController> _controllers = [];
@@ -25,13 +46,20 @@ class DealDetailsProvider extends ChangeNotifier {
   }
 
   List<TextEditingController> get controllers => _controllers;
+  void addMeeting(Meeting meeting) {
+    calender.add(meeting);
+    notifyListeners();
+  }
 
   void addTab(String tabTitle) {
     tabList.add(tabTitle);
     tabTitles.add(tabTitle);
     _controllers.add(TextEditingController(text: tabTitle));
     tabContent.add([
-      tabDetails(tabContentHeader: "new header", tabContentBody: "new body"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
     ]);
     notifyListeners();
   }
@@ -61,7 +89,10 @@ class DealDetailsProvider extends ChangeNotifier {
   void addField(int tabIndex) {
     _controllers.add(TextEditingController());
     tabContent[tabIndex].add(
-      tabDetails(tabContentHeader: "new header", tabContentBody: "new body"),
+      tabDetails(
+          tabContentHeader: "context",
+          tabContentBody:
+              "provide prompt and our ai will generate text for you"),
     );
     notifyListeners();
   }

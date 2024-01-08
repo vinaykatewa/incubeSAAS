@@ -49,8 +49,42 @@ class _DealPipelineState extends State<DealPipeline> {
 
   Widget _buildScreen(int index) {
     switch (index) {
+      // case 0:
+      //   return ReviewPandingDeals();
       case 0:
-        return ReviewPandingDeals();
+        return DealDetails(
+          deal: Deals(
+              idDeal: "idDealUnique",
+              teamId: "teamIdUnique",
+              company_logo: "company_logo",
+              company_name: "Incube",
+              company_description: "fintech",
+              seeking: "\$70M",
+              status: "pending",
+              calls: DealsCall(tabList: [
+                "call 1",
+                "call 2",
+              ], tabTitles: [
+                "call 1",
+                "call 2",
+              ], tabContent: [
+                tabContentList(tabDetailsList: [
+                  tabDetails(
+                      tabContentHeader: "header 1", tabContentBody: "body 1"),
+                  tabDetails(
+                      tabContentHeader: "header 1", tabContentBody: "body 1"),
+                  tabDetails(
+                      tabContentHeader: "header 1", tabContentBody: "body 1"),
+                ]),
+                tabContentList(tabDetailsList: [
+                  tabDetails(
+                      tabContentHeader: "header 1", tabContentBody: "body 1"),
+                  tabDetails(
+                      tabContentHeader: "header 1", tabContentBody: "body 1"),
+                ]),
+              ]),
+              meetings: []),
+        );
       case 1:
         return OpenDeals();
       case 2:

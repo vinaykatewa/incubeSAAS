@@ -21,6 +21,7 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
+import 'package:collection/collection.dart';
 
 
 /** This is an auto generated class representing the Deals type in your schema. */
@@ -33,6 +34,7 @@ class Deals {
   final String? _seeking;
   final String? _status;
   final DealsCall? _calls;
+  final List<Meeting>? _meetings;
 
   String get idDeal {
     try {
@@ -138,9 +140,22 @@ class Deals {
     }
   }
   
-  const Deals._internal({required idDeal, required teamId, required company_logo, required company_name, required company_description, required seeking, required status, required calls}): _idDeal = idDeal, _teamId = teamId, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status, _calls = calls;
+  List<Meeting> get meetings {
+    try {
+      return _meetings!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
   
-  factory Deals({required String idDeal, required String teamId, required String company_logo, required String company_name, required String company_description, required String seeking, required String status, required DealsCall calls}) {
+  const Deals._internal({required idDeal, required teamId, required company_logo, required company_name, required company_description, required seeking, required status, required calls, required meetings}): _idDeal = idDeal, _teamId = teamId, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status, _calls = calls, _meetings = meetings;
+  
+  factory Deals({required String idDeal, required String teamId, required String company_logo, required String company_name, required String company_description, required String seeking, required String status, required DealsCall calls, required List<Meeting> meetings}) {
     return Deals._internal(
       idDeal: idDeal,
       teamId: teamId,
@@ -149,7 +164,8 @@ class Deals {
       company_description: company_description,
       seeking: seeking,
       status: status,
-      calls: calls);
+      calls: calls,
+      meetings: meetings != null ? List<Meeting>.unmodifiable(meetings) : meetings);
   }
   
   bool equals(Object other) {
@@ -167,7 +183,8 @@ class Deals {
       _company_description == other._company_description &&
       _seeking == other._seeking &&
       _status == other._status &&
-      _calls == other._calls;
+      _calls == other._calls &&
+      DeepCollectionEquality().equals(_meetings, other._meetings);
   }
   
   @override
@@ -185,13 +202,14 @@ class Deals {
     buffer.write("company_description=" + "$_company_description" + ", ");
     buffer.write("seeking=" + "$_seeking" + ", ");
     buffer.write("status=" + "$_status" + ", ");
-    buffer.write("calls=" + (_calls != null ? _calls!.toString() : "null"));
+    buffer.write("calls=" + (_calls != null ? _calls!.toString() : "null") + ", ");
+    buffer.write("meetings=" + (_meetings != null ? _meetings!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Deals copyWith({String? idDeal, String? teamId, String? company_logo, String? company_name, String? company_description, String? seeking, String? status, DealsCall? calls}) {
+  Deals copyWith({String? idDeal, String? teamId, String? company_logo, String? company_name, String? company_description, String? seeking, String? status, DealsCall? calls, List<Meeting>? meetings}) {
     return Deals._internal(
       idDeal: idDeal ?? this.idDeal,
       teamId: teamId ?? this.teamId,
@@ -200,7 +218,8 @@ class Deals {
       company_description: company_description ?? this.company_description,
       seeking: seeking ?? this.seeking,
       status: status ?? this.status,
-      calls: calls ?? this.calls);
+      calls: calls ?? this.calls,
+      meetings: meetings ?? this.meetings);
   }
   
   Deals copyWithModelFieldValues({
@@ -211,7 +230,8 @@ class Deals {
     ModelFieldValue<String>? company_description,
     ModelFieldValue<String>? seeking,
     ModelFieldValue<String>? status,
-    ModelFieldValue<DealsCall>? calls
+    ModelFieldValue<DealsCall>? calls,
+    ModelFieldValue<List<Meeting>?>? meetings
   }) {
     return Deals._internal(
       idDeal: idDeal == null ? this.idDeal : idDeal.value,
@@ -221,7 +241,8 @@ class Deals {
       company_description: company_description == null ? this.company_description : company_description.value,
       seeking: seeking == null ? this.seeking : seeking.value,
       status: status == null ? this.status : status.value,
-      calls: calls == null ? this.calls : calls.value
+      calls: calls == null ? this.calls : calls.value,
+      meetings: meetings == null ? this.meetings : meetings.value
     );
   }
   
@@ -235,10 +256,16 @@ class Deals {
       _status = json['status'],
       _calls = json['calls']?['serializedData'] != null
         ? DealsCall.fromJson(new Map<String, dynamic>.from(json['calls']['serializedData']))
+        : null,
+      _meetings = json['meetings'] is List
+        ? (json['meetings'] as List)
+          .where((e) => e != null)
+          .map((e) => Meeting.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
         : null;
   
   Map<String, dynamic> toJson() => {
-    'idDeal': _idDeal, 'teamId': _teamId, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status, 'calls': _calls?.toJson()
+    'idDeal': _idDeal, 'teamId': _teamId, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status, 'calls': _calls?.toJson(), 'meetings': _meetings?.map((Meeting? e) => e?.toJson()).toList()
   };
   
   Map<String, Object?> toMap() => {
@@ -249,7 +276,8 @@ class Deals {
     'company_description': _company_description,
     'seeking': _seeking,
     'status': _status,
-    'calls': _calls
+    'calls': _calls,
+    'meetings': _meetings
   };
 
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
@@ -302,6 +330,13 @@ class Deals {
       fieldName: 'calls',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embedded, ofCustomTypeName: 'DealsCall')
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
+      fieldName: 'meetings',
+      isRequired: true,
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Meeting')
     ));
   });
 }

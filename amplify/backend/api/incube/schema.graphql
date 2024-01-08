@@ -61,6 +61,12 @@ company_description: String!
 seeking: String!
 status: String!
 calls: DealsCall!
+meetings:[Meeting]!
+}
+
+type Meeting{
+date: String!
+  link: String!
 }
 
 type DealsCall{

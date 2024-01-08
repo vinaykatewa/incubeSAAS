@@ -9,6 +9,38 @@ double MainBorderRadius() {
   return 12.0;
 }
 
+Widget CustomButton(
+    {required String text,
+    required VoidCallback onPressed,
+    required Icon icon,
+    required double screenWidth}) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadiusAuth()),
+        color: secondaryColor(),
+      ),
+      child: Container(
+        padding: EdgeInsets.only(
+            left: screenWidth * 0.01,
+            right: screenWidth * 0.01,
+            top: screenWidth * 0.005,
+            bottom: screenWidth * 0.005),
+        child: Row(
+          children: [
+            icon,
+            Text(
+              text,
+              style: BodySmall().copyWith(color: Colors.white.withOpacity(0.9)),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 Color primaryColor1() {
   return const Color.fromRGBO(149, 104, 255, 1);
 }
