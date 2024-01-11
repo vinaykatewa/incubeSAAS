@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,8 @@ import 'package:incube/uiThemes.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'package:file_picker/file_picker.dart';
+
 class DealDetails extends StatefulWidget {
   final Deals deal;
   const DealDetails({Key? key, required this.deal}) : super(key: key);
@@ -23,6 +28,19 @@ class _DealDetailsState extends State<DealDetails>
     with TickerProviderStateMixin {
   bool isLoading = false;
   final AwsIncube awsAmplify = AwsIncube();
+  var documentLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      documentLoading = true;
+    });
+    gettingDocument(context);
+    setState(() {
+      documentLoading = true;
+    });
+  }
 
   Future<void> saveDataInDB(BuildContext context, int currentTabIndex) async {
     //update the deal calls
@@ -48,7 +66,8 @@ class _DealDetailsState extends State<DealDetails>
     specificDealCall.tabContent[currentTabIndex] = tabContentList(
         tabDetailsList: dealDetailProvider.tabContent[currentTabIndex]);
     // Update Deals
-    Deals updatedDeal = dealList[dealIndex].copyWith(calls: specificDealCall);
+    Deals updatedDeal = dealList[dealIndex].copyWith(
+        calls: specificDealCall, documents: dealDetailProvider.documentsName);
     dealList[dealIndex] = updatedDeal;
 
     // Update Organization
@@ -117,133 +136,130 @@ class _DealDetailsState extends State<DealDetails>
                           SizedBox(
                             height: screenHeight * 0.01,
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.4,
-                            child: Expanded(
-                              child: Builder(builder: (context) {
-                                return TabBar(
-                                  isScrollable: true,
-                                  // labelStyle: LabelLarge().copyWith(
-                                  //     color: Colors.white.withOpacity(0.9)),
-                                  labelColor: Colors.white.withOpacity(0.9),
-                                  unselectedLabelColor:
-                                      textColor().withOpacity(0.5),
-                                  // indicator: BoxDecoration(
-                                  //   borderRadius: BorderRadius.circular(
-                                  //       MainBorderRadius()),
-                                  //   color: secondaryColor(),
-                                  // ),
-                                  onTap: (value) {
-                                    TabController tabController =
-                                        DefaultTabController.of(context);
-                                    int previousIndex =
-                                        tabController.previousIndex;
-                                    setState(() {
-                                      _detailsProvider.tabList[previousIndex] =
-                                          _detailsProvider
-                                              .controllers[previousIndex].text;
-                                    });
-                                  },
-                                  tabs: _detailsProvider.tabList
-                                      .asMap()
-                                      .entries
-                                      .map((entry) {
-                                    int index = entry.key;
-                                    String tab = entry.value;
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
+                          Expanded(
+                            flex: 1,
+                            child: Builder(builder: (context) {
+                              return TabBar(
+                                isScrollable: true,
+                                // labelStyle: LabelLarge().copyWith(
+                                //     color: Colors.white.withOpacity(0.9)),
+                                labelColor: Colors.white.withOpacity(0.9),
+                                unselectedLabelColor:
+                                    textColor().withOpacity(0.5),
+                                // indicator: BoxDecoration(
+                                //   borderRadius: BorderRadius.circular(
+                                //       MainBorderRadius()),
+                                //   color: secondaryColor(),
+                                // ),
+                                onTap: (value) {
+                                  TabController tabController =
+                                      DefaultTabController.of(context);
+                                  int previousIndex =
+                                      tabController.previousIndex;
+                                  setState(() {
+                                    _detailsProvider.tabList[previousIndex] =
+                                        _detailsProvider
+                                            .controllers[previousIndex].text;
+                                  });
+                                },
+                                tabs: _detailsProvider.tabList
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  int index = entry.key;
+                                  String tab = entry.value;
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: index ==
+                                                  _detailsProvider.tabList
+                                                      .indexWhere((element) =>
+                                                          element == tab)
+                                              ? secondaryColor()
+                                              : secondaryColor()
+                                                  .withOpacity(0.7),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                  MainBorderRadius())),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: screenWidth * 0.01,
+                                            ),
+                                            Tab(
+                                              child: Text(
+                                                tab,
+                                                style: BodySmall().copyWith(
+                                                    color: _detailsProvider
+                                                                .controllers[
+                                                                    index]
+                                                                .text ==
+                                                            tab
+                                                        ? Colors.white
+                                                        : Colors.white
+                                                            .withOpacity(0.7)),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                safePrint(
+                                                    'we are providing this index: $index');
+                                                safePrint(
+                                                    'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
+                                                safePrint(
+                                                    'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
+                                                _detailsProvider
+                                                    .deleteTab(index);
+                                              },
+                                              icon: Icon(
+                                                Icons.cancel,
+                                                color: _detailsProvider
+                                                            .controllers[index]
+                                                            .text ==
+                                                        tab
+                                                    ? Colors.white
+                                                    : Colors.white
+                                                        .withOpacity(0.7),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: screenWidth * 0.01,
+                                      ),
+                                      if (index ==
+                                          _detailsProvider.tabList.length - 1)
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: index ==
-                                                    _detailsProvider.tabList
-                                                        .indexWhere((element) =>
-                                                            element == tab)
-                                                ? secondaryColor()
-                                                : secondaryColor()
-                                                    .withOpacity(0.7),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(
-                                                    MainBorderRadius())),
+                                            shape: BoxShape.circle,
+                                            color: secondaryColor(),
                                           ),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: screenWidth * 0.01,
-                                              ),
-                                              Tab(
-                                                child: Text(
-                                                  tab,
-                                                  style: BodySmall().copyWith(
-                                                      color: _detailsProvider
-                                                                  .controllers[
-                                                                      index]
-                                                                  .text ==
-                                                              tab
-                                                          ? Colors.white
-                                                          : Colors.white
-                                                              .withOpacity(
-                                                                  0.7)),
-                                                ),
-                                              ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  safePrint(
-                                                      'we are providing this index: $index');
-                                                  safePrint(
-                                                      'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
-                                                  safePrint(
-                                                      'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
-                                                  _detailsProvider
-                                                      .deleteTab(index);
-                                                },
-                                                icon: Icon(
-                                                  Icons.cancel,
-                                                  color: _detailsProvider
-                                                              .controllers[
-                                                                  index]
-                                                              .text ==
-                                                          tab
-                                                      ? Colors.white
-                                                      : Colors.white
-                                                          .withOpacity(0.7),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: screenWidth * 0.01,
-                                        ),
-                                        if (index ==
-                                            _detailsProvider.tabList.length - 1)
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: secondaryColor(),
-                                            ),
-                                            child: IconButton(
-                                              onPressed: () {
-                                                _detailsProvider.addTab(
-                                                    "tab $globalTabCount");
-                                                globalTabCount++;
-                                              },
-                                              icon: const Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              _detailsProvider.addTab(
+                                                  "tab $globalTabCount");
+                                              globalTabCount++;
+                                            },
+                                            icon: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
                                             ),
                                           ),
-                                      ],
-                                    );
-                                  }).toList(),
-                                );
-                              }),
-                            ),
+                                        ),
+                                    ],
+                                  );
+                                }).toList(),
+                              );
+                            }),
                           ),
                           // SizedBox(height: screenHeight * 0.02),
                           Expanded(
+                            flex: 5,
                             child: TabBarView(
                               children: _detailsProvider.tabList
                                   .asMap()
@@ -359,6 +375,16 @@ class _DealDetailsState extends State<DealDetails>
                                                   color: Colors.white
                                                       .withOpacity(0.9)),
                                               screenWidth: screenWidth),
+                                          CustomButton(
+                                              text: "upload file",
+                                              onPressed: () {
+                                                openFilePicker(context,
+                                                    widget.deal.idDeal);
+                                              },
+                                              icon: Icon(Icons.save,
+                                                  color: Colors.white
+                                                      .withOpacity(0.9)),
+                                              screenWidth: screenWidth),
                                         ],
                                       ),
                                       Divider(
@@ -376,12 +402,22 @@ class _DealDetailsState extends State<DealDetails>
                     VerticalDivider(
                       color: secondaryColor(),
                     ),
+                    ////////////////////////////////////////////////////////////////
                     Expanded(
                       flex: 2,
-                      child: SizedBox(
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.2,
-                        child: buildCalender(),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: screenWidth * 0.2,
+                            height: screenHeight * 0.2,
+                            child: buildCalender(),
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.2,
+                            height: screenHeight * 0.2,
+                            child: documentsWidget(context),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -393,139 +429,244 @@ class _DealDetailsState extends State<DealDetails>
       );
     }
   }
-}
 
-Widget buildCalender() {
-  return Consumer<DealDetailsProvider>(
-    builder: (context, _dealDetailProvider, child) {
-      return ListView.builder(
-        itemCount: _dealDetailProvider.calender.length,
-        itemBuilder: (context, index) {
-          Meeting meeting = _dealDetailProvider.calender[index];
-          DateTime meetingDateTime;
-          try {
-            meetingDateTime =
-                DateFormat('EEEE, yyyy-MM-dd – kk:mm').parse(meeting.date);
-          } catch (e) {
-            // Handle the exception
-            print('Invalid date format: ${meeting.date}');
-            return Container(); // Return an empty container
-          }
+  Widget documentsWidget(BuildContext context) {
+    return
+        // documentLoading
+        //     ? ElevatedButton(
+        //         onPressed: () {
+        //           setState(() {
+        //             documentLoading = true;
+        //           });
+        //           gettingDocument(context);
+        //           setState(() {
+        //             documentLoading = true;
+        //           });
+        //         },
+        //         child: const Text('Refresh'))
+        //     :
+        Consumer<DealDetailsProvider>(
+      builder: (context, provider, child) {
+        return ListView.builder(
+          itemCount: provider.documentsList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(
+                'title: $index ${provider.documentsList[index]}',
+                style: TitleLarge().copyWith(color: secondaryColor()),
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container();
+                    // AlertDialog(
+                    //   content:
+                    //       SfPdfViewer.memory(provider.documentsList[index]),
+                    // );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
-          return Column(
+  void gettingDocument(BuildContext context) async {
+    //iterate the name list
+    final DealDetailsProvider detailProvider = DealDetailsProvider();
+    final ApiCalls apiCalls = ApiCalls();
+    for (String s in detailProvider.documentsName) {
+      Uint8List? ourDoc = await apiCalls.getItemByName(s);
+      if (ourDoc == null) {
+        safePrint('In gettingDocument, we got ourdocument as null');
+        return;
+      }
+      detailProvider.addDocument(ourDoc);
+    }
+  }
+
+  void openFilePicker(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final ApiCalls apiCallClass = ApiCalls();
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Please select the file'),
+              content: ElevatedButton(
+                child: const Text('Select File'),
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
+
+                  if (result != null) {
+                    if (result.files.first.bytes != null) {
+                      safePrint(
+                          'In openFilePicker, platformFile name is: ${result.files.first.name}');
+                      apiCallClass.putItemsInS3(
+                          result.files.first.name, result.files.first.bytes!);
+                    }
+                    if (result.files.first.bytes == null) {
+                      safePrint('In openFilePicker, bytes is null');
+                    }
+                    Navigator.of(context).pop();
+                  }
+                  if (result == null) {
+                    safePrint('result is null');
+                  }
+                },
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget buildCalender() {
+    return Consumer<DealDetailsProvider>(
+      builder: (context, _dealDetailProvider, child) {
+        return ListView.builder(
+          itemCount: _dealDetailProvider.calender.length,
+          itemBuilder: (context, index) {
+            Meeting meeting = _dealDetailProvider.calender[index];
+            DateTime meetingDateTime;
+            try {
+              meetingDateTime =
+                  DateFormat('EEEE, yyyy-MM-dd – kk:mm').parse(meeting.date);
+            } catch (e) {
+              // Handle the exception
+              print('Invalid date format: ${meeting.date}');
+              return Container(); // Return an empty container
+            }
+
+            return Column(
+              children: <Widget>[
+                Text(
+                  DateFormat('EEEE').format(meetingDateTime), // Weekday
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  DateFormat('d').format(meetingDateTime), // Date
+                  style: TextStyle(fontSize: 20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.access_time), // Clock icon
+                    Text(
+                      DateFormat('hh:mm a').format(meetingDateTime), // Time
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+                Text(
+                  meeting.link, // Meeting link
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _calendar(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController linkController = TextEditingController();
+        DateTime selectedDate = DateTime.now();
+        TimeOfDay selectedTime = TimeOfDay.now();
+
+        return AlertDialog(
+          title: Text('Add Meeting'),
+          content: Column(
             children: <Widget>[
-              Text(
-                DateFormat('EEEE').format(meetingDateTime), // Weekday
-                style: TextStyle(fontSize: 20),
+              ElevatedButton(
+                child: Text("Select date and time"),
+                onPressed: () async {
+                  // Show the date picker
+                  final DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime(2015, 8),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    selectedDate = pickedDate;
+
+                    // Show the time picker
+                    final TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime,
+                    );
+                    if (pickedTime != null) {
+                      selectedTime = pickedTime;
+                    }
+                  }
+                },
               ),
-              Text(
-                DateFormat('d').format(meetingDateTime), // Date
-                style: TextStyle(fontSize: 20),
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(Icons.access_time), // Clock icon
-                  Text(
-                    DateFormat('hh:mm a').format(meetingDateTime), // Time
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              Text(
-                meeting.link, // Meeting link
-                style: TextStyle(fontSize: 20),
+              TextField(
+                controller: linkController,
+                decoration: InputDecoration(hintText: "Enter meeting link"),
               ),
             ],
-          );
-        },
-      );
-    },
-  );
-}
+          ),
+          actions: <Widget>[
+            Consumer<DealDetailsProvider>(
+              builder: (context, _dealDetailProvider, child) {
+                return TextButton(
+                  child: Text(
+                    'Save',
+                    style: BodySmall()
+                        .copyWith(color: secondaryColor().withOpacity(0.9)),
+                  ),
+                  onPressed: () {
+                    // Format the date and time as a string
+                    String formattedDate =
+                        DateFormat('EEEE, yyyy-MM-dd – kk:mm').format(DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                      selectedTime.hour,
+                      selectedTime.minute,
+                    ));
 
-void _calendar(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      TextEditingController linkController = TextEditingController();
-      DateTime selectedDate = DateTime.now();
-      TimeOfDay selectedTime = TimeOfDay.now();
+                    // Create a new Meeting object
+                    Meeting newMeeting = Meeting(
+                      date: formattedDate,
+                      link: linkController.text,
+                    );
 
-      return AlertDialog(
-        title: Text('Add Meeting'),
-        content: Column(
-          children: <Widget>[
-            ElevatedButton(
-              child: Text("Select date and time"),
-              onPressed: () async {
-                // Show the date picker
-                final DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate,
-                  firstDate: DateTime(2015, 8),
-                  lastDate: DateTime(2101),
+                    // Add the new meeting to the provider's list
+                    _dealDetailProvider.addMeeting(newMeeting);
+                    safePrint(
+                        "we have added this meeting to the list: ${_dealDetailProvider.calender[0].date}");
+
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
                 );
-                if (pickedDate != null) {
-                  selectedDate = pickedDate;
-
-                  // Show the time picker
-                  final TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime,
-                  );
-                  if (pickedTime != null) {
-                    selectedTime = pickedTime;
-                  }
-                }
               },
             ),
-            TextField(
-              controller: linkController,
-              decoration: InputDecoration(hintText: "Enter meeting link"),
-            ),
           ],
-        ),
-        actions: <Widget>[
-          Consumer<DealDetailsProvider>(
-            builder: (context, _dealDetailProvider, child) {
-              return TextButton(
-                child: Text(
-                  'Save',
-                  style: BodySmall()
-                      .copyWith(color: secondaryColor().withOpacity(0.9)),
-                ),
-                onPressed: () {
-                  // Format the date and time as a string
-                  String formattedDate =
-                      DateFormat('EEEE, yyyy-MM-dd – kk:mm').format(DateTime(
-                    selectedDate.year,
-                    selectedDate.month,
-                    selectedDate.day,
-                    selectedTime.hour,
-                    selectedTime.minute,
-                  ));
-
-                  // Create a new Meeting object
-                  Meeting newMeeting = Meeting(
-                    date: formattedDate,
-                    link: linkController.text,
-                  );
-
-                  // Add the new meeting to the provider's list
-                  _dealDetailProvider.addMeeting(newMeeting);
-                  safePrint(
-                      "we have added this meeting to the list: ${_dealDetailProvider.calender[0].date}");
-
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-              );
-            },
-          ),
-        ],
-      );
-    },
-  );
+        );
+      },
+    );
+  }
 }
 
 class TabContentModel {
@@ -729,14 +870,12 @@ class _TabViewModelState extends State<TabViewModel> {
                       ),
                       IconButton(
                           onPressed: () async {
-                            String? response = await apiCallClass
-                                .postApi(tabBodyController.text);
-                            setState(() {
-                              response != null
-                                  ? tabBodyController.text = response
-                                  : tabBodyController.text =
-                                      "Sorry our ai is down right now, please try again";
-                            });
+                            // final url =
+                            //     Uri.parse("http://localhost:5000/prompt");
+                            // final response = await http
+                            //     .post(url, body: {'key': 'api prompt'});
+                            // safePrint('Response status: ${response.statusCode}');
+                            // safePrint('Response body: ${response.body}');
                           },
                           icon: Icon(
                             Icons.generating_tokens_outlined,

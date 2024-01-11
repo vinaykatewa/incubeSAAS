@@ -92,7 +92,8 @@ class _AddDealState extends State<AddDeal> {
                     tabContentHeader: "header 1", tabContentBody: "body 1")
               ])
             ]),
-            meetings: []);
+            meetings: [],
+            documents: []);
         await amplifyFunction
             .addDeals(_incubeProvider.superAdmin, _deals)
             .whenComplete(() {
