@@ -45,18 +45,14 @@ class ApiCalls {
 
   Future<String?> getItemByName(String name) async {
     safePrint('In getItemByName, we are providing this name $name');
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request =
-        http.Request('GET', Uri.parse('http://localhost:5000/getItemMethod'));
-    request.body = json.encode({"name": "SOA_(68).pdf"});
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request(
+        'GET', Uri.parse('http://localhost:5000/getItemMethod?name=$name'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      safePrint(await response.stream.bytesToString());
       String base64String = await response.stream.bytesToString();
       return base64String;
     } else {

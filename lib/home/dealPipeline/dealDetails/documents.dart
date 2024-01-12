@@ -22,23 +22,24 @@ class _DocumentsState extends State<Documents> {
   }
 
   void gettingDocument() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
-    // //iterate the name list
-    // final DealDetailsProvider detailProvider = DealDetailsProvider();
-    // final ApiCalls apiCalls = ApiCalls();
-    // for (String s in detailProvider.documentsName) {
-    //   String? ourDoc = await apiCalls.getItemByName(s);
-    //   if (ourDoc == null) {
-    //     safePrint('In gettingDocument, we got ourDoc as null');
-    //     return;
-    //   }
-    //   detailProvider.addDocument(ourDoc);
-    // }
-    // setState(() {
-    //   isLoading = false;
-    // });
+    setState(() {
+      isLoading = true;
+    });
+    //iterate the name list
+    final DealDetailsProvider detailProvider =
+        Provider.of<DealDetailsProvider>(context, listen: false);
+    final ApiCalls apiCalls = ApiCalls();
+    for (String s in detailProvider.documentsName) {
+      String? ourDoc = await apiCalls.getItemByName(s);
+      if (ourDoc == null) {
+        safePrint('In gettingDocument, we got ourDoc as null');
+        return;
+      }
+      detailProvider.addDocument(ourDoc);
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override

@@ -73,8 +73,8 @@ let config = {
 async function makeRequest() {
   try {
     const response = await axios.request(config);
-    console.log(JSON.stringify(response.data));
-    return response.data;
+    // console.log(JSON.stringify(response.data));
+    return JSON.stringify(response.data);
   }
   catch (error) {
     console.log(error);
@@ -86,13 +86,14 @@ async function makeRequest() {
 
 app.get('/getItemMethod', async(req, res) => {
   console.log('now we going to run getItem()');
-  console.log('this is the key that we are using: '+ req.body.name);
-  let response = await getItem(req.body.name);
+  let name = req.query.name;
+  console.log('this is the key that we are using: '+ name);
+  let response = await getItem(name);
   console.log('we are done running getItem method');
-  console.log('this is the response: ' + response);
-  // res.send(response);
-  res.send(JSON.stringify(response));
-})
+  // console.log('this is the response: ' + response);
+  res.send(response);
+});
+
 
 
 app.post('/putItem', async(req, res) => {
@@ -109,5 +110,5 @@ app.post('/aiPrompting', async(req, res) => {
 })
 
 app.listen(port, ()=>{
-  console.log('listening on port $port');
+  console.log('listening on port: '+port);
 });
