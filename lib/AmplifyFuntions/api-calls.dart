@@ -43,7 +43,7 @@ class ApiCalls {
     }
   }
 
-  Future<Uint8List?> getItemByName(String name) async {
+  Future<String?> getItemByName(String name) async {
     safePrint('In getItemByName, we are providing this name $name');
     var headers = {
       'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ class ApiCalls {
     if (response.statusCode == 200) {
       safePrint(await response.stream.bytesToString());
       String base64String = await response.stream.bytesToString();
-      return base64Decode(base64String);
+      return base64String;
     } else {
       safePrint(response.reasonPhrase);
     }

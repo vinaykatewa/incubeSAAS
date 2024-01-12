@@ -8,6 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
+import 'package:incube/home/dealPipeline/dealDetails/pdfReader.dart';
+import 'package:incube/home/dealPipeline/dealDetails/tabContent.dart';
+import 'package:incube/home/dealPipeline/dealDetails/tabTitle.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
@@ -15,6 +18,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:file_picker/file_picker.dart';
+
+import 'calender.dart';
+import 'documents.dart';
 
 class DealDetails extends StatefulWidget {
   final Deals deal;
@@ -29,18 +35,6 @@ class _DealDetailsState extends State<DealDetails>
   bool isLoading = false;
   final AwsIncube awsAmplify = AwsIncube();
   var documentLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      documentLoading = true;
-    });
-    gettingDocument(context);
-    setState(() {
-      documentLoading = true;
-    });
-  }
 
   Future<void> saveDataInDB(BuildContext context, int currentTabIndex) async {
     //update the deal calls
@@ -410,12 +404,12 @@ class _DealDetailsState extends State<DealDetails>
                           SizedBox(
                             width: screenWidth * 0.2,
                             height: screenHeight * 0.2,
-                            child: buildCalender(),
+                            child: const Calender(),
                           ),
                           SizedBox(
                             width: screenWidth * 0.2,
                             height: screenHeight * 0.2,
-                            child: documentsWidget(context),
+                            child: const Documents(),
                           ),
                         ],
                       ),
@@ -428,159 +422,6 @@ class _DealDetailsState extends State<DealDetails>
         },
       );
     }
-  }
-
-  Widget documentsWidget(BuildContext context) {
-    return
-        // documentLoading
-        //     ? ElevatedButton(
-        //         onPressed: () {
-        //           setState(() {
-        //             documentLoading = true;
-        //           });
-        //           gettingDocument(context);
-        //           setState(() {
-        //             documentLoading = true;
-        //           });
-        //         },
-        //         child: const Text('Refresh'))
-        //     :
-        Consumer<DealDetailsProvider>(
-      builder: (context, provider, child) {
-        return ListView.builder(
-          itemCount: provider.documentsList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                'title: $index ${provider.documentsList[index]}',
-                style: TitleLarge().copyWith(color: secondaryColor()),
-              ),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container();
-                    // AlertDialog(
-                    //   content:
-                    //       SfPdfViewer.memory(provider.documentsList[index]),
-                    // );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void gettingDocument(BuildContext context) async {
-    //iterate the name list
-    final DealDetailsProvider detailProvider = DealDetailsProvider();
-    final ApiCalls apiCalls = ApiCalls();
-    for (String s in detailProvider.documentsName) {
-      Uint8List? ourDoc = await apiCalls.getItemByName(s);
-      if (ourDoc == null) {
-        safePrint('In gettingDocument, we got ourdocument as null');
-        return;
-      }
-      detailProvider.addDocument(ourDoc);
-    }
-  }
-
-  void openFilePicker(BuildContext context, String id) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        final ApiCalls apiCallClass = ApiCalls();
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Please select the file'),
-              content: ElevatedButton(
-                child: const Text('Select File'),
-                onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-
-                  if (result != null) {
-                    if (result.files.first.bytes != null) {
-                      safePrint(
-                          'In openFilePicker, platformFile name is: ${result.files.first.name}');
-                      apiCallClass.putItemsInS3(
-                          result.files.first.name, result.files.first.bytes!);
-                    }
-                    if (result.files.first.bytes == null) {
-                      safePrint('In openFilePicker, bytes is null');
-                    }
-                    Navigator.of(context).pop();
-                  }
-                  if (result == null) {
-                    safePrint('result is null');
-                  }
-                },
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget buildCalender() {
-    return Consumer<DealDetailsProvider>(
-      builder: (context, _dealDetailProvider, child) {
-        return ListView.builder(
-          itemCount: _dealDetailProvider.calender.length,
-          itemBuilder: (context, index) {
-            Meeting meeting = _dealDetailProvider.calender[index];
-            DateTime meetingDateTime;
-            try {
-              meetingDateTime =
-                  DateFormat('EEEE, yyyy-MM-dd – kk:mm').parse(meeting.date);
-            } catch (e) {
-              // Handle the exception
-              print('Invalid date format: ${meeting.date}');
-              return Container(); // Return an empty container
-            }
-
-            return Column(
-              children: <Widget>[
-                Text(
-                  DateFormat('EEEE').format(meetingDateTime), // Weekday
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  DateFormat('d').format(meetingDateTime), // Date
-                  style: TextStyle(fontSize: 20),
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.access_time), // Clock icon
-                    Text(
-                      DateFormat('hh:mm a').format(meetingDateTime), // Time
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                Text(
-                  meeting.link, // Meeting link
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
   }
 
   void _calendar(BuildContext context) {
@@ -667,237 +508,49 @@ class _DealDetailsState extends State<DealDetails>
       },
     );
   }
-}
 
-class TabContentModel {
-  final String title;
-  final String content;
+  void openFilePicker(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final ApiCalls apiCallClass = ApiCalls();
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Please select the file'),
+              content: ElevatedButton(
+                child: const Text('Select File'),
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
 
-  TabContentModel({required this.title, required this.content});
-}
-
-class TabTitle extends StatefulWidget {
-  final String title;
-  final TextEditingController controller;
-  final int tabIndex;
-  const TabTitle(
-      {Key? key,
-      required this.title,
-      required this.controller,
-      required this.tabIndex})
-      : super(key: key);
-  @override
-  State<TabTitle> createState() => _TabTitleState();
-}
-
-class _TabTitleState extends State<TabTitle> {
-  TextEditingController titleHaderController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    titleHaderController.text = "Title";
-    widget.controller.text = widget.title;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Consumer<DealDetailsProvider>(
-      builder: (context, _detailsProvider, child) {
-        return SizedBox(
-          width: screenWidth * 0.3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.only(left: screenWidth * 0.01),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(MainBorderRadius()),
-                      bottomLeft: Radius.circular(MainBorderRadius()),
-                    ),
-                  ),
-                  child: TextField(
-                      readOnly: true,
-                      controller: titleHaderController,
-                      style: BodySmall()
-                          .copyWith(color: Colors.white.withOpacity(0.9)),
-                      maxLines: null,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none)),
-                ),
+                  if (result != null) {
+                    if (result.files.first.bytes != null) {
+                      safePrint(
+                          'In openFilePicker, platformFile name is: ${result.files.first.name}');
+                      apiCallClass.putItemsInS3(
+                          result.files.first.name, result.files.first.bytes!);
+                    }
+                    if (result.files.first.bytes == null) {
+                      safePrint('In openFilePicker, bytes is null');
+                    }
+                    Navigator.of(context).pop();
+                  }
+                  if (result == null) {
+                    safePrint('result is null');
+                  }
+                },
               ),
-              //content body
-              Expanded(
-                flex: 4,
-                child: Container(
-                  padding: EdgeInsets.only(
-                    left: screenWidth * 0.01,
-                    right: screenWidth * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(MainBorderRadius()),
-                      bottomRight: Radius.circular(MainBorderRadius()),
-                    ),
-                  ),
-                  child: TextField(
-                    controller: widget.controller,
-                    onChanged: (value) {
-                      _detailsProvider.tabTitles[widget.tabIndex] = value;
-                    },
-                    style: BodySmall()
-                        .copyWith(color: Colors.white.withOpacity(0.9)),
-                    maxLines: null,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                  ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class TabViewModel extends StatefulWidget {
-  final TabContentModel tabContentModel;
-  final int tabIndex;
-  final int fieldIndex;
-  const TabViewModel(
-      {Key? key,
-      required this.tabContentModel,
-      required this.tabIndex,
-      required this.fieldIndex})
-      : super(key: key);
-  @override
-  State<TabViewModel> createState() => _TabViewModelState();
-}
-
-class _TabViewModelState extends State<TabViewModel> {
-  TextEditingController tabHeaderController = TextEditingController();
-  TextEditingController tabBodyController = TextEditingController();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    tabHeaderController.text = widget.tabContentModel.title;
-    tabBodyController.text = widget.tabContentModel.content;
-  }
-
-  final ApiCalls apiCallClass = ApiCalls();
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Consumer<DealDetailsProvider>(
-      builder: (context, _detailsProvider, child) {
-        return SizedBox(
-          width: screenWidth * 0.3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  width: screenWidth * 0.05,
-                  padding: EdgeInsets.only(left: screenWidth * 0.01),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(MainBorderRadius()),
-                      bottomLeft: Radius.circular(MainBorderRadius()),
-                    ),
-                  ),
-                  child: TextField(
-                    controller: tabHeaderController,
-                    onChanged: (value) {
-                      _detailsProvider.tabContent[widget.tabIndex]
-                              [widget.fieldIndex] =
-                          _detailsProvider.tabContent[widget.tabIndex]
-                                  [widget.fieldIndex]
-                              .copyWith(tabContentHeader: value);
-                    },
-                    style: BodySmall()
-                        .copyWith(color: Colors.white.withOpacity(0.9)),
-                    maxLines: null,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                  ),
-                ),
-              ),
-              //content body
-              Expanded(
-                flex: 4,
-                child: Container(
-                  width: screenWidth * 0.25,
-                  padding: EdgeInsets.only(
-                    left: screenWidth * 0.01,
-                    right: screenWidth * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(MainBorderRadius()),
-                      bottomRight: Radius.circular(MainBorderRadius()),
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: tabBodyController,
-                          onChanged: (value) {
-                            _detailsProvider.tabContent[widget.tabIndex]
-                                    [widget.fieldIndex] =
-                                _detailsProvider.tabContent[widget.tabIndex]
-                                        [widget.fieldIndex]
-                                    .copyWith(tabContentBody: value);
-                          },
-                          style: BodySmall()
-                              .copyWith(color: Colors.white.withOpacity(0.9)),
-                          maxLines: null,
-                          decoration:
-                              const InputDecoration(border: InputBorder.none),
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                            // final url =
-                            //     Uri.parse("http://localhost:5000/prompt");
-                            // final response = await http
-                            //     .post(url, body: {'key': 'api prompt'});
-                            // safePrint('Response status: ${response.statusCode}');
-                            // safePrint('Response body: ${response.body}');
-                          },
-                          icon: Icon(
-                            Icons.generating_tokens_outlined,
-                            color: Colors.white.withOpacity(0.9),
-                          )),
-                      IconButton(
-                          onPressed: () async {
-                            _detailsProvider.updateFieldHeader(widget.tabIndex,
-                                widget.fieldIndex, tabHeaderController.text);
-                            _detailsProvider.updateFieldBody(widget.tabIndex,
-                                widget.fieldIndex, tabBodyController.text);
-                          },
-                          icon: Icon(
-                            Icons.send,
-                            color: Colors.white.withOpacity(0.9),
-                          ))
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         );
       },
     );
