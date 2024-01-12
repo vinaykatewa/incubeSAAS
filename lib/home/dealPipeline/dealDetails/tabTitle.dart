@@ -34,58 +34,67 @@ class _TabTitleState extends State<TabTitle> {
       builder: (context, _detailsProvider, child) {
         return SizedBox(
           width: screenWidth * 0.3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.only(left: screenWidth * 0.01),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(MainBorderRadius()),
-                      bottomLeft: Radius.circular(MainBorderRadius()),
+          child: Card(
+            elevation: 5.0,
+            color: tertiaryColor2(),
+            shadowColor: secondaryColor(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(MainBorderRadius()),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.only(left: screenWidth * 0.01),
+                    decoration: BoxDecoration(
+                      color: tertiaryColor1(),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(MainBorderRadius()),
+                        bottomLeft: Radius.circular(MainBorderRadius()),
+                      ),
                     ),
+                    child: TextField(
+                        readOnly: true,
+                        controller: titleHaderController,
+                        style: BodySmall()
+                            .copyWith(color: const Color(0x7c1e1e1e)),
+                        maxLines: null,
+                        decoration:
+                            const InputDecoration(border: InputBorder.none)),
                   ),
-                  child: TextField(
-                      readOnly: true,
-                      controller: titleHaderController,
-                      style: BodySmall()
-                          .copyWith(color: Colors.white.withOpacity(0.9)),
+                ),
+                //content body
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: screenWidth * 0.01,
+                      right: screenWidth * 0.01,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tertiaryColor1(),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(MainBorderRadius()),
+                        bottomRight: Radius.circular(MainBorderRadius()),
+                      ),
+                    ),
+                    child: TextField(
+                      controller: widget.controller,
+                      onChanged: (value) {
+                        _detailsProvider.tabTitles[widget.tabIndex] = value;
+                      },
+                      style:
+                          BodySmall().copyWith(color: const Color(0x7c1e1e1e)),
                       maxLines: null,
                       decoration:
-                          const InputDecoration(border: InputBorder.none)),
-                ),
-              ),
-              //content body
-              Expanded(
-                flex: 4,
-                child: Container(
-                  padding: EdgeInsets.only(
-                    left: screenWidth * 0.01,
-                    right: screenWidth * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: secondaryColor(),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(MainBorderRadius()),
-                      bottomRight: Radius.circular(MainBorderRadius()),
+                          const InputDecoration(border: InputBorder.none),
                     ),
                   ),
-                  child: TextField(
-                    controller: widget.controller,
-                    onChanged: (value) {
-                      _detailsProvider.tabTitles[widget.tabIndex] = value;
-                    },
-                    style: BodySmall()
-                        .copyWith(color: Colors.white.withOpacity(0.9)),
-                    maxLines: null,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

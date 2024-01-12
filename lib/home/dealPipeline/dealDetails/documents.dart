@@ -47,27 +47,43 @@ class _DocumentsState extends State<Documents> {
         ? const LinearProgressIndicator()
         : Consumer<DealDetailsProvider>(
             builder: (context, provider, child) {
-              return ListView.builder(
-                itemCount: provider.documentsList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      'title: $index click here to see the pdf',
-                      style: TitleLarge().copyWith(color: secondaryColor()),
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              content: PdfReaderIFrame(
-                            base64String: provider.documentsList[index],
-                          ));
+              return Card(
+                elevation: 5.0,
+                color: tertiaryColor2(),
+                shadowColor: secondaryColor(),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(MainBorderRadius()),
+                ),
+                child: ListView.builder(
+                  itemCount: provider.documentsList.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 5.0,
+                      color: tertiaryColor1(),
+                      shadowColor: secondaryColor(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(MainBorderRadius()),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          '${index + 1}: ${provider.documentsName[index]}',
+                          style: BodySmall().copyWith(color: secondaryColor()),
+                        ),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  content: PdfReaderIFrame(
+                                base64String: provider.documentsList[index],
+                              ));
+                            },
+                          );
                         },
-                      );
-                    },
-                  );
-                },
+                      ),
+                    );
+                  },
+                ),
               );
             },
           );

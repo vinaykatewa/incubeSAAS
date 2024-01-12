@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -102,156 +99,164 @@ class _DealDetailsState extends State<DealDetails>
                     right: screenWidth * 0.04,
                     top: screenWidth * 0.01,
                     bottom: screenHeight * 0.01),
-                child: Row(
+                child: Column(
                   children: [
                     Expanded(
-                      flex: 2,
+                      flex: 1,
                       child: Container(
-                        width: screenWidth * 0.2,
-                        height: screenHeight * 0.2,
-                        color: Colors.blueGrey,
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 5.0,
+                          color: tertiaryColor2(),
+                          shadowColor: secondaryColor(),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(MainBorderRadius()),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.deal.company_name,
+                              style: TitleLarge()
+                                  .copyWith(color: secondaryColor()),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    VerticalDivider(
-                      color: secondaryColor(),
-                    ),
                     Expanded(
-                      flex: 4,
-                      child: Column(
-                        children: [
-                          Text(
-                            widget.deal.company_name,
-                            style:
-                                TitleLarge().copyWith(color: secondaryColor()),
+                      flex: 1,
+                      child: Container(
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 5.0,
+                          color: tertiaryColor2(),
+                          shadowColor: secondaryColor(),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(MainBorderRadius()),
                           ),
-                          Divider(
-                            color: secondaryColor(),
-                          ),
-                          SizedBox(
-                            height: screenHeight * 0.01,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Builder(builder: (context) {
-                              return TabBar(
-                                isScrollable: true,
-                                // labelStyle: LabelLarge().copyWith(
-                                //     color: Colors.white.withOpacity(0.9)),
-                                labelColor: Colors.white.withOpacity(0.9),
-                                unselectedLabelColor:
-                                    textColor().withOpacity(0.5),
-                                // indicator: BoxDecoration(
-                                //   borderRadius: BorderRadius.circular(
-                                //       MainBorderRadius()),
-                                //   color: secondaryColor(),
-                                // ),
-                                onTap: (value) {
-                                  TabController tabController =
-                                      DefaultTabController.of(context);
-                                  int previousIndex =
-                                      tabController.previousIndex;
-                                  setState(() {
-                                    _detailsProvider.tabList[previousIndex] =
-                                        _detailsProvider
-                                            .controllers[previousIndex].text;
-                                  });
-                                },
-                                tabs: _detailsProvider.tabList
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  int index = entry.key;
-                                  String tab = entry.value;
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
+                          child: Builder(builder: (context) {
+                            return TabBar(
+                              isScrollable: true,
+                              // labelStyle: LabelLarge().copyWith(
+                              //     color: Colors.white.withOpacity(0.9)),
+                              labelColor: Colors.white.withOpacity(0.9),
+                              unselectedLabelColor:
+                                  textColor().withOpacity(0.5),
+                              // indicator: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(
+                              //       MainBorderRadius()),
+                              //   color: secondaryColor(),
+                              // ),
+                              onTap: (value) {
+                                TabController tabController =
+                                    DefaultTabController.of(context);
+                                int previousIndex = tabController.previousIndex;
+                                setState(() {
+                                  _detailsProvider.tabList[previousIndex] =
+                                      _detailsProvider
+                                          .controllers[previousIndex].text;
+                                });
+                              },
+                              tabs: _detailsProvider.tabList
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                int index = entry.key;
+                                String tab = entry.value;
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: index ==
+                                                _detailsProvider.tabList
+                                                    .indexWhere((element) =>
+                                                        element == tab)
+                                            ? secondaryColor()
+                                            : secondaryColor().withOpacity(0.7),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(
+                                                MainBorderRadius())),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: screenWidth * 0.01,
+                                          ),
+                                          Tab(
+                                            child: Text(
+                                              tab,
+                                              style: BodySmall().copyWith(
+                                                  color: _detailsProvider
+                                                              .controllers[
+                                                                  index]
+                                                              .text ==
+                                                          tab
+                                                      ? Colors.white
+                                                      : Colors.white
+                                                          .withOpacity(0.7)),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              safePrint(
+                                                  'we are providing this index: $index');
+                                              safePrint(
+                                                  'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
+                                              safePrint(
+                                                  'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
+                                              _detailsProvider.deleteTab(index);
+                                            },
+                                            icon: Icon(
+                                              Icons.cancel,
+                                              color: _detailsProvider
+                                                          .controllers[index]
+                                                          .text ==
+                                                      tab
+                                                  ? Colors.white
+                                                  : Colors.white
+                                                      .withOpacity(0.7),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: screenWidth * 0.01,
+                                    ),
+                                    if (index ==
+                                        _detailsProvider.tabList.length - 1)
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: index ==
-                                                  _detailsProvider.tabList
-                                                      .indexWhere((element) =>
-                                                          element == tab)
-                                              ? secondaryColor()
-                                              : secondaryColor()
-                                                  .withOpacity(0.7),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(
-                                                  MainBorderRadius())),
+                                          shape: BoxShape.circle,
+                                          color: secondaryColor(),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: screenWidth * 0.01,
-                                            ),
-                                            Tab(
-                                              child: Text(
-                                                tab,
-                                                style: BodySmall().copyWith(
-                                                    color: _detailsProvider
-                                                                .controllers[
-                                                                    index]
-                                                                .text ==
-                                                            tab
-                                                        ? Colors.white
-                                                        : Colors.white
-                                                            .withOpacity(0.7)),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                safePrint(
-                                                    'we are providing this index: $index');
-                                                safePrint(
-                                                    'we are providing this tab: ${_detailsProvider.tabList[index - 1]}');
-                                                safePrint(
-                                                    'we are providing this tabContent: ${_detailsProvider.tabContent[index]}');
-                                                _detailsProvider
-                                                    .deleteTab(index);
-                                              },
-                                              icon: Icon(
-                                                Icons.cancel,
-                                                color: _detailsProvider
-                                                            .controllers[index]
-                                                            .text ==
-                                                        tab
-                                                    ? Colors.white
-                                                    : Colors.white
-                                                        .withOpacity(0.7),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * 0.01,
-                                      ),
-                                      if (index ==
-                                          _detailsProvider.tabList.length - 1)
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: secondaryColor(),
-                                          ),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              _detailsProvider.addTab(
-                                                  "tab $globalTabCount");
-                                              globalTabCount++;
-                                            },
-                                            icon: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            _detailsProvider
+                                                .addTab("tab $globalTabCount");
+                                            globalTabCount++;
+                                          },
+                                          icon: const Icon(
+                                            Icons.add,
+                                            color: Colors.white,
                                           ),
                                         ),
-                                    ],
-                                  );
-                                }).toList(),
-                              );
-                            }),
-                          ),
-                          // SizedBox(height: screenHeight * 0.02),
+                                      ),
+                                  ],
+                                );
+                              }).toList(),
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: Row(
+                        children: [
                           Expanded(
                             flex: 5,
                             child: TabBarView(
@@ -266,120 +271,162 @@ class _DealDetailsState extends State<DealDetails>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      TabTitle(
-                                        tabIndex: index,
-                                        title:
-                                            _detailsProvider.tabTitles[index],
-                                        controller:
-                                            _detailsProvider.controllers[index],
-                                      ),
-                                      SizedBox(height: screenHeight * 0.01),
-                                      Container(
-                                        width: screenWidth * 0.6,
-                                        height: screenHeight * 0.5,
-                                        child: Center(
-                                          child: Builder(builder: (context) {
-                                            TabController tabController =
-                                                DefaultTabController.of(
-                                                    context);
-                                            return ListView.builder(
-                                              itemCount: _detailsProvider
-                                                  .tabContent[
-                                                      tabController.index]
-                                                  .length,
-                                              itemBuilder:
-                                                  (context, itemIndex) {
-                                                return Column(
-                                                  children: [
-                                                    TabViewModel(
-                                                      tabIndex:
-                                                          tabController.index,
-                                                      fieldIndex: itemIndex,
-                                                      tabContentModel:
-                                                          TabContentModel(
-                                                        title: _detailsProvider
-                                                            .tabContent[
-                                                                tabController
-                                                                    .index]
-                                                                [itemIndex]
-                                                            .tabContentHeader,
-                                                        content: _detailsProvider
-                                                            .tabContent[
-                                                                tabController
-                                                                    .index]
-                                                                [itemIndex]
-                                                            .tabContentBody,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        height: screenHeight *
-                                                            0.01),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          }),
+                                      Expanded(
+                                        flex: 8,
+                                        child: Card(
+                                          elevation: 5.0,
+                                          color: tertiaryColor2(),
+                                          shadowColor: secondaryColor(),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                MainBorderRadius()),
+                                          ),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                TabTitle(
+                                                  tabIndex: index,
+                                                  title: _detailsProvider
+                                                      .tabTitles[index],
+                                                  controller: _detailsProvider
+                                                      .controllers[index],
+                                                ),
+                                                SizedBox(
+                                                    height:
+                                                        screenHeight * 0.01),
+                                                Container(
+                                                  width: screenWidth * 0.6,
+                                                  height: screenHeight * 0.5,
+                                                  child: Center(
+                                                    child: Builder(
+                                                        builder: (context) {
+                                                      TabController
+                                                          tabController =
+                                                          DefaultTabController
+                                                              .of(context);
+                                                      return ListView.builder(
+                                                        itemCount:
+                                                            _detailsProvider
+                                                                .tabContent[
+                                                                    tabController
+                                                                        .index]
+                                                                .length,
+                                                        itemBuilder: (context,
+                                                            itemIndex) {
+                                                          return Column(
+                                                            children: [
+                                                              TabViewModel(
+                                                                tabIndex:
+                                                                    tabController
+                                                                        .index,
+                                                                fieldIndex:
+                                                                    itemIndex,
+                                                                tabContentModel:
+                                                                    TabContentModel(
+                                                                  title: _detailsProvider
+                                                                      .tabContent[
+                                                                          tabController
+                                                                              .index]
+                                                                          [
+                                                                          itemIndex]
+                                                                      .tabContentHeader,
+                                                                  content: _detailsProvider
+                                                                      .tabContent[
+                                                                          tabController
+                                                                              .index]
+                                                                          [
+                                                                          itemIndex]
+                                                                      .tabContentBody,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  height:
+                                                                      screenHeight *
+                                                                          0.01),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    }),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: screenHeight * 0.01,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: screenHeight * 0.01,
-                                      ),
-                                      Divider(
-                                        color: secondaryColor(),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CustomButton(
-                                              text: "field",
-                                              onPressed: () {
-                                                _detailsProvider
-                                                    .addField(index);
-                                              },
-                                              icon: Icon(
-                                                Icons.add,
-                                                color: Colors.white
-                                                    .withOpacity(0.9),
-                                              ),
-                                              screenWidth: screenWidth),
-                                          SizedBox(
-                                            width: screenWidth * 0.008,
+                                      Expanded(
+                                        flex: 2,
+                                        child: Card(
+                                          elevation: 5.0,
+                                          color: tertiaryColor2(),
+                                          shadowColor: secondaryColor(),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                MainBorderRadius()),
                                           ),
-                                          CustomButton(
-                                              text: "Calender",
-                                              onPressed: () {
-                                                _calendar(context);
-                                              },
-                                              icon: Icon(
-                                                Icons.add,
-                                                color: Colors.white
-                                                    .withOpacity(0.9),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              CustomButton(
+                                                  text: "field",
+                                                  onPressed: () {
+                                                    _detailsProvider
+                                                        .addField(index);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                  ),
+                                                  screenWidth: screenWidth),
+                                              SizedBox(
+                                                width: screenWidth * 0.008,
                                               ),
-                                              screenWidth: screenWidth),
-                                          SizedBox(
-                                            width: screenWidth * 0.008,
+                                              CustomButton(
+                                                  text: "Calender",
+                                                  onPressed: () {
+                                                    _calendar(context);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                  ),
+                                                  screenWidth: screenWidth),
+                                              SizedBox(
+                                                width: screenWidth * 0.008,
+                                              ),
+                                              CustomButton(
+                                                  text: "Save the edits",
+                                                  onPressed: () {
+                                                    saveDataInDB(
+                                                        context, index);
+                                                  },
+                                                  icon: Icon(Icons.save,
+                                                      color: Colors.white
+                                                          .withOpacity(0.9)),
+                                                  screenWidth: screenWidth),
+                                              SizedBox(
+                                                width: screenWidth * 0.008,
+                                              ),
+                                              CustomButton(
+                                                  text: "upload file",
+                                                  onPressed: () {
+                                                    openFilePicker(context,
+                                                        widget.deal.idDeal);
+                                                  },
+                                                  icon: Icon(Icons.save,
+                                                      color: Colors.white
+                                                          .withOpacity(0.9)),
+                                                  screenWidth: screenWidth),
+                                            ],
                                           ),
-                                          CustomButton(
-                                              text: "Save the edits",
-                                              onPressed: () {
-                                                saveDataInDB(context, index);
-                                              },
-                                              icon: Icon(Icons.save,
-                                                  color: Colors.white
-                                                      .withOpacity(0.9)),
-                                              screenWidth: screenWidth),
-                                          CustomButton(
-                                              text: "upload file",
-                                              onPressed: () {
-                                                openFilePicker(context,
-                                                    widget.deal.idDeal);
-                                              },
-                                              icon: Icon(Icons.save,
-                                                  color: Colors.white
-                                                      .withOpacity(0.9)),
-                                              screenWidth: screenWidth),
-                                        ],
+                                        ),
                                       ),
                                       Divider(
                                         color: secondaryColor(),
@@ -390,26 +437,23 @@ class _DealDetailsState extends State<DealDetails>
                               }).toList(),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    VerticalDivider(
-                      color: secondaryColor(),
-                    ),
-                    ////////////////////////////////////////////////////////////////
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: screenWidth * 0.2,
-                            height: screenHeight * 0.2,
-                            child: const Calender(),
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.2,
-                            height: screenHeight * 0.2,
-                            child: const Documents(),
+                          ////////////////////////////////////////////////////////////////
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth * 0.2,
+                                  height: screenHeight * 0.2,
+                                  child: const Calender(),
+                                ),
+                                SizedBox(
+                                  width: screenWidth * 0.2,
+                                  height: screenHeight * 0.2,
+                                  child: const Documents(),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
