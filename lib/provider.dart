@@ -73,4 +73,19 @@ class IncubeProvider extends ChangeNotifier {
     _isteamLeader = value;
     notifyListeners();
   }
+
+  //google sheet list
+  List<Map<String, dynamic>> _companySheetData = [];
+
+  List<Map<String, dynamic>> get sheetData => _companySheetData;
+
+  set sheetData(List<Map<String, dynamic>> value) {
+    _companySheetData = value;
+    notifyListeners();
+  }
+
+  void replaceSheetData(List<Map<String, dynamic>> newData) {
+    _companySheetData = newData;
+    notifyListeners();
+  }
 }

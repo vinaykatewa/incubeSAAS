@@ -1,6 +1,6 @@
 {
   "api": {
-    "incube": {
+    "incubeweb": {
       "dependsOn": [],
       "output": {
         "authConfig": {
@@ -18,7 +18,7 @@
     }
   },
   "auth": {
-    "incube5af5e499": {
+    "incubeweb": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -28,11 +28,9 @@
         ],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
+          "passwordPolicyMinLength": 6
         },
-        "signupAttributes": [
-          "EMAIL"
-        ],
+        "signupAttributes": [],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"

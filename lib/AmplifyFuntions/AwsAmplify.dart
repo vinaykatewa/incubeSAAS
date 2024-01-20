@@ -182,12 +182,14 @@ class AwsIncube {
     try {
       safePrint('we are trying to add the organization');
       final organizationModel = Organization(
-          org_name: org_name,
-          org_admin: [org_admin],
-          superAdminId: adminUid,
-          org_team: [],
-          org_deals: [],
-          request: []);
+        org_name: org_name,
+        org_admin: [org_admin],
+        superAdminId: adminUid,
+        org_team: [],
+        org_deals: [],
+        request: [],
+        sheets: [],
+      );
 
       final request = ModelMutations.create(organizationModel);
       final response = await Amplify.API.mutate(request: request).response;

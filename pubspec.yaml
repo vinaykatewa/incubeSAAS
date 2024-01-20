@@ -59,7 +59,8 @@ dependencies:
   amazon_cognito_identity_dart_2: ^3.6.0
   amplify_authenticator: ^1.5.2
   cached_network_image: ^3.3.0
-  hive: ^2.2.3
+  data_table_2: ^2.5.10
+  fl_chart: ^0.66.0
 
 dev_dependencies:
   flutter_test:

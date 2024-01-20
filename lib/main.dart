@@ -1,6 +1,9 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:incube/AmplifyFuntions/api-calls.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
+import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
+import 'package:incube/home/portfolioAnalytics/usersheets/usersheets.dart';
 import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:incube/amplifyconfiguration.dart';
@@ -21,6 +24,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => IncubeProvider()),
         ChangeNotifierProvider(create: (_) => DealDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => UserSheetProvider()),
       ],
       child: const MyApp(),
     ),
@@ -53,6 +57,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.auth: (context) => const SignUpScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
+        AppRoutes.usersheets: (context) => const Usersheets()
       },
     );
   }

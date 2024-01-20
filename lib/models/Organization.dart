@@ -34,6 +34,7 @@ class Organization extends amplify_core.Model {
   final List<userRequest>? _request;
   final List<Team>? _org_team;
   final List<Deals>? _org_deals;
+  final List<usersPersonalSheets>? _sheets;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -128,6 +129,19 @@ class Organization extends amplify_core.Model {
     }
   }
   
+  List<usersPersonalSheets> get sheets {
+    try {
+      return _sheets!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -136,9 +150,9 @@ class Organization extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Organization._internal({required this.id, required org_name, required superAdminId, required org_admin, required request, required org_team, required org_deals, createdAt, updatedAt}): _org_name = org_name, _superAdminId = superAdminId, _org_admin = org_admin, _request = request, _org_team = org_team, _org_deals = org_deals, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Organization._internal({required this.id, required org_name, required superAdminId, required org_admin, required request, required org_team, required org_deals, required sheets, createdAt, updatedAt}): _org_name = org_name, _superAdminId = superAdminId, _org_admin = org_admin, _request = request, _org_team = org_team, _org_deals = org_deals, _sheets = sheets, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Organization({String? id, required String org_name, required String superAdminId, required List<String> org_admin, required List<userRequest> request, required List<Team> org_team, required List<Deals> org_deals}) {
+  factory Organization({String? id, required String org_name, required String superAdminId, required List<String> org_admin, required List<userRequest> request, required List<Team> org_team, required List<Deals> org_deals, required List<usersPersonalSheets> sheets}) {
     return Organization._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       org_name: org_name,
@@ -146,7 +160,8 @@ class Organization extends amplify_core.Model {
       org_admin: org_admin != null ? List<String>.unmodifiable(org_admin) : org_admin,
       request: request != null ? List<userRequest>.unmodifiable(request) : request,
       org_team: org_team != null ? List<Team>.unmodifiable(org_team) : org_team,
-      org_deals: org_deals != null ? List<Deals>.unmodifiable(org_deals) : org_deals);
+      org_deals: org_deals != null ? List<Deals>.unmodifiable(org_deals) : org_deals,
+      sheets: sheets != null ? List<usersPersonalSheets>.unmodifiable(sheets) : sheets);
   }
   
   bool equals(Object other) {
@@ -163,7 +178,8 @@ class Organization extends amplify_core.Model {
       DeepCollectionEquality().equals(_org_admin, other._org_admin) &&
       DeepCollectionEquality().equals(_request, other._request) &&
       DeepCollectionEquality().equals(_org_team, other._org_team) &&
-      DeepCollectionEquality().equals(_org_deals, other._org_deals);
+      DeepCollectionEquality().equals(_org_deals, other._org_deals) &&
+      DeepCollectionEquality().equals(_sheets, other._sheets);
   }
   
   @override
@@ -181,6 +197,7 @@ class Organization extends amplify_core.Model {
     buffer.write("request=" + (_request != null ? _request!.toString() : "null") + ", ");
     buffer.write("org_team=" + (_org_team != null ? _org_team!.toString() : "null") + ", ");
     buffer.write("org_deals=" + (_org_deals != null ? _org_deals!.toString() : "null") + ", ");
+    buffer.write("sheets=" + (_sheets != null ? _sheets!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -188,7 +205,7 @@ class Organization extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Organization copyWith({String? org_name, String? superAdminId, List<String>? org_admin, List<userRequest>? request, List<Team>? org_team, List<Deals>? org_deals}) {
+  Organization copyWith({String? org_name, String? superAdminId, List<String>? org_admin, List<userRequest>? request, List<Team>? org_team, List<Deals>? org_deals, List<usersPersonalSheets>? sheets}) {
     return Organization._internal(
       id: id,
       org_name: org_name ?? this.org_name,
@@ -196,7 +213,8 @@ class Organization extends amplify_core.Model {
       org_admin: org_admin ?? this.org_admin,
       request: request ?? this.request,
       org_team: org_team ?? this.org_team,
-      org_deals: org_deals ?? this.org_deals);
+      org_deals: org_deals ?? this.org_deals,
+      sheets: sheets ?? this.sheets);
   }
   
   Organization copyWithModelFieldValues({
@@ -205,7 +223,8 @@ class Organization extends amplify_core.Model {
     ModelFieldValue<List<String>?>? org_admin,
     ModelFieldValue<List<userRequest>?>? request,
     ModelFieldValue<List<Team>?>? org_team,
-    ModelFieldValue<List<Deals>?>? org_deals
+    ModelFieldValue<List<Deals>?>? org_deals,
+    ModelFieldValue<List<usersPersonalSheets>?>? sheets
   }) {
     return Organization._internal(
       id: id,
@@ -214,7 +233,8 @@ class Organization extends amplify_core.Model {
       org_admin: org_admin == null ? this.org_admin : org_admin.value,
       request: request == null ? this.request : request.value,
       org_team: org_team == null ? this.org_team : org_team.value,
-      org_deals: org_deals == null ? this.org_deals : org_deals.value
+      org_deals: org_deals == null ? this.org_deals : org_deals.value,
+      sheets: sheets == null ? this.sheets : sheets.value
     );
   }
   
@@ -241,11 +261,17 @@ class Organization extends amplify_core.Model {
           .map((e) => Deals.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
+      _sheets = json['sheets'] is List
+        ? (json['sheets'] as List)
+          .where((e) => e != null)
+          .map((e) => usersPersonalSheets.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
+        : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'org_name': _org_name, 'superAdminId': _superAdminId, 'org_admin': _org_admin, 'request': _request?.map((userRequest? e) => e?.toJson()).toList(), 'org_team': _org_team?.map((Team? e) => e?.toJson()).toList(), 'org_deals': _org_deals?.map((Deals? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'org_name': _org_name, 'superAdminId': _superAdminId, 'org_admin': _org_admin, 'request': _request?.map((userRequest? e) => e?.toJson()).toList(), 'org_team': _org_team?.map((Team? e) => e?.toJson()).toList(), 'org_deals': _org_deals?.map((Deals? e) => e?.toJson()).toList(), 'sheets': _sheets?.map((usersPersonalSheets? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -256,6 +282,7 @@ class Organization extends amplify_core.Model {
     'request': _request,
     'org_team': _org_team,
     'org_deals': _org_deals,
+    'sheets': _sheets,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -268,6 +295,7 @@ class Organization extends amplify_core.Model {
   static final REQUEST = amplify_core.QueryField(fieldName: "request");
   static final ORG_TEAM = amplify_core.QueryField(fieldName: "org_team");
   static final ORG_DEALS = amplify_core.QueryField(fieldName: "org_deals");
+  static final SHEETS = amplify_core.QueryField(fieldName: "sheets");
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Organization";
     modelSchemaDefinition.pluralName = "Organizations";
@@ -312,6 +340,13 @@ class Organization extends amplify_core.Model {
       isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Deals')
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
+      fieldName: 'sheets',
+      isRequired: true,
+      isArray: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'usersPersonalSheets')
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(

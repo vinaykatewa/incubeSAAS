@@ -55,36 +55,41 @@ class _DocumentsState extends State<Documents> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(MainBorderRadius()),
                 ),
-                child: ListView.builder(
-                  itemCount: provider.documentsList.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 5.0,
-                      color: tertiaryColor1(),
-                      shadowColor: secondaryColor(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(MainBorderRadius()),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          '${index + 1}: ${provider.documentsName[index]}',
-                          style: BodySmall().copyWith(color: secondaryColor()),
-                        ),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  content: PdfReaderIFrame(
-                                base64String: provider.documentsList[index],
-                              ));
-                            },
+                child: provider.documentsList.isEmpty
+                    ? const Text('Now document is added yet')
+                    : ListView.builder(
+                        itemCount: provider.documentsList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 5.0,
+                            color: tertiaryColor1(),
+                            shadowColor: secondaryColor(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(MainBorderRadius()),
+                            ),
+                            child: ListTile(
+                              title: Text(
+                                '${index + 1}: ${provider.documentsName[index]}',
+                                style: BodySmall()
+                                    .copyWith(color: secondaryColor()),
+                              ),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        content: PdfReaderIFrame(
+                                      base64String:
+                                          provider.documentsList[index],
+                                    ));
+                                  },
+                                );
+                              },
+                            ),
                           );
                         },
                       ),
-                    );
-                  },
-                ),
               );
             },
           );

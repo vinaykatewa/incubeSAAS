@@ -2,65 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:incube/models/ModelProvider.dart';
 
 class DealDetailsProvider extends ChangeNotifier {
-  List<String> tabList = ['Tab 1', 'Tab 2', 'Tab 3'];
-  List<String> tabTitles = ['Title 1', 'Title 2', 'Title 3'];
-  List<Meeting> calender = [
-    Meeting(
-      date: 'Friday, 2024-01-12 – 17:10',
-      link: 'https:google-meet',
-    ),
-  ];
-  List<String> documentsName = ["Database.pdf"];
+  List<String> tabList = [];
+  List<String> tabTitles = [];
+  List<List<tabDetails>> tabContent = [];
+  List<Meeting> calender = [];
+  List<String> documentsName = [];
   List<String> documentsList = [];
 
-  List<List<tabDetails>> tabContent = [
-    [
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-    ],
-    [
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-    ],
-    [
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-      tabDetails(
-          tabContentHeader: "context",
-          tabContentBody:
-              "provide prompt and our ai will generate text for you"),
-    ],
-  ];
   List<TextEditingController> _controllers = [];
 
   DealDetailsProvider() {
     _controllers =
         tabList.map((tab) => TextEditingController(text: tab)).toList();
   }
+  set controllers(List<TextEditingController> value) {
+    _controllers = value;
+    Future.microtask(() => notifyListeners());
+  }
 
   List<TextEditingController> get controllers => _controllers;
   void addMeeting(Meeting meeting) {
     calender.add(meeting);
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
+  }
+
+  void addDocumentName(String name) {
+    documentsName.add(name);
+    Future.microtask(() => notifyListeners());
   }
 
   void addDocument(String document) {
     documentsList.add(document);
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void addTab(String tabTitle) {
@@ -73,21 +46,21 @@ class DealDetailsProvider extends ChangeNotifier {
           tabContentBody:
               "provide prompt and our ai will generate text for you"),
     ]);
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void updateFieldHeader(int tabIndex, int fieldIndex, String header) {
     var updatedDetails =
         tabContent[tabIndex][fieldIndex].copyWith(tabContentHeader: header);
     tabContent[tabIndex][fieldIndex] = updatedDetails;
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void updateFieldBody(int tabIndex, int fieldIndex, String body) {
     var updatedDetails =
         tabContent[tabIndex][fieldIndex].copyWith(tabContentBody: body);
     tabContent[tabIndex][fieldIndex] = updatedDetails;
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void deleteTab(int index) {
@@ -95,7 +68,7 @@ class DealDetailsProvider extends ChangeNotifier {
     _controllers.removeAt(index);
     tabTitles.removeAt(index);
     tabContent.removeAt(index);
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   void addField(int tabIndex) {
@@ -106,6 +79,6 @@ class DealDetailsProvider extends ChangeNotifier {
           tabContentBody:
               "provide prompt and our ai will generate text for you"),
     );
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 }

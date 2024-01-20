@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
 import 'dart:convert';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:html' as html;
@@ -14,14 +13,19 @@ class PdfReaderIFrame extends StatefulWidget {
       var iframe = html.IFrameElement();
 
       String cleanString = base64String;
+      safePrint('this is the string: $base64String');
       if (cleanString.startsWith('"') && cleanString.endsWith('"')) {
         cleanString = cleanString.substring(1, cleanString.length - 1);
       }
-      var decodedPDF = base64Decode(cleanString);
-      var blob = html.Blob([decodedPDF], 'application/pdf');
-      var url = html.Url.createObjectUrlFromBlob(blob);
+      try {
+        var decodedPDF = base64Decode(cleanString);
+        var blob = html.Blob([decodedPDF], 'application/pdf');
+        var url = html.Url.createObjectUrlFromBlob(blob);
 
-      iframe.src = url;
+        iframe.src = url;
+      } catch (e) {
+        print('Error decoding Base64 string: $e');
+      }
       return iframe;
     });
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,35 @@ class _DealDetailsState extends State<DealDetails>
   final AwsIncube awsAmplify = AwsIncube();
   var documentLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    setDealProvider(context);
+  }
+
+  Future<void> setDealProvider(BuildContext context) async {
+    final DealDetailsProvider dealDetailProvider =
+        Provider.of<DealDetailsProvider>(context, listen: false);
+    dealDetailProvider.tabList = widget.deal.calls.tabList;
+    dealDetailProvider.tabTitles = widget.deal.calls.tabTitles;
+    dealDetailProvider.tabContent = widget.deal.calls.tabContent
+        .map((tabContentList) => tabContentList.tabDetailsList)
+        .toList();
+    dealDetailProvider.calender = widget.deal.meetings;
+    dealDetailProvider.documentsName = widget.deal.documents;
+    dealDetailProvider.controllers = dealDetailProvider.tabList
+        .map((tab) => TextEditingController(text: tab))
+        .toList();
+    safePrint(
+        'we are done saving the data in provider, this is length of dealDetailProvider.tabList: ${dealDetailProvider.tabList.length}');
+    safePrint(
+        'we are done saving the data in provider, this is length of dealDetailProvider.tabTitles: ${dealDetailProvider.tabTitles.length}');
+    safePrint(
+        'we are done saving the data in provider, this is length of dealDetailProvider.calender: ${dealDetailProvider.calender.length}');
+    safePrint(
+        'we are done saving the data in provider, this is length of dealDetailProvider.documentsName: ${dealDetailProvider.documentsName.length}');
+  }
+
   Future<void> saveDataInDB(BuildContext context, int currentTabIndex) async {
     //update the deal calls
     final DealDetailsProvider dealDetailProvider =
@@ -59,6 +90,40 @@ class _DealDetailsState extends State<DealDetails>
     // Update Deals
     Deals updatedDeal = dealList[dealIndex].copyWith(
         calls: specificDealCall, documents: dealDetailProvider.documentsName);
+    dealList[dealIndex] = updatedDeal;
+
+    // Update Organization
+    Organization updatedOrganization = org.copyWith(org_deals: dealList);
+
+    // Perform the mutation to update the organization
+    try {
+      final request = ModelMutations.update(updatedOrganization);
+      final response = await Amplify.API.mutate(request: request).response;
+      print('Organization updated successfully');
+    } catch (e) {
+      print('Error updating organization: $e');
+    }
+  }
+
+  Future<void> savePdf(BuildContext context) async {
+    //update the deal calls
+    final DealDetailsProvider dealDetailProvider =
+        Provider.of<DealDetailsProvider>(context, listen: false);
+    final IncubeProvider incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    Organization? org =
+        await awsAmplify.getOrganizationByAdminId(incubeProvider.superAdmin);
+    if (org == null) {
+      safePrint('In assignToTeam method, we are receiving null value for org');
+      return;
+    }
+    List<Deals> dealList = org.org_deals;
+    int dealIndex =
+        dealList.indexWhere((element) => element.idDeal == widget.deal.idDeal);
+    var specificDealCall = dealList[dealIndex].calls;
+    // Update Deals
+    Deals updatedDeal = dealList[dealIndex]
+        .copyWith(documents: dealDetailProvider.documentsName);
     dealList[dealIndex] = updatedDeal;
 
     // Update Organization
@@ -419,6 +484,7 @@ class _DealDetailsState extends State<DealDetails>
                                                   onPressed: () {
                                                     openFilePicker(context,
                                                         widget.deal.idDeal);
+                                                    setState(() {});
                                                   },
                                                   icon: Icon(Icons.save,
                                                       color: Colors.white
@@ -560,39 +626,54 @@ class _DealDetailsState extends State<DealDetails>
         final ApiCalls apiCallClass = ApiCalls();
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Please select the file'),
-              content: ElevatedButton(
-                child: const Text('Select File'),
-                onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
+            return Consumer<DealDetailsProvider>(
+              builder: (context, dealDetailProvider, child) {
+                return AlertDialog(
+                  title: const Text('Please select the file'),
+                  content: ElevatedButton(
+                    child: const Text('Select File'),
+                    onPressed: () async {
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles();
 
-                  if (result != null) {
-                    if (result.files.first.bytes != null) {
-                      safePrint(
-                          'In openFilePicker, platformFile name is: ${result.files.first.name}');
-                      apiCallClass.putItemsInS3(
-                          result.files.first.name, result.files.first.bytes!);
-                    }
-                    if (result.files.first.bytes == null) {
-                      safePrint('In openFilePicker, bytes is null');
-                    }
-                    Navigator.of(context).pop();
-                  }
-                  if (result == null) {
-                    safePrint('result is null');
-                  }
-                },
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+                      if (result != null) {
+                        if (result.files.first.bytes != null) {
+                          safePrint(
+                              'In openFilePicker, platformFile name is: ${result.files.first.name}');
+                          apiCallClass.putItemsInS3(result.files.first.name,
+                              result.files.first.bytes!);
+                          dealDetailProvider
+                              .addDocumentName(result.files.first.name);
+                          final base64String = await apiCallClass
+                              .getItemByName(result.files.first.name);
+                          if (base64String == null) {
+                            safePrint(
+                                'In gettingDocument, we got ourDoc as null');
+                            return;
+                          }
+                          dealDetailProvider.addDocument(base64String);
+                          // await savePdf(context);
+                        }
+                        if (result.files.first.bytes == null) {
+                          safePrint('In openFilePicker, bytes is null');
+                        }
+                        Navigator.of(context).pop();
+                      }
+                      if (result == null) {
+                        safePrint('result is null');
+                      }
+                    },
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
             );
           },
         );

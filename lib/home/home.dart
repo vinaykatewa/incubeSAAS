@@ -4,6 +4,9 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:incube/AmplifyFuntions/api-calls.dart';
+import 'package:incube/home/dealSourcing/dealSourcing.dart';
+import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
 import 'package:incube/models/ModelProvider.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/route.dart';
@@ -28,9 +31,27 @@ class _HomeState extends State<Home> {
   List<userRequest> _userRequests = [];
   List<Team> _teams = [];
   final _awsAmplify = AwsIncube();
+  final _apiCall = ApiCalls();
+  Future<void> setGoogleSheet() async {
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    try {
+      final temp = await _apiCall.googleSheetGetData();
+      _incubeProvider.replaceSheetData(temp);
+      safePrint(
+          'length of provider sheet: ${_incubeProvider.sheetData.length}');
+    } catch (e) {}
+  }
+
+  Future<void> setUserPersonalSheets() async {
+    //we are setting userSheets (provider) from organization's userSheets
+  }
+
   @override
   void initState() {
     super.initState();
+    setGoogleSheet();
+    setUserPersonalSheets();
   }
 
   @override
@@ -479,7 +500,7 @@ class _HomeState extends State<Home> {
         case 1:
           return 'Deal Pipeline';
         case 2:
-          return 'Investment Tracking';
+          return 'Deal Sourcing';
         case 3:
           return 'Portfolio Analytics';
         case 4:
@@ -595,7 +616,7 @@ class _HomeState extends State<Home> {
         case 1:
           return const DealPipeline();
         case 2:
-          return const InvestmentTracking();
+          return const DealSourcing();
         case 3:
           return const PortfolioAnalytics();
         case 4:

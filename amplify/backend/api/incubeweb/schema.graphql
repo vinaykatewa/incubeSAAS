@@ -18,7 +18,6 @@ type userInfo @model {
   dealIds: [String]!
 }
 
-
 type Team {
 idTeam: ID!
 teamName: String!
@@ -42,6 +41,12 @@ type Organization @model {
   request: [userRequest]!
   org_team: [Team]!
   org_deals: [Deals]!
+  sheets: [usersPersonalSheets]!
+}
+
+type usersPersonalSheets {
+  folderName: String!
+  googleSheet: [String]!
 }
 
 type userRequest{
@@ -62,6 +67,7 @@ seeking: String!
 status: String!
 calls: DealsCall!
 meetings:[Meeting]!
+documents: [String]!
 }
 
 type Meeting{
