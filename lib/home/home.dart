@@ -29,6 +29,7 @@ class _HomeState extends State<Home> {
   int selectedButtonIndex = 0;
   late String uid;
   List<userRequest> _userRequests = [];
+  final AwsIncube awsAmplify = AwsIncube();
   List<Team> _teams = [];
   final _awsAmplify = AwsIncube();
   final _apiCall = ApiCalls();
@@ -45,6 +46,19 @@ class _HomeState extends State<Home> {
 
   Future<void> setUserPersonalSheets() async {
     //we are setting userSheets (provider) from organization's userSheets
+    final IncubeProvider incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    final UserSheetProvider userSheerProvider =
+        Provider.of<UserSheetProvider>(context, listen: false);
+    Organization? _org =
+        await awsAmplify.getOrganizationByAdminId(incubeProvider.superAdmin);
+    if (_org == null) {
+      safePrint('we got the null organization in fetchTeams method');
+      return;
+    }
+    userSheerProvider.userSheets = _org.sheets;
+    safePrint(
+        'we are done setting the userSheet, here is the length: ${userSheerProvider.userSheets.length}');
   }
 
   @override

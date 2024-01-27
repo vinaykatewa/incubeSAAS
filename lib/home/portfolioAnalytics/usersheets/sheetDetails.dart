@@ -9,8 +9,8 @@ import 'package:incube/rezieableContainer.dart';
 import 'package:incube/uiThemes.dart';
 
 class SheetDetails extends StatefulWidget {
-  final List<String> listsIds;
-  const SheetDetails({super.key, required this.listsIds});
+  final List<Map<String, dynamic>> sheets;
+  const SheetDetails({super.key, required this.sheets});
 
   @override
   State<SheetDetails> createState() => _SheetDetailsState();
@@ -18,7 +18,6 @@ class SheetDetails extends StatefulWidget {
 
 class _SheetDetailsState extends State<SheetDetails> {
   bool isLoading = false;
-  List<List<Map<String, dynamic>>> allsheets = [];
   final apiCalls = ApiCalls();
   List<Widget> charts = [
     ResizableContainer(
@@ -27,29 +26,6 @@ class _SheetDetailsState extends State<SheetDetails> {
           yAxis: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']),
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    setData();
-  }
-
-  Future<void> setData() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<List<Map<String, dynamic>>> wholeList = [];
-    for (String id in widget.listsIds) {
-      List<Map<String, dynamic>> temp = await apiCalls.sheetList(id);
-      wholeList.add(temp);
-    }
-    setState(() {
-      allsheets = wholeList;
-    });
-    setState(() {
-      isLoading = false;
-    });
-  }
 
   List<String> extractColumnNames(List<Map<String, dynamic>> startupData) {
     Set<String> columnNames = Set<String>();
@@ -61,7 +37,6 @@ class _SheetDetailsState extends State<SheetDetails> {
     return columnNames.toList();
   }
 
-  // Define a function to create DataTable columns dynamically
   List<DataColumn> createDataColumns(List<String> columnNames) {
     List<DataColumn> columns = [];
 
@@ -97,7 +72,6 @@ class _SheetDetailsState extends State<SheetDetails> {
     return rows;
   }
 
-  // Create the DataTable
   DataTable2 dynamicStartupTable(List<Map<String, dynamic>> startupData) {
     List<String> columnNames = extractColumnNames(startupData);
 
@@ -141,134 +115,114 @@ class _SheetDetailsState extends State<SheetDetails> {
             ),
           )
         : Material(
-            child: ListView.builder(
-                itemCount: allsheets.length,
-                itemBuilder: (context, item) {
-                  return Container(
-                    height: screenHeight * 0.7,
-                    width: screenWidth * 0.6,
-                    color: tertiaryColor2(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          allsheets[item][0]['parentName'],
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+            child: Column(
+            children: [
+              Expanded(
+                flex: 6,
+                child: Column(
+                  children: [
+                    GridView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
                         ),
-                        GridView.builder(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                        itemCount: widget.sheets.length,
+                        itemBuilder: (context, index) {
+                          return ResizableContainer(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    widget.sheets[index]['sheetName'],
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 12,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: dynamicStartupTable(
+                                      (widget.sheets[index]['data'] as List)
+                                          .map<Map<String, dynamic>>((e) {
+                                        if (e is Map) {
+                                          return Map<String, dynamic>.from(e);
+                                        } else {
+                                          return {};
+                                        }
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            itemCount: allsheets[item].length,
-                            itemBuilder: (context, index) {
-                              return Row(
-                                children: [
-                                  ResizableContainer(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            allsheets[item][index]['sheetName'],
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 12,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: dynamicStartupTable(
-                                              (allsheets[item][index]['data']
-                                                      as List)
-                                                  .map<Map<String, dynamic>>(
-                                                      (e) {
-                                                if (e is Map) {
-                                                  return Map<String,
-                                                      dynamic>.from(e);
-                                                } else {
-                                                  return {};
-                                                }
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: ListView.builder(
-                                      itemCount: charts.length,
-                                      itemBuilder: (context, index) {
-                                        return ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: charts[index],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  CustomButton(
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colors.white.withOpacity(0.9),
-                                      ),
-                                      text: 'Add Bar chart',
-                                      screenWidth: screenWidth,
-                                      onPressed: () {
-                                        setState(() {
-                                          charts.add(
-                                            ResizableContainer(
-                                              child: const BarChartStrtps(
-                                                  xAxis: [
-                                                    '1',
-                                                    '2',
-                                                    '3',
-                                                    '4',
-                                                    '5',
-                                                    '6',
-                                                    '7',
-                                                    '8',
-                                                    '9',
-                                                    '10',
-                                                    '11'
-                                                  ],
-                                                  yAxis: [
-                                                    '1',
-                                                    '2',
-                                                    '3',
-                                                    '4',
-                                                    '5',
-                                                    '6',
-                                                    '7',
-                                                    '8',
-                                                    '9',
-                                                    '10',
-                                                    '11'
-                                                  ]),
-                                            ),
-                                          );
-                                        });
-                                      }),
-                                ],
-                              );
-                            })
-                      ],
-                    ),
-                  );
-                }),
-          );
+                          );
+                        }),
+                  ],
+                ),
+              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: ListView.builder(
+              //     itemCount: charts.length,
+              //     itemBuilder: (context, index) {
+              //       return ClipRRect(
+              //         borderRadius: BorderRadius.circular(10),
+              //         child: charts[index],
+              //       );
+              //     },
+              //   ),
+              // ),
+              // Expanded(
+              //   flex: 1,
+              //   child: CustomButton(
+              //       icon: Icon(
+              //         Icons.add,
+              //         color: Colors.white.withOpacity(0.9),
+              //       ),
+              //       text: 'Add Bar chart',
+              //       screenWidth: screenWidth,
+              //       onPressed: () {
+              //         setState(() {
+              //           charts.add(
+              //             ResizableContainer(
+              //               child: const BarChartStrtps(xAxis: [
+              //                 '1',
+              //                 '2',
+              //                 '3',
+              //                 '4',
+              //                 '5',
+              //                 '6',
+              //                 '7',
+              //                 '8',
+              //                 '9',
+              //                 '10',
+              //                 '11'
+              //               ], yAxis: [
+              //                 '1',
+              //                 '2',
+              //                 '3',
+              //                 '4',
+              //                 '5',
+              //                 '6',
+              //                 '7',
+              //                 '8',
+              //                 '9',
+              //                 '10',
+              //                 '11'
+              //               ]),
+              //             ),
+              //           );
+              //         });
+              //       }),
+              // ),
+            ],
+          ));
   }
 }

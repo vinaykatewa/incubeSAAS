@@ -23,7 +23,6 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
 
-
 /** This is an auto generated class representing the usersPersonalSheets type in your schema. */
 class usersPersonalSheets {
   final String? _folderName;
@@ -32,108 +31,115 @@ class usersPersonalSheets {
   String get folderName {
     try {
       return _folderName!;
-    } catch(e) {
+    } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
+
   List<String> get googleSheet {
     try {
       return _googleSheet!;
-    } catch(e) {
+    } catch (e) {
       throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
+          amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion: amplify_core.AmplifyExceptionMessages
+              .codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString());
     }
   }
-  
-  const usersPersonalSheets._internal({required folderName, required googleSheet}): _folderName = folderName, _googleSheet = googleSheet;
-  
-  factory usersPersonalSheets({required String folderName, required List<String> googleSheet}) {
+
+  const usersPersonalSheets._internal(
+      {required folderName, required googleSheet})
+      : _folderName = folderName,
+        _googleSheet = googleSheet;
+
+  factory usersPersonalSheets(
+      {required String folderName, required List<String> googleSheet}) {
     return usersPersonalSheets._internal(
-      folderName: folderName,
-      googleSheet: googleSheet != null ? List<String>.unmodifiable(googleSheet) : googleSheet);
+        folderName: folderName,
+        googleSheet:
+            googleSheet != null ? List<String>.from(googleSheet) : googleSheet);
   }
-  
+
   bool equals(Object other) {
     return this == other;
   }
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is usersPersonalSheets &&
-      _folderName == other._folderName &&
-      DeepCollectionEquality().equals(_googleSheet, other._googleSheet);
+        _folderName == other._folderName &&
+        DeepCollectionEquality().equals(_googleSheet, other._googleSheet);
   }
-  
+
   @override
   int get hashCode => toString().hashCode;
-  
+
   @override
   String toString() {
     var buffer = new StringBuffer();
-    
+
     buffer.write("usersPersonalSheets {");
     buffer.write("folderName=" + "$_folderName" + ", ");
-    buffer.write("googleSheet=" + (_googleSheet != null ? _googleSheet!.toString() : "null"));
+    buffer.write("googleSheet=" +
+        (_googleSheet != null ? _googleSheet!.toString() : "null"));
     buffer.write("}");
-    
+
     return buffer.toString();
   }
-  
-  usersPersonalSheets copyWith({String? folderName, List<String>? googleSheet}) {
-    return usersPersonalSheets._internal(
-      folderName: folderName ?? this.folderName,
-      googleSheet: googleSheet ?? this.googleSheet);
-  }
-  
-  usersPersonalSheets copyWithModelFieldValues({
-    ModelFieldValue<String>? folderName,
-    ModelFieldValue<List<String>?>? googleSheet
-  }) {
-    return usersPersonalSheets._internal(
-      folderName: folderName == null ? this.folderName : folderName.value,
-      googleSheet: googleSheet == null ? this.googleSheet : googleSheet.value
-    );
-  }
-  
-  usersPersonalSheets.fromJson(Map<String, dynamic> json)  
-    : _folderName = json['folderName'],
-      _googleSheet = json['googleSheet']?.cast<String>();
-  
-  Map<String, dynamic> toJson() => {
-    'folderName': _folderName, 'googleSheet': _googleSheet
-  };
-  
-  Map<String, Object?> toMap() => {
-    'folderName': _folderName,
-    'googleSheet': _googleSheet
-  };
 
-  static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
+  usersPersonalSheets copyWith(
+      {String? folderName, List<String>? googleSheet}) {
+    return usersPersonalSheets._internal(
+        folderName: folderName ?? this.folderName,
+        googleSheet: googleSheet ?? this.googleSheet);
+  }
+
+  usersPersonalSheets copyWithModelFieldValues(
+      {ModelFieldValue<String>? folderName,
+      ModelFieldValue<List<String>>? googleSheet}) {
+    return usersPersonalSheets._internal(
+        folderName: folderName == null ? this.folderName : folderName.value,
+        googleSheet:
+            googleSheet == null ? this.googleSheet : googleSheet.value);
+  }
+
+  usersPersonalSheets.fromJson(Map<String, dynamic> json)
+      : _folderName = json['folderName'],
+        _googleSheet = json['googleSheet']?.cast<String>();
+
+  Map<String, dynamic> toJson() =>
+      {'folderName': _folderName, 'googleSheet': _googleSheet};
+
+  Map<String, Object?> toMap() =>
+      {'folderName': _folderName, 'googleSheet': _googleSheet};
+
+  static var schema = amplify_core.Model.defineSchema(
+      define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "usersPersonalSheets";
     modelSchemaDefinition.pluralName = "usersPersonalSheets";
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'folderName',
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
-      fieldName: 'googleSheet',
-      isRequired: true,
-      isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.collection, ofModelName: amplify_core.ModelFieldTypeEnum.string.name)
-    ));
+
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'folderName',
+            isRequired: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(
+        amplify_core.ModelFieldDefinition.customTypeField(
+            fieldName: 'googleSheet',
+            isRequired: true,
+            isArray: true,
+            ofType: amplify_core.ModelFieldType(
+                amplify_core.ModelFieldTypeEnum.collection,
+                ofModelName: amplify_core.ModelFieldTypeEnum.string.name)));
   });
 }

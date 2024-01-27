@@ -46,7 +46,7 @@ type Organization @model {
 
 type usersPersonalSheets {
   folderName: String!
-  googleSheet: [String]!
+  googleSheet: [String!]!
 }
 
 type userRequest{
