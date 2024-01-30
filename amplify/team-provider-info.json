@@ -19,5 +19,23 @@
         "incubeweb": {}
       }
     }
+  },
+  "develop": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-incubeweb-develop-114035-authRole",
+      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-develop-114035-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-develop-114035-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-incubeweb-develop-114035-deployment",
+      "UnauthRoleName": "amplify-incubeweb-develop-114035-unauthRole",
+      "StackName": "amplify-incubeweb-develop-114035",
+      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubeweb-develop-114035/51b68780-bf36-11ee-af9d-0e87f61573a3",
+      "AmplifyAppId": "d2jqfeuiaz9beh"
+    },
+    "categories": {
+      "auth": {
+        "incubeweb": {}
+      }
+    }
   }
 }
