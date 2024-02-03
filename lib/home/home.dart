@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
+import 'package:incube/dealsProvider.dart';
 import 'package:incube/home/dealSourcing/dealSourcing.dart';
 import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
 import 'package:incube/models/ModelProvider.dart';
@@ -13,10 +14,10 @@ import 'package:incube/route.dart';
 import 'package:provider/provider.dart';
 import '../AmplifyFuntions/AwsAmplify.dart';
 import '../uiThemes.dart';
-import './communications/communications.dart';
+// import './communications/communications.dart';
 import './dashboard/dashboard.dart';
 import 'dealPipeline/dealPipeline.dart';
-import './investmentTracking/investmentTracking.dart';
+// import './investmentTracking/investmentTracking.dart';
 import './portfolioAnalytics/portfolioAnalytics.dart';
 
 class Home extends StatefulWidget {
@@ -66,6 +67,31 @@ class _HomeState extends State<Home> {
     super.initState();
     setGoogleSheet();
     setUserPersonalSheets();
+    fetchDeals(context);
+  }
+
+  Future<void> fetchDeals(BuildContext context) async {
+    safePrint('fetchDeals method is running');
+    final IncubeProvider _incubeProvider =
+        Provider.of<IncubeProvider>(context, listen: false);
+    final DealsProvider _dealProvider =
+        Provider.of<DealsProvider>(context, listen: false);
+    try {
+      safePrint('fetchDeals is trying to get the data');
+
+      safePrint(
+          'this is the admin id of the organization: ${_incubeProvider.superAdmin}');
+      final organization = await _awsAmplify
+          .getOrganizationByAdminId(_incubeProvider.superAdmin);
+      setState(() {
+        _dealProvider.ReviewdealList = organization!.org_deals
+            .where((element) => element.status == "review pending")
+            .toList();
+      });
+    } on ApiException catch (e) {
+      safePrint('Query failed: $e');
+      safePrint('queryListItems method is failed');
+    }
   }
 
   @override
@@ -517,8 +543,6 @@ class _HomeState extends State<Home> {
           return 'Deal Sourcing';
         case 3:
           return 'Portfolio Analytics';
-        case 4:
-          return 'Communications';
         default:
           return '';
       }
@@ -633,8 +657,6 @@ class _HomeState extends State<Home> {
           return const DealSourcing();
         case 3:
           return const PortfolioAnalytics();
-        case 4:
-          return const Communications();
         default:
           return Container();
       }
@@ -649,33 +671,6 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class DealManagementScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Deal Management Screen'),
-    );
-  }
-}
-
-class InvestmentTrackingScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Investment Tracking Screen'),
-    );
-  }
-}
-
-class PortfolioAnalyticsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Portfolio Analytics Screen'),
     );
   }
 }

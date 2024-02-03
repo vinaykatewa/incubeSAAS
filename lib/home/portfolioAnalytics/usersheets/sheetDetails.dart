@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
-import 'package:incube/home/dealSourcing/barChartStrtup.dart';
+import 'package:incube/home/charts/barChartStrtup.dart';
 import 'package:incube/rezieableContainer.dart';
 import 'package:incube/uiThemes.dart';
 

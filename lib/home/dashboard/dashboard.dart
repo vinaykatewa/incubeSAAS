@@ -2,6 +2,9 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
+import 'package:incube/home/dashboard/ChartSheet/charts/lineChartSrtup.dart';
+import 'package:incube/home/dashboard/ChartSheet/sheets/portFolioStartups.dart';
+import 'package:incube/home/dashboard/dashBoardWidget.dart';
 import 'package:incube/provider.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,11 +41,11 @@ class _DashboardState extends State<Dashboard> {
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return PortfolioAnalyticsScreen();
+        return DashboardWidget();
       case 1:
-        return DealManagementScreen();
+        return PortfolioStartups();
       case 2:
-        return InvestmentTrackingScreen();
+        return LineChartSample1();
       case 3:
         return PortfolioAnalyticsScreen();
       case 4:
@@ -196,11 +199,11 @@ class _SideNavigationState extends State<SideNavigation> {
   String _getNavigationText(int index) {
     switch (index) {
       case 0:
-        return 'Profile';
+        return 'Dashboard';
       case 1:
-        return 'Deal piepline';
+        return 'Google Sheets';
       case 2:
-        return 'Add investment';
+        return 'Add Charts';
       case 3:
         return 'Add funds';
       case 4:

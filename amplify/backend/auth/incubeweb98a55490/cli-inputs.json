@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "testAuthIdentityPool",
+    "identityPoolName": "incubeweb98a55490_identitypool_98a55490",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "incubec4fe7767",
-    "userPoolName": "incubeweb",
+    "resourceNameTruncated": "incube98a55490",
+    "userPoolName": "incubeweb98a55490_userpool_98a55490",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -14,32 +14,34 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Verification code: {####}",
-    "emailVerificationMessage": "Verification code: {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
-    "passwordPolicyMinLength": 6,
+    "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
-    "requiredAttributes": [],
+    "requiredAttributes": [
+      "email"
+    ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [],
-    "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "incubec4fe7767_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [
+      "email"
+    ],
+    "userpoolClientReadAttributes": [
+      "email"
+    ],
+    "userpoolClientLambdaRole": "incube98a55490_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "c4fe7767",
-    "resourceName": "incubeweb",
+    "sharedId": "98a55490",
+    "resourceName": "incubeweb98a55490",
     "authSelections": "identityPoolAndUserPool",
-    "serviceName": "Cognito",
+    "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
-    "useDefault": "manual",
-    "userPoolGroups": false,
     "userPoolGroupList": [],
-    "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": [],
+    "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true
   }

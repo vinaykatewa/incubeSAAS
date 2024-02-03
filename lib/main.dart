@@ -1,6 +1,8 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
+import 'package:incube/dealsProvider.dart';
+import 'package:incube/home/dashboard/ChartSheet/chartProvider.dart';
 import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
 import 'package:incube/home/portfolioAnalytics/usersheets/usersheets.dart';
@@ -25,6 +27,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => IncubeProvider()),
         ChangeNotifierProvider(create: (_) => DealDetailsProvider()),
         ChangeNotifierProvider(create: (_) => UserSheetProvider()),
+        ChangeNotifierProvider(create: (_) => ChartsProvider()),
+        ChangeNotifierProvider(create: (_) => DealsProvider()),
       ],
       child: const MyApp(),
     ),

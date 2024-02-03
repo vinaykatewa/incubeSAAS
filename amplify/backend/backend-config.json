@@ -18,7 +18,7 @@
     }
   },
   "auth": {
-    "incubeweb": {
+    "incubeweb98a55490": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -28,9 +28,11 @@
         ],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 6
+          "passwordPolicyMinLength": 8
         },
-        "signupAttributes": [],
+        "signupAttributes": [
+          "EMAIL"
+        ],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"

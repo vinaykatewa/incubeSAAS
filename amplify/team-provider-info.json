@@ -1,40 +1,22 @@
 {
-  "staging": {
+  "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-incubeweb-staging-104559-authRole",
-      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-staging-104559-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-staging-104559-authRole",
+      "AuthRoleName": "amplify-incubeweb-dev-181427-authRole",
+      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-dev-181427-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-dev-181427-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-incubeweb-staging-104559-deployment",
-      "UnauthRoleName": "amplify-incubeweb-staging-104559-unauthRole",
-      "StackName": "amplify-incubeweb-staging-104559",
-      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubeweb-staging-104559/716c9470-afa5-11ee-b8ee-0aaafd52157d",
-      "AmplifyAppId": "d2jqfeuiaz9beh"
+      "DeploymentBucketName": "amplify-incubeweb-dev-181427-deployment",
+      "UnauthRoleName": "amplify-incubeweb-dev-181427-unauthRole",
+      "StackName": "amplify-incubeweb-dev-181427",
+      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubeweb-dev-181427/7a092250-c036-11ee-8e6d-12b31dea6fc1",
+      "AmplifyAppId": "d2fr8p1jroty0a"
     },
     "categories": {
-      "auth": {
-        "incubeweb": {}
-      },
       "api": {
         "incubeweb": {}
-      }
-    }
-  },
-  "develop": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-incubeweb-develop-114035-authRole",
-      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-develop-114035-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-develop-114035-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-incubeweb-develop-114035-deployment",
-      "UnauthRoleName": "amplify-incubeweb-develop-114035-unauthRole",
-      "StackName": "amplify-incubeweb-develop-114035",
-      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubeweb-develop-114035/51b68780-bf36-11ee-af9d-0e87f61573a3",
-      "AmplifyAppId": "d2jqfeuiaz9beh"
-    },
-    "categories": {
+      },
       "auth": {
-        "incubeweb": {}
+        "incubeweb98a55490": {}
       }
     }
   }
