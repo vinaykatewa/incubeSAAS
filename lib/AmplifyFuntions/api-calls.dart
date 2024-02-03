@@ -111,11 +111,47 @@ class ApiCalls {
     }
   }
 
+  Future<void> putUserImage(String filename, Uint8List bytes) async {
+    var base64Str = base64Encode(bytes);
+    safePrint('this is base64 that we are passing: $base64Str');
+    var headers = {'Content-Type': 'application/json'};
+    var request =
+        http.Request('POST', Uri.parse('http://localhost:5000/putUserImage'));
+    request.body = json.encode({"data": base64Str, "name": filename});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      safePrint(await response.stream.bytesToString());
+    } else {
+      safePrint(response.reasonPhrase);
+    }
+  }
+
   Future<String?> getItemByName(String name) async {
     safePrint('In getItemByName, we are providing this name $name');
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
         'GET', Uri.parse('http://localhost:5000/getItemMethod?name=$name'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String base64String = await response.stream.bytesToString();
+      return base64String;
+    } else {
+      safePrint(response.reasonPhrase);
+    }
+    return null;
+  }
+
+  Future<String?> getUserImage(String name) async {
+    safePrint('In getItemByName, we are providing this name $name');
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request(
+        'GET', Uri.parse('http://localhost:5000/getUserImage?name=$name'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

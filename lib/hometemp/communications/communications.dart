@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/usersheets.dart';
+import 'package:incube/hometemp/home.dart';
 import 'package:incube/uiThemes.dart';
+// import 'chat/chatform.dart';
+// import 'events/events.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PortfolioAnalytics extends StatefulWidget {
-  const PortfolioAnalytics({super.key});
+class Communications extends StatefulWidget {
+  const Communications({super.key});
 
   @override
-  State<PortfolioAnalytics> createState() => _PortfolioAnalyticsState();
+  State<Communications> createState() => _CommunicationsState();
 }
 
-class _PortfolioAnalyticsState extends State<PortfolioAnalytics> {
+class _CommunicationsState extends State<Communications> {
   int selctedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -34,10 +36,12 @@ class _PortfolioAnalyticsState extends State<PortfolioAnalytics> {
 
   Widget _buildScreen(int index) {
     switch (index) {
-      case 0:
-        return Usersheets();
+      // case 0:
+      //   return const EventsWidget();
       case 1:
-        return DealManagementScreen();
+      // return ChatForm();
+      case 0:
+        return InvestmentTrackingScreen();
       case 2:
         return InvestmentTrackingScreen();
       case 3:
@@ -45,7 +49,7 @@ class _PortfolioAnalyticsState extends State<PortfolioAnalytics> {
       case 4:
         return CommunicationsScreen();
       default:
-        return Container(); // Return a default screen or an empty container
+        return Container();
     }
   }
 }
@@ -172,7 +176,7 @@ class _SideNavigationState extends State<SideNavigation> {
   IconData _getNavigationIcons(int index) {
     switch (index) {
       case 0:
-        return FontAwesomeIcons.user;
+        return FontAwesomeIcons.calendarCheck;
       case 1:
         return FontAwesomeIcons.barsProgress;
       case 2:
@@ -191,9 +195,9 @@ class _SideNavigationState extends State<SideNavigation> {
   String _getNavigationText(int index) {
     switch (index) {
       case 0:
-        return 'Google sheets';
+        return 'Events';
       case 1:
-        return 'Deal piepline';
+        return 'ChatForm';
       case 2:
         return 'Add investment';
       case 3:
@@ -205,15 +209,6 @@ class _SideNavigationState extends State<SideNavigation> {
       default:
         return '';
     }
-  }
-}
-
-class DealManagementScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Deal Management Screen'),
-    );
   }
 }
 

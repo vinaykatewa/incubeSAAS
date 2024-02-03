@@ -1,8 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/listOfParentSheets.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/sheetDetails.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/listOfParentSheets.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/sheetDetails.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/userSheetProvider.dart';
 import 'package:incube/models/usersPersonalSheets.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:provider/provider.dart';

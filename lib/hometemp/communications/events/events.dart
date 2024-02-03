@@ -4,7 +4,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:incube/home/communications/events/eventsUi.dart';
+import 'package:incube/hometemp/communications/events/eventsUi.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';

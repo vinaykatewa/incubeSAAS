@@ -1,8 +1,8 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
-import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
-import 'package:incube/home/dealPipeline/dealDetails/pdfReader.dart';
+import 'package:incube/hometemp/dealPipeline/dealDetails/dealDetailsProvider.dart';
+import 'package:incube/hometemp/dealPipeline/dealDetails/pdfReader.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:provider/provider.dart';
 

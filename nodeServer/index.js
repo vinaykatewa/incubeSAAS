@@ -75,6 +75,31 @@ try {
   return {error: 'Something went wrong'};
 }
 }
+async function putUserImage(base64Data, name){
+  const axios = require('axios');
+
+let config = {
+  method: 'put',
+  maxBodyLength: Infinity,
+  url: 'https://mkb27guk1m.execute-api.eu-north-1.amazonaws.com/incubeFileApiStaging/userimages3/' + name,
+  headers: {
+    'Content-Type': 'application/pdf'
+  },
+  data : base64Data
+};
+
+async function makeRequest() {
+  try {
+    const response = await axios.request(config);
+    console.log(JSON.stringify(response.data));
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+  return await makeRequest();
+}
 async function putItemToS3(base64Data, name){
   const axios = require('axios');
 
@@ -101,6 +126,24 @@ async function makeRequest() {
   return await makeRequest();
 }
 
+async function getUserImage(name){
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'https://mkb27guk1m.execute-api.eu-north-1.amazonaws.com/incubeFileApiStaging/userimages3/'+name,
+};
+async function makeRequest() {
+  try {
+    const response = await axios.request(config);
+    // console.log(JSON.stringify(response.data));
+    return JSON.stringify(response.data);
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+  return makeRequest();
+}
 async function getItem(name){
 let config = {
   method: 'get',
@@ -272,6 +315,14 @@ app.post('/gettingCompanyDetails', async(req, res)=> {
 });
 
 
+app.get('/getUserImage', async(req, res) => {
+  let name = req.query.name;
+  console.log('this is the key that we are using: '+ name);
+  let response = await getUserImage(name);
+  console.log('we are done running getItem method');
+  // console.log('this is the response: ' + response);
+  res.send(response);
+});
 app.get('/getItemMethod', async(req, res) => {
   console.log('now we going to run getItem()');
   let name = req.query.name;
@@ -284,6 +335,11 @@ app.get('/getItemMethod', async(req, res) => {
 
 
 
+app.post('/putUserImage', async(req, res) => {
+  let response = await putUserImage(req.body.data, req.body.name)
+  console.log(response);
+  res.send(response);
+})
 app.post('/putItem', async(req, res) => {
   let response = await putItemToS3(req.body.data, req.body.name)
   console.log(response);

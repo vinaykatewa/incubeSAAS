@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
-import 'package:incube/home/dealSourcing/companyDetails.dart';
-import 'package:incube/home/dealSourcing/companyList.dart';
-import 'package:incube/provider.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/usersheets.dart';
 import 'package:incube/uiThemes.dart';
-import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class DealSourcing extends StatefulWidget {
-  const DealSourcing({super.key});
+class PortfolioAnalytics extends StatefulWidget {
+  const PortfolioAnalytics({super.key});
 
   @override
-  State<DealSourcing> createState() => _DealSourcingState();
+  State<PortfolioAnalytics> createState() => _PortfolioAnalyticsState();
 }
 
-class _DealSourcingState extends State<DealSourcing> {
+class _PortfolioAnalyticsState extends State<PortfolioAnalytics> {
   int selctedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -39,23 +35,17 @@ class _DealSourcingState extends State<DealSourcing> {
   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
-        return CompanyList();
+        return Usersheets();
       case 1:
-        return CompanyDetails();
+        return DealManagementScreen();
       case 2:
-        return DealManagementScreen();
+        return InvestmentTrackingScreen();
       case 3:
-        return DealManagementScreen();
+        return PortfolioAnalyticsScreen();
       case 4:
         return CommunicationsScreen();
-      case 5:
-        return CommunicationsScreen();
-      case 6:
-        return CommunicationsScreen();
-      case 7:
-        return DealManagementScreen();
       default:
-        return Container();
+        return Container(); // Return a default screen or an empty container
     }
   }
 }
@@ -87,6 +77,14 @@ class _SideNavigationState extends State<SideNavigation> {
       margin: EdgeInsets.only(top: screenHeight * 0.002),
       decoration: BoxDecoration(
         color: Color.fromRGBO(54, 36, 101, 1),
+        // gradient: LinearGradient(
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //     colors: [
+        //       Color.fromRGBO(22, 43, 89, 1),
+        //       Color.fromRGBO(66, 50, 121, 0.8),
+        //       Color.fromRGBO(14, 58, 105, 1),
+        //     ]),
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(MainBorderRadius()),
           topRight: Radius.circular(MainBorderRadius()),
@@ -118,7 +116,7 @@ class _SideNavigationState extends State<SideNavigation> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              7,
+              5,
               (index) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -166,53 +164,6 @@ class _SideNavigationState extends State<SideNavigation> {
               ),
             ),
           ),
-          const Divider(
-            color: const Color.fromRGBO(245, 247, 244, 1),
-          ),
-          SizedBox(
-            height: screenHeight * 0.03,
-          ),
-          // add new deal button
-          ClipPath(
-            clipper: ReverseBorderRadiusClipper(radius: MainBorderRadius()),
-            child: Container(
-              margin: EdgeInsets.only(left: screenWidth * 0.01),
-              width: screenWidth * 0.15,
-              decoration: BoxDecoration(
-                  color: widget.selectedIndex == 7
-                      ? tertiaryColor1()
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(MainBorderRadius()),
-                    bottomLeft: Radius.circular(MainBorderRadius()),
-                  )),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      widget.onButtonTapped(7);
-                    });
-                  },
-                  icon: FaIcon(
-                    FontAwesomeIcons.plus,
-                    color: widget.selectedIndex == 7
-                        ? Colors.black
-                        : const Color.fromRGBO(245, 247, 244, 1),
-                    size: screenWidth * 0.01,
-                  ),
-                  label: Text(
-                    "Create a new deal",
-                    style: LabelMedium().copyWith(
-                      color: widget.selectedIndex == 7
-                          ? Colors.black
-                          : const Color.fromRGBO(245, 247, 244, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -221,7 +172,7 @@ class _SideNavigationState extends State<SideNavigation> {
   IconData _getNavigationIcons(int index) {
     switch (index) {
       case 0:
-        return FontAwesomeIcons.list;
+        return FontAwesomeIcons.user;
       case 1:
         return FontAwesomeIcons.barsProgress;
       case 2:
@@ -240,19 +191,17 @@ class _SideNavigationState extends State<SideNavigation> {
   String _getNavigationText(int index) {
     switch (index) {
       case 0:
-        return 'Company List';
+        return 'Google sheets';
       case 1:
-        return 'Open deals';
+        return 'Deal piepline';
       case 2:
-        return 'Presenting';
+        return 'Add investment';
       case 3:
-        return 'In due diligence';
+        return 'Add funds';
       case 4:
-        return 'closing';
+        return 'Initiate capital call';
       case 5:
-        return 'Closed';
-      case 6:
-        return 'Rejected';
+        return 'Manage investor';
       default:
         return '';
     }
@@ -263,12 +212,7 @@ class DealManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          const Text('Deal Management Screen'),
-          ElevatedButton(onPressed: () async {}, child: Text('give deal'))
-        ],
-      ),
+      child: Text('Deal Management Screen'),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:incube/home/home.dart';
+import 'package:incube/hometemp/home.dart';
 import 'package:provider/provider.dart';
 
 import 'package:incube/AmplifyFuntions/AwsAmplify.dart';
@@ -379,7 +379,7 @@ class _OrganizationPageState extends State<OrganizationPage> {
         Future.delayed(Duration.zero, () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Home()),
+            MaterialPageRoute(builder: (context) => HomeTemp()),
           );
         });
         return const Center(

@@ -1,6 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
+import 'package:incube/hometemp/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/models/Meeting.dart';
 import 'package:incube/uiThemes.dart';
 import 'package:intl/intl.dart';

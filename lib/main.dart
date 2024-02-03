@@ -2,14 +2,14 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
 import 'package:incube/dealsProvider.dart';
-import 'package:incube/home/dashboard/ChartSheet/chartProvider.dart';
-import 'package:incube/home/dealPipeline/dealDetails/dealDetailsProvider.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/userSheetProvider.dart';
-import 'package:incube/home/portfolioAnalytics/usersheets/usersheets.dart';
+import 'package:incube/home/home.dart';
+import 'package:incube/hometemp/dashboard/ChartSheet/chartProvider.dart';
+import 'package:incube/hometemp/dealPipeline/dealDetails/dealDetailsProvider.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/userSheetProvider.dart';
+import 'package:incube/hometemp/portfolioAnalytics/usersheets/usersheets.dart';
 import 'package:incube/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:incube/amplifyconfiguration.dart';
-import 'package:incube/home/home.dart';
 import 'route.dart';
 import 'package:incube/authentication/auth.dart';
 import 'package:incube/authentication/login.dart';
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Incube',
-      initialRoute: AppRoutes.auth,
+      initialRoute: AppRoutes.home,
       routes: {
         AppRoutes.auth: (context) => const SignUpScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
