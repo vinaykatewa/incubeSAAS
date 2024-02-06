@@ -91,6 +91,18 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/google-logo-auth-screen.png
+    - assets/incubelogo.png
+    - assets/dashboardIcon.png
+    - assets/dealpipelineIcon.png
+    - assets/dealSourcingIcon.png
+    - assets/portfolioIcon.png
+    - assets/communicationIcon.png
+    - assets/eventsIcon.png
+    - assets/chatformIcon.png
+    - assets/whatsNewIcon.png
+    - assets/settingsIcon.png
+    - assets/addInvestmentIcon.png
+    - assets/logOutIcon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
