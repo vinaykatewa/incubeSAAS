@@ -2,7 +2,12 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:incube/AmplifyFuntions/api-calls.dart';
 import 'package:incube/dealsProvider.dart';
+import 'package:incube/home/dashboardProvider.dart';
+import 'package:incube/home/dealPipelineProvider.dart';
 import 'package:incube/home/home.dart';
+import 'package:incube/home/organizationProvider.dart';
+import 'package:incube/home/portfolioProvider.dart';
+import 'package:incube/home/userSheets/userSheetsProvider.dart';
 import 'package:incube/hometemp/dashboard/ChartSheet/chartProvider.dart';
 import 'package:incube/hometemp/dealPipeline/dealDetails/dealDetailsProvider.dart';
 import 'package:incube/hometemp/portfolioAnalytics/usersheets/userSheetProvider.dart';
@@ -29,6 +34,12 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => UserSheetProvider()),
         ChangeNotifierProvider(create: (_) => ChartsProvider()),
         ChangeNotifierProvider(create: (_) => DealsProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
+        //new ones
+        ChangeNotifierProvider(create: (_) => PortfolioProvider()),
+        ChangeNotifierProvider(create: (_) => DealsPipelineProvider()),
+        ChangeNotifierProvider(create: (_) => OrganizationProvider()),
+        ChangeNotifierProvider(create: (_) => UserSheetsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -37,12 +48,12 @@ Future<void> main() async {
 
 Future<void> _configureAmplify() async {
   try {
-    await Amplify.addPlugins([
-      AmplifyAPI(modelProvider: ModelProvider.instance),
-      AmplifyAuthCognito(),
-      // AmplifyStorageS3(),
-    ]);
-    await Amplify.configure(amplifyconfig);
+    // await Amplify.addPlugins([
+    //   AmplifyAPI(modelProvider: ModelProvider.instance),
+    //   AmplifyAuthCognito(),
+    //   // AmplifyStorageS3(),
+    // ]);
+    // await Amplify.configure(amplifyconfig);
     safePrint('configured');
   } on Exception catch (e) {
     safePrint('An error occurred while configuring Amplify: $e');
@@ -61,7 +72,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.auth: (context) => const SignUpScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const Home(),
-        AppRoutes.usersheets: (context) => const Usersheets()
+        // AppRoutes.usersheets: (context) => const Usersheets()
       },
     );
   }

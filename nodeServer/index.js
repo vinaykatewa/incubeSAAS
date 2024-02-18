@@ -354,6 +354,7 @@ app.post('/aiPrompting', async(req, res) => {
 })
 
 app.post('/fetchData', async (req, res) => {
+  console.log('hitting fetchData api');
   try {
     const response = await axios.get('https://script.google.com/macros/s/AKfycbztUplT59vruhzrWjZekKA5biKU108NTYAvn5kaHlhD06bAdVZVatwuEa66DUTYSZUJOA/exec', {
       params: {

@@ -49,7 +49,7 @@ class _DealDetailsState extends State<DealDetails>
     dealDetailProvider.tabContent = widget.deal.calls.tabContent
         .map((tabContentList) => tabContentList.tabDetailsList)
         .toList();
-    dealDetailProvider.calender = widget.deal.meetings;
+    // dealDetailProvider.calender = widget.deal.meetings;
     dealDetailProvider.documentsName = widget.deal.documents;
     dealDetailProvider.controllers = dealDetailProvider.tabList
         .map((tab) => TextEditingController(text: tab))
@@ -511,7 +511,7 @@ class _DealDetailsState extends State<DealDetails>
                                 SizedBox(
                                   width: screenWidth * 0.2,
                                   height: screenHeight * 0.2,
-                                  child: const Calender(),
+                                  // child: const Calender(),
                                 ),
                                 SizedBox(
                                   width: screenWidth * 0.2,
@@ -603,9 +603,9 @@ class _DealDetailsState extends State<DealDetails>
                     );
 
                     // Add the new meeting to the provider's list
-                    _dealDetailProvider.addMeeting(newMeeting);
-                    safePrint(
-                        "we have added this meeting to the list: ${_dealDetailProvider.calender[0].date}");
+                    // _dealDetailProvider.addMeeting(newMeeting);
+                    // safePrint(
+                    //     "we have added this meeting to the list: ${_dealDetailProvider.calender[0].date}");
 
                     // Close the dialog
                     Navigator.of(context).pop();

@@ -44,8 +44,8 @@ class _DashboardState extends State<Dashboard> {
         return DashboardWidget();
       case 1:
         return PortfolioStartups();
-      case 2:
-        return LineChartSample1();
+      // case 2:
+      //   return LineChartSample1();
       case 3:
         return PortfolioAnalyticsScreen();
       case 4:

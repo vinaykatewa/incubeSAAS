@@ -134,11 +134,14 @@ class _TabViewModelState extends State<TabViewModel> {
                         IconButton(
                             onPressed: () async {
                               _detailsProvider.updateFieldHeader(
-                                  widget.tabIndex,
-                                  widget.fieldIndex,
-                                  tabHeaderController.text);
-                              _detailsProvider.updateFieldBody(widget.tabIndex,
-                                  widget.fieldIndex, tabBodyController.text);
+                                tabIndex: widget.tabIndex,
+                                fieldIndex: widget.fieldIndex,
+                                header: tabHeaderController.text,
+                              );
+                              _detailsProvider.updateFieldBody(
+                                  tabIndex: widget.tabIndex,
+                                  fieldIndex: widget.fieldIndex,
+                                  body: tabBodyController.text);
                             },
                             icon: const Icon(
                               Icons.send,

@@ -48,7 +48,7 @@ export 'usersPersonalSheets.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "1fe3fa3452bf8a8dcf00761109783575";
+  String version = "893800ff98844d9bd9bb01f30ebe62c8";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [Events.schema, Organization.schema, userInfo.schema];
   @override

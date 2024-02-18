@@ -28,6 +28,7 @@ import 'package:collection/collection.dart';
 class Deals {
   final String? _idDeal;
   final String? _teamId;
+  final String? _teamName;
   final String? _company_logo;
   final String? _company_name;
   final String? _company_description;
@@ -53,6 +54,19 @@ class Deals {
   String get teamId {
     try {
       return _teamId!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  String get teamName {
+    try {
+      return _teamName!;
     } catch(e) {
       throw amplify_core.AmplifyCodeGenModelException(
           amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -167,12 +181,13 @@ class Deals {
     }
   }
   
-  const Deals._internal({required idDeal, required teamId, required company_logo, required company_name, required company_description, required seeking, required status, required calls, required meetings, required documents}): _idDeal = idDeal, _teamId = teamId, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status, _calls = calls, _meetings = meetings, _documents = documents;
+  const Deals._internal({required idDeal, required teamId, required teamName, required company_logo, required company_name, required company_description, required seeking, required status, required calls, required meetings, required documents}): _idDeal = idDeal, _teamId = teamId, _teamName = teamName, _company_logo = company_logo, _company_name = company_name, _company_description = company_description, _seeking = seeking, _status = status, _calls = calls, _meetings = meetings, _documents = documents;
   
-  factory Deals({required String idDeal, required String teamId, required String company_logo, required String company_name, required String company_description, required String seeking, required String status, required DealsCall calls, required List<Meeting> meetings, required List<String> documents}) {
+  factory Deals({required String idDeal, required String teamId, required String teamName, required String company_logo, required String company_name, required String company_description, required String seeking, required String status, required DealsCall calls, required List<Meeting> meetings, required List<String> documents}) {
     return Deals._internal(
       idDeal: idDeal,
       teamId: teamId,
+      teamName: teamName,
       company_logo: company_logo,
       company_name: company_name,
       company_description: company_description,
@@ -193,6 +208,7 @@ class Deals {
     return other is Deals &&
       _idDeal == other._idDeal &&
       _teamId == other._teamId &&
+      _teamName == other._teamName &&
       _company_logo == other._company_logo &&
       _company_name == other._company_name &&
       _company_description == other._company_description &&
@@ -213,6 +229,7 @@ class Deals {
     buffer.write("Deals {");
     buffer.write("idDeal=" + "$_idDeal" + ", ");
     buffer.write("teamId=" + "$_teamId" + ", ");
+    buffer.write("teamName=" + "$_teamName" + ", ");
     buffer.write("company_logo=" + "$_company_logo" + ", ");
     buffer.write("company_name=" + "$_company_name" + ", ");
     buffer.write("company_description=" + "$_company_description" + ", ");
@@ -226,10 +243,11 @@ class Deals {
     return buffer.toString();
   }
   
-  Deals copyWith({String? idDeal, String? teamId, String? company_logo, String? company_name, String? company_description, String? seeking, String? status, DealsCall? calls, List<Meeting>? meetings, List<String>? documents}) {
+  Deals copyWith({String? idDeal, String? teamId, String? teamName, String? company_logo, String? company_name, String? company_description, String? seeking, String? status, DealsCall? calls, List<Meeting>? meetings, List<String>? documents}) {
     return Deals._internal(
       idDeal: idDeal ?? this.idDeal,
       teamId: teamId ?? this.teamId,
+      teamName: teamName ?? this.teamName,
       company_logo: company_logo ?? this.company_logo,
       company_name: company_name ?? this.company_name,
       company_description: company_description ?? this.company_description,
@@ -243,6 +261,7 @@ class Deals {
   Deals copyWithModelFieldValues({
     ModelFieldValue<String>? idDeal,
     ModelFieldValue<String>? teamId,
+    ModelFieldValue<String>? teamName,
     ModelFieldValue<String>? company_logo,
     ModelFieldValue<String>? company_name,
     ModelFieldValue<String>? company_description,
@@ -255,6 +274,7 @@ class Deals {
     return Deals._internal(
       idDeal: idDeal == null ? this.idDeal : idDeal.value,
       teamId: teamId == null ? this.teamId : teamId.value,
+      teamName: teamName == null ? this.teamName : teamName.value,
       company_logo: company_logo == null ? this.company_logo : company_logo.value,
       company_name: company_name == null ? this.company_name : company_name.value,
       company_description: company_description == null ? this.company_description : company_description.value,
@@ -269,6 +289,7 @@ class Deals {
   Deals.fromJson(Map<String, dynamic> json)  
     : _idDeal = json['idDeal'],
       _teamId = json['teamId'],
+      _teamName = json['teamName'],
       _company_logo = json['company_logo'],
       _company_name = json['company_name'],
       _company_description = json['company_description'],
@@ -286,12 +307,13 @@ class Deals {
       _documents = json['documents']?.cast<String>();
   
   Map<String, dynamic> toJson() => {
-    'idDeal': _idDeal, 'teamId': _teamId, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status, 'calls': _calls?.toJson(), 'meetings': _meetings?.map((Meeting? e) => e?.toJson()).toList(), 'documents': _documents
+    'idDeal': _idDeal, 'teamId': _teamId, 'teamName': _teamName, 'company_logo': _company_logo, 'company_name': _company_name, 'company_description': _company_description, 'seeking': _seeking, 'status': _status, 'calls': _calls?.toJson(), 'meetings': _meetings?.map((Meeting? e) => e?.toJson()).toList(), 'documents': _documents
   };
   
   Map<String, Object?> toMap() => {
     'idDeal': _idDeal,
     'teamId': _teamId,
+    'teamName': _teamName,
     'company_logo': _company_logo,
     'company_name': _company_name,
     'company_description': _company_description,
@@ -314,6 +336,12 @@ class Deals {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
       fieldName: 'teamId',
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(
+      fieldName: 'teamName',
       isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));

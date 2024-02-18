@@ -15,6 +15,7 @@ type userInfo @model {
   teamId: String
   isteamLeader: Boolean
   dealIds: [String]!
+  sheets: usersAllSheets!
 }
 
 type Team {
@@ -43,6 +44,10 @@ type Organization @model {
   sheets: [usersPersonalSheets]!
 }
 
+type usersAllSheets {
+  allSheets: [usersPersonalSheets]!
+}
+
 type usersPersonalSheets {
   folderName: String!
   googleSheet: [String!]!
@@ -59,6 +64,7 @@ type userRequest{
 type Deals{
 idDeal: String!
 teamId: String!
+teamName: String!
 company_logo: String!
 company_name: String!
 company_description: String!

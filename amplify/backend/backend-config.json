@@ -1,6 +1,6 @@
 {
   "api": {
-    "incubeweb": {
+    "incubesaas": {
       "dependsOn": [],
       "output": {
         "authConfig": {
@@ -18,7 +18,7 @@
     }
   },
   "auth": {
-    "incubeweb98a55490": {
+    "incubesaas9df24f22": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {

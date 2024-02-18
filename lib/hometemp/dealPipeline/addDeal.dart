@@ -76,6 +76,7 @@ class _AddDealState extends State<AddDeal> {
       await storingImage().whenComplete(() async {
         final _deals = Deals(
             idDeal: id,
+            teamName: '',
             company_logo: _imageUrl,
             company_name: companyNameController.text,
             company_description: companyDescriptionController.text,

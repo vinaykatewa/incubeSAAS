@@ -1,7 +1,7 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "incubeweb",
+    "apiName": "incubesaas",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",

@@ -30,8 +30,8 @@ class DataWidget extends StatelessWidget {
     final chartData = Provider.of<ChartsProvider>(context);
 
     final Map<String, Widget Function(IncubeDashboardItem i)> _map = {
-      "line-chart": (l) => BarChartStrtps(
-          xAxis: chartData.xAxisData, yAxis: chartData.yAxisData),
+      // "line-chart": (l) => BarChartStrtps(
+      //     xAxis: chartData.xAxisData, yAxis: chartData.yAxisData),
       "custom": (l) => Container(
             padding: const EdgeInsets.all(8.0),
             color: Colors.blue,

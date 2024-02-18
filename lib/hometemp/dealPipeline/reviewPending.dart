@@ -99,6 +99,7 @@ class _ReviewPandingDealsState extends State<ReviewPandingDeals> {
       var specificDeal = dealList[dealIndex];
       dealList[dealIndex] = Deals(
         idDeal: specificDeal.idDeal,
+        teamName: '',
         teamId: teamId,
         company_logo: specificDeal.company_logo,
         company_name: specificDeal.company_name,

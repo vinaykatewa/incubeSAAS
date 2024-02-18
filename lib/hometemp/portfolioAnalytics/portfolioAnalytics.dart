@@ -34,8 +34,8 @@ class _PortfolioAnalyticsState extends State<PortfolioAnalytics> {
 
   Widget _buildScreen(int index) {
     switch (index) {
-      case 0:
-        return Usersheets();
+      // case 0:
+      //   return Usersheets();
       case 1:
         return DealManagementScreen();
       case 2:

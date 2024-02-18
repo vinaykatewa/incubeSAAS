@@ -1,396 +1,396 @@
 import 'package:flutter/material.dart';
 
-TextStyle display2xlRegular() {
-  return const TextStyle(
+TextStyle display2xlRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 72,
+      fontSize: 72 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400,
       height: 1.25);
 }
 
-TextStyle display2xlMedium() {
-  return const TextStyle(
+TextStyle display2xlMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 72,
+      fontSize: 72 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500,
       height: 1.25);
 }
 
-TextStyle display2xlSemibold() {
-  return const TextStyle(
+TextStyle display2xlSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 72,
+      fontSize: 72 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600,
       height: 1.25);
 }
 
-TextStyle display2xlBold() {
-  return const TextStyle(
+TextStyle display2xlBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 72,
+      fontSize: 72 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold,
       height: 1.25);
 }
 
-TextStyle displayXlRegular() {
-  return const TextStyle(
+TextStyle displayXlRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 60,
+      fontSize: 60 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400,
       height: 1.2);
 }
 
-TextStyle displayXlMedium() {
-  return const TextStyle(
+TextStyle displayXlMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 60,
+      fontSize: 60 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500,
       height: 1.2);
 }
 
-TextStyle displayXlSemibold() {
-  return const TextStyle(
+TextStyle displayXlSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 60,
+      fontSize: 60 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600,
       height: 1.2);
 }
 
-TextStyle displayXlBold() {
-  return const TextStyle(
+TextStyle displayXlBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 60,
+      fontSize: 60 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold,
       height: 1.2);
 }
 
-TextStyle displayLgRegular() {
-  return const TextStyle(
+TextStyle displayLgRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 48,
+      fontSize: 48 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.25);
 }
 
-TextStyle displayLgMedium() {
-  return const TextStyle(
+TextStyle displayLgMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 48,
+      fontSize: 48 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.25);
 }
 
-TextStyle displayLgSemibold() {
-  return const TextStyle(
+TextStyle displayLgSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 48,
+      fontSize: 48 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.25);
 }
 
-TextStyle displayLgBold() {
-  return const TextStyle(
+TextStyle displayLgBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 48,
+      fontSize: 48 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.25);
 }
 
-TextStyle displayMdRegular() {
-  return const TextStyle(
+TextStyle displayMdRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 36,
+      fontSize: 36 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.2222222222222223);
 }
 
-TextStyle displayMdMedium() {
-  return const TextStyle(
+TextStyle displayMdMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 36,
+      fontSize: 36 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.2222222222222223);
 }
 
-TextStyle displayMdSemibold() {
-  return const TextStyle(
+TextStyle displayMdSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 36,
+      fontSize: 36 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.2222222222222223);
 }
 
-TextStyle displayMdBold() {
-  return const TextStyle(
+TextStyle displayMdBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 36,
+      fontSize: 36 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.2222222222222223);
 }
 
-TextStyle displaySmRegular() {
-  return const TextStyle(
+TextStyle displaySmRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 30,
+      fontSize: 30 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.2666666666666666);
 }
 
-TextStyle displaySmMedium() {
-  return const TextStyle(
+TextStyle displaySmMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 30,
+      fontSize: 30 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.2666666666666666);
 }
 
-TextStyle displaySmSemibold() {
-  return const TextStyle(
+TextStyle displaySmSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 30,
+      fontSize: 30 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.2666666666666666);
 }
 
-TextStyle displaySmBold() {
-  return const TextStyle(
+TextStyle displaySmBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 30,
+      fontSize: 30 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.2666666666666666);
 }
 
-TextStyle displayXsRegular() {
-  return const TextStyle(
+TextStyle displayXsRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 24,
+      fontSize: 24 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.3333333333333333);
 }
 
-TextStyle displayXsMedium() {
-  return const TextStyle(
+TextStyle displayXsMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 24,
+      fontSize: 24 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.3333333333333333);
 }
 
-TextStyle displayXsSemibold() {
-  return const TextStyle(
+TextStyle displayXsSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 24,
+      fontSize: 24 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.3333333333333333);
 }
 
-TextStyle displayXsBold() {
-  return const TextStyle(
+TextStyle displayXsBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 24,
+      fontSize: 24 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.3333333333333333);
 }
 
-TextStyle textXlRegular() {
-  return const TextStyle(
+TextStyle textXlRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 20,
+      fontSize: 20 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.5);
 }
 
-TextStyle textXlMedium() {
-  return const TextStyle(
+TextStyle textXlMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 20,
+      fontSize: 20 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.5);
 }
 
-TextStyle textXlSemibold() {
-  return const TextStyle(
+TextStyle textXlSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 20,
+      fontSize: 20 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.5);
 }
 
-TextStyle textXlBold() {
-  return const TextStyle(
+TextStyle textXlBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 20,
+      fontSize: 20 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.5);
 }
 
-TextStyle textLgRegular() {
-  return const TextStyle(
+TextStyle textLgRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 18,
+      fontSize: 18 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.5555555555555556);
 }
 
-TextStyle textLgMedium() {
-  return const TextStyle(
+TextStyle textLgMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 18,
+      fontSize: 18 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.5555555555555556);
 }
 
-TextStyle textLgSemibold() {
-  return const TextStyle(
+TextStyle textLgSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 18,
+      fontSize: 18 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.5555555555555556);
 }
 
-TextStyle textLgBold() {
-  return const TextStyle(
+TextStyle textLgBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 18,
+      fontSize: 18 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.5555555555555556);
 }
 
-TextStyle textMdRegular() {
-  return const TextStyle(
+TextStyle textMdRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 16,
+      fontSize: 16 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.5);
 }
 
-TextStyle textMdMedium() {
-  return const TextStyle(
+TextStyle textMdMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 16,
+      fontSize: 16 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.5);
 }
 
-TextStyle textMdSemibold() {
-  return const TextStyle(
+TextStyle textMdSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 16,
+      fontSize: 16 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.5);
 }
 
-TextStyle textMdBold() {
-  return const TextStyle(
+TextStyle textMdBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 16,
+      fontSize: 16 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.5);
 }
 
-TextStyle textSmRegular() {
-  return const TextStyle(
+TextStyle textSmRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 14,
+      fontSize: 14 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.4285714285714286);
 }
 
-TextStyle textSmMedium() {
-  return const TextStyle(
+TextStyle textSmMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 14,
+      fontSize: 14 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.4285714285714286);
 }
 
-TextStyle textSmSemibold() {
-  return const TextStyle(
+TextStyle textSmSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 14,
+      fontSize: 14 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.4285714285714286);
 }
 
-TextStyle textSmBold() {
-  return const TextStyle(
+TextStyle textSmBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 14,
+      fontSize: 14 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.4285714285714286);
 }
 
-TextStyle textXsRegular() {
-  return const TextStyle(
+TextStyle textXsRegular(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 12,
+      fontSize: 12 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w400, // Regular
       height: 1.5);
 }
 
-TextStyle textXsMedium() {
-  return const TextStyle(
+TextStyle textXsMedium(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 12,
+      fontSize: 12 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w500, // Medium
       height: 1.5);
 }
 
-TextStyle textXsSemibold() {
-  return const TextStyle(
+TextStyle textXsSemibold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 12,
+      fontSize: 12 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.w600, // SemiBold
       height: 1.5);
 }
 
-TextStyle textXsBold() {
-  return const TextStyle(
+TextStyle textXsBold(double responsive) {
+  return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 12,
+      fontSize: 12 * responsive,
       letterSpacing: 0,
       fontWeight: FontWeight.bold, // Bold
       height: 1.5);

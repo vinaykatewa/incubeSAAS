@@ -60,11 +60,13 @@ dependencies:
   amplify_authenticator: ^1.5.2
   cached_network_image: ^3.3.0
   data_table_2: ^2.5.10
-  fl_chart: ^0.66.0
+  fl_chart: ^0.36.4
   dashboard: ^0.0.4
   shared_preferences: ^2.2.2
   flutter_colorpicker: ^1.0.3
   auto_size_text: ^3.0.0
+  flutter_svg: ^2.0.9
+  syncfusion_flutter_gauges: ^24.2.5
 
 dev_dependencies:
   flutter_test:
@@ -92,17 +94,36 @@ flutter:
   assets:
     - assets/google-logo-auth-screen.png
     - assets/incubelogo.png
-    - assets/dashboardIcon.png
-    - assets/dealpipelineIcon.png
-    - assets/dealSourcingIcon.png
-    - assets/portfolioIcon.png
-    - assets/communicationIcon.png
-    - assets/eventsIcon.png
-    - assets/chatformIcon.png
-    - assets/whatsNewIcon.png
-    - assets/settingsIcon.png
+    - assets/dashboard.svg
+    - assets/dealpipelineIcon.svg
+    - assets/dealSourcingIcon.svg
+    - assets/portfolioIcon.svg
+    - assets/whatsNewIcon.svg
+    - assets/settingsIcon.svg
+    - assets/editBlue.svg
+    - assets/customizeIcon.svg
+    - assets/threeDots.svg
+    - assets/saveIcon.svg
+    - assets/filterIcon.svg
+    - assets/blueDot.svg
+    - assets/pinkDot.svg
+    - assets/greenDot.svg
+    - assets/shopifyIcon.svg
+    - assets/userImage.svg
+    - assets/sheetsIcon.svg
+    - assets/editPenIcon.svg
+    - assets/trendupIcon.svg
+    - assets/tempChart.svg
     - assets/addInvestmentIcon.png
     - assets/logOutIcon.png
+    - assets/startupImg.png
+    - assets/leftArrow.png
+    - assets/rightArrow.png
+    - assets/homeIcon.png
+    - assets/slashIcon.png
+    - assets/editIcon.png
+    - assets/calendarAvatar.png
+    - assets/filesIcon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

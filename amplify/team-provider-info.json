@@ -1,22 +1,22 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-incubeweb-dev-181427-authRole",
-      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-dev-181427-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubeweb-dev-181427-authRole",
+      "AuthRoleName": "amplify-incubesaas-dev-141412-authRole",
+      "UnauthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubesaas-dev-141412-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::381322991813:role/amplify-incubesaas-dev-141412-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-incubeweb-dev-181427-deployment",
-      "UnauthRoleName": "amplify-incubeweb-dev-181427-unauthRole",
-      "StackName": "amplify-incubeweb-dev-181427",
-      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubeweb-dev-181427/7a092250-c036-11ee-8e6d-12b31dea6fc1",
-      "AmplifyAppId": "d2fr8p1jroty0a"
+      "DeploymentBucketName": "amplify-incubesaas-dev-141412-deployment",
+      "UnauthRoleName": "amplify-incubesaas-dev-141412-unauthRole",
+      "StackName": "amplify-incubesaas-dev-141412",
+      "StackId": "arn:aws:cloudformation:us-east-1:381322991813:stack/amplify-incubesaas-dev-141412/bd8e7940-c8b9-11ee-8ce6-129328d61a65",
+      "AmplifyAppId": "d32qeghtjny4sl"
     },
     "categories": {
       "api": {
-        "incubeweb": {}
+        "incubesaas": {}
       },
       "auth": {
-        "incubeweb98a55490": {}
+        "incubesaas9df24f22": {}
       }
     }
   }
