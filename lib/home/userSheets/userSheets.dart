@@ -443,38 +443,41 @@ class _UserSheetsState extends State<UserSheets> {
           SizedBox(
             width: 365 * 0.000651 * screenWidth,
           ),
-          Container(
-            width: 150,
-            child: Row(
-              children: [
-                Flexible(
-                  child: ExpansionTile(
-                    title: Text(
-                      'Open',
-                      style: textSmSemibold(0.000651 * screenWidth)
-                          .copyWith(color: greyColor900()),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              width: 60,
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: ExpansionTile(
+                      title: Text(
+                        'Open',
+                        style: textSmSemibold(0.000651 * screenWidth)
+                            .copyWith(color: greyColor900()),
+                      ),
+                      children: sheet.keys.map((sheetName) {
+                        return ListTile(
+                          title: Text(sheetName),
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: SizedBox(
+                                    width: double.maxFinite,
+                                    child: showDataTables(sheet[sheetName]!),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      }).toList(),
                     ),
-                    children: sheet.keys.map((sheetName) {
-                      return ListTile(
-                        title: Text(sheetName),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Container(
-                                  width: double.maxFinite,
-                                  child: showDataTables(sheet[sheetName]!),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }).toList(),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

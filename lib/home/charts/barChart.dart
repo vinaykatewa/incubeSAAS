@@ -41,7 +41,7 @@ class _MyBarChartState extends State<MyBarChart> {
               barRods: group.barRods.map((rod) {
                 return BarChartRodData(
                     y: rod.y,
-                    width: 30, // Adjust the width of the bars here
+                    width: 30,
                     colors: rod.colors,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
